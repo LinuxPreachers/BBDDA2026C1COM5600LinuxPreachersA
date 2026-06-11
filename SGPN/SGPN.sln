@@ -1,0 +1,58 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# SQL Server Management Studio Version 21
+VisualStudioVersion = 17.14.36212.18
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{4F2E2C19-372F-40D8-9FA7-9D2138C6997A}") = "SGPN", "SGPN.ssmssqlproj", "{CE4A56E1-1995-9F01-1989-9941B5F28028}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Modulos", "Modulos", "{02EA681E-C7D8-13C7-8484-4AC65E1B71E8}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Parques", "Parques", "{C0BE212A-2DC4-4F1D-A5FF-DDB3A8A4B624}"
+	ProjectSection(SolutionItems) = preProject
+		Modulos\Parques\Tablas.sql = Modulos\Parques\Tablas.sql
+	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Empleados", "Empleados", "{9571DDE5-8EDF-4007-B9A9-703393C3718B}"
+	ProjectSection(SolutionItems) = preProject
+		Modulos\Empleados\Tablas.sql = Modulos\Empleados\Tablas.sql
+	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Actividades", "Actividades", "{4DF9D534-4687-48EE-B7CF-4556869A802A}"
+	ProjectSection(SolutionItems) = preProject
+		Modulos\Actividades\ABM.sql = Modulos\Actividades\ABM.sql
+		Modulos\Actividades\Tablas.sql = Modulos\Actividades\Tablas.sql
+		Modulos\Actividades\Testing_FaltanTests.sql = Modulos\Actividades\Testing_FaltanTests.sql
+	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Reservas", "Reservas", "{AF293F3A-72EA-43CC-9594-4C385FA1A6E6}"
+	ProjectSection(SolutionItems) = preProject
+		Modulos\Reservas\Tablas.sql = Modulos\Reservas\Tablas.sql
+	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Pagos", "Pagos", "{65E62FC6-315D-4B10-A896-1BA2E07CFDEE}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Concesiones", "Concesiones", "{1CAE7C1D-5E06-4080-8C03-3CCEEEAD61D2}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Default|Default = Default|Default
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{CE4A56E1-1995-9F01-1989-9941B5F28028}.Default|Default.ActiveCfg = Default
+		{61BCFA97-CFF0-4111-B647-BD52B0441B32}.Default|Default.ActiveCfg = Default
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{C0BE212A-2DC4-4F1D-A5FF-DDB3A8A4B624} = {02EA681E-C7D8-13C7-8484-4AC65E1B71E8}
+		{9571DDE5-8EDF-4007-B9A9-703393C3718B} = {02EA681E-C7D8-13C7-8484-4AC65E1B71E8}
+		{4DF9D534-4687-48EE-B7CF-4556869A802A} = {02EA681E-C7D8-13C7-8484-4AC65E1B71E8}
+		{AF293F3A-72EA-43CC-9594-4C385FA1A6E6} = {02EA681E-C7D8-13C7-8484-4AC65E1B71E8}
+		{65E62FC6-315D-4B10-A896-1BA2E07CFDEE} = {02EA681E-C7D8-13C7-8484-4AC65E1B71E8}
+		{1CAE7C1D-5E06-4080-8C03-3CCEEEAD61D2} = {02EA681E-C7D8-13C7-8484-4AC65E1B71E8}
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {E619910C-FC77-40FF-AB49-EE7E89591B2D}
+	EndGlobalSection
+EndGlobal
