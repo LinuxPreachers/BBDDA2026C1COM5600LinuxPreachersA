@@ -1,6 +1,11 @@
+USE LinuxPreachers
+
 -- Schema
 IF NOT EXISTS ( SELECT 1 FROM sys.schemas WHERE name = 'sgpn' )
-BEGIN EXEC('CREATE SCHEMA sgpn'); END; GO
+BEGIN 
+    EXEC('CREATE SCHEMA sgpn'); 
+END
+GO
 
 -- Este SP Asume que no existe ninguna tabla
 CREATE OR ALTER PROCEDURE sgpn.crear_tablas_modulo_parques
@@ -69,6 +74,8 @@ BEGIN
     CREATE TABLE sgpn.EstadisticaVisitantes (
         id INT IDENTITY(1,1) NOT NULL,
         periodo VARCHAR(50) NOT NULL,
+        periodo_inicio DATETIME NOT NULL,
+        periodo_fin DATETIME NOT NULL,
         cantidad INT NOT NULL,
         id_region INT NOT NULL,
 
@@ -194,6 +201,7 @@ BEGIN
 END;
 GO
 
+/*
 -- Ejecucion
 EXEC sgpn.sp_crear_modulo_parques;
 select * from sys.tables
@@ -203,3 +211,9 @@ GO
 EXEC sgpn.sp_eliminar_modulo_parques;
 select * from sys.tables
 GO
+
+-- Otra Verif
+SELECT * 
+FROM INFORMATION_SCHEMA.TABLES
+WHERE TABLE_SCHEMA = 'sgpn';
+*/

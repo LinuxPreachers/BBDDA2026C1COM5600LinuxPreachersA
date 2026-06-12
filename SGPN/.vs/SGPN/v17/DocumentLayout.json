@@ -1,14 +1,10 @@
 {
   "Version": 1,
-  "WorkspaceRootPath": "D:\\Facultad\\TP-BDA\\BBDDA2026C1COM5600LinuxPreachersA\\SGPN\\",
+  "WorkspaceRootPath": "D:\\FACU\\01 - MATERIAS\\Archivos\\3641 - BASES DE DATOS APLICADA\\tp\\SGPN\\",
   "Documents": [
     {
-      "AbsoluteMoniker": "D:0:0:{AF293F3A-72EA-43CC-9594-4C385FA1A6E6}|Reservas{AF293F3A-72EA-43CC-9594-4C385FA1A6E6}|D:\\Facultad\\TP-BDA\\BBDDA2026C1COM5600LinuxPreachersA\\SGPN\\Modulos\\Reservas\\Tablas.sql||{B5A506EB-11BE-4782-9A18-21265C2CA0B4}",
-      "RelativeMoniker": "D:0:0:{AF293F3A-72EA-43CC-9594-4C385FA1A6E6}|Reservas{AF293F3A-72EA-43CC-9594-4C385FA1A6E6}|solutionrelative:Modulos\\Reservas\\Tablas.sql||{B5A506EB-11BE-4782-9A18-21265C2CA0B4}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{4DF9D534-4687-48EE-B7CF-4556869A802A}|Actividades{4DF9D534-4687-48EE-B7CF-4556869A802A}|D:\\Facultad\\TP-BDA\\BBDDA2026C1COM5600LinuxPreachersA\\SGPN\\Modulos\\Actividades\\ABM.sql||{B5A506EB-11BE-4782-9A18-21265C2CA0B4}",
-      "RelativeMoniker": "D:0:0:{4DF9D534-4687-48EE-B7CF-4556869A802A}|Actividades{4DF9D534-4687-48EE-B7CF-4556869A802A}|solutionrelative:Modulos\\Actividades\\ABM.sql||{B5A506EB-11BE-4782-9A18-21265C2CA0B4}"
+      "AbsoluteMoniker": "D:0:0:{C0BE212A-2DC4-4F1D-A5FF-DDB3A8A4B624}|Parques{C0BE212A-2DC4-4F1D-A5FF-DDB3A8A4B624}|D:\\FACU\\01 - MATERIAS\\Archivos\\3641 - BASES DE DATOS APLICADA\\tp\\SGPN\\Modulos\\Parques\\Tablas.sql||{B5A506EB-11BE-4782-9A18-21265C2CA0B4}",
+      "RelativeMoniker": "D:0:0:{C0BE212A-2DC4-4F1D-A5FF-DDB3A8A4B624}|Parques{C0BE212A-2DC4-4F1D-A5FF-DDB3A8A4B624}|solutionrelative:Modulos\\Parques\\Tablas.sql||{B5A506EB-11BE-4782-9A18-21265C2CA0B4}"
     }
   ],
   "DocumentGroupContainers": [
@@ -18,31 +14,19 @@
       "DocumentGroups": [
         {
           "DockedWidth": 200,
-          "SelectedChildIndex": 1,
+          "SelectedChildIndex": 0,
           "Children": [
             {
               "$type": "Document",
-              "DocumentIndex": 1,
-              "Title": "ABM.sql - localhost.master (DESKTOP-KOIKGVK\\Luis (53))",
-              "DocumentMoniker": "D:\\Facultad\\TP-BDA\\BBDDA2026C1COM5600LinuxPreachersA\\SGPN\\Modulos\\Actividades\\ABM.sql",
-              "RelativeDocumentMoniker": "Modulos\\Actividades\\ABM.sql",
-              "ToolTip": "D:\\Facultad\\TP-BDA\\BBDDA2026C1COM5600LinuxPreachersA\\SGPN\\Modulos\\Actividades\\ABM.sql - localhost.master (DESKTOP-KOIKGVK\\Luis (53))",
-              "RelativeToolTip": "Modulos\\Actividades\\ABM.sql - localhost.master (DESKTOP-KOIKGVK\\Luis (53))",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000826|",
-              "WhenOpened": "2026-06-11T02:32:30.336Z",
-              "EditorCaption": " - localhost.master (DESKTOP-KOIKGVK\\Luis (53))"
-            },
-            {
-              "$type": "Document",
               "DocumentIndex": 0,
-              "Title": "Tablas.sql - localhost.master (DESKTOP-KOIKGVK\\Luis (72))",
-              "DocumentMoniker": "D:\\Facultad\\TP-BDA\\BBDDA2026C1COM5600LinuxPreachersA\\SGPN\\Modulos\\Reservas\\Tablas.sql",
-              "RelativeDocumentMoniker": "Modulos\\Reservas\\Tablas.sql",
-              "ToolTip": "D:\\Facultad\\TP-BDA\\BBDDA2026C1COM5600LinuxPreachersA\\SGPN\\Modulos\\Reservas\\Tablas.sql - localhost.master (DESKTOP-KOIKGVK\\Luis (72))",
-              "RelativeToolTip": "Modulos\\Reservas\\Tablas.sql - localhost.master (DESKTOP-KOIKGVK\\Luis (72))",
+              "Title": "Tablas.sql - DESKTOP-U54AKC1\\SQLEXPRESS.LinuxPreachers (DESKTOP-U54AKC1\\Usuario (63))",
+              "DocumentMoniker": "D:\\FACU\\01 - MATERIAS\\Archivos\\3641 - BASES DE DATOS APLICADA\\tp\\SGPN\\Modulos\\Parques\\Tablas.sql",
+              "RelativeDocumentMoniker": "Modulos\\Parques\\Tablas.sql",
+              "ToolTip": "D:\\FACU\\01 - MATERIAS\\Archivos\\3641 - BASES DE DATOS APLICADA\\tp\\SGPN\\Modulos\\Parques\\Tablas.sql - DESKTOP-U54AKC1\\SQLEXPRESS.LinuxPreachers (DESKTOP-U54AKC1\\Usuario (63))",
+              "RelativeToolTip": "Modulos\\Parques\\Tablas.sql - DESKTOP-U54AKC1\\SQLEXPRESS.LinuxPreachers (DESKTOP-U54AKC1\\Usuario (63))",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000826|",
-              "WhenOpened": "2026-06-10T21:42:00.698Z",
-              "EditorCaption": " - localhost.master (DESKTOP-KOIKGVK\\Luis (72))"
+              "WhenOpened": "2026-06-12T12:27:31.113Z",
+              "EditorCaption": " - DESKTOP-U54AKC1\\SQLEXPRESS.LinuxPreachers (DESKTOP-U54AKC1\\Usuario (63))"
             }
           ]
         }
