@@ -1,0 +1,258 @@
+USE LinuxPreachers;
+GO
+-- MODULO CONCESIONES
+-- ---------------------------------------------
+-- 1. ABM: EMPRESA CONCESIONARIA
+-- ---------------------------------------------
+
+-- Alta
+CREATE OR ALTER PROCEDURE sgpn.sp_crear_empresa_concesionaria
+
+    @nombre VARCHAR(100),
+    @descripcion VARCHAR(255),
+    @cuit BIGINT,
+    @razon_social VARCHAR(100),
+    @id_actividad_empresarial INT
+AS
+BEGIN
+    SET NOCOUNT ON;
+    BEGIN TRY
+        IF(@nombre IS NULL OR LTRIM(RTRIM(@nombre)) = '')
+            THROW 60100, 'El nombre ingresado para la Empresa no es válido.', 1;
+
+        IF(@razon_social IS NULL OR LTRIM(RTRIM(@razon_social)) = '')
+            THROW 60101, 'La razon social ingresada para la Empresa no es válida.', 1;
+
+        IF(@cuit >= 99999999999 OR @cuit <= 10000000000)
+            THROW 60102, 'CUIT inválido.', 1;
+
+        IF(EXISTS(SELECT 1 FROM sgpn.EmpresaConcesionaria WHERE @cuit = cuit))
+            THROW 60103, 'CUIT ya cargado.', 1;
+
+        IF( @id_actividad_empresarial NOT IN(SELECT id FROM sgpn.ActividadEmpresarial) )
+            THROW 60104, 'No existe la Actividad', 1;
+
+            
+        INSERT INTO sgpn.EmpresaConcesionaria(nombre,descripcion,cuit,razon_social,id_actividad_empresarial)
+        VALUES (@nombre,@descripcion,@cuit,@razon_social,@id_actividad_empresarial);
+    END TRY
+    BEGIN CATCH
+        THROW;
+    END CATCH;
+END;
+GO
+
+-- Modificación
+CREATE OR ALTER PROCEDURE sgpn.sp_modificar_empresa_concesionaria
+    @id INT,
+    @nombre VARCHAR(100),
+    @descripcion VARCHAR(255),
+    @cuit BIGINT,
+    @razon_social VARCHAR(100),
+    @id_actividad_empresarial INT
+AS
+BEGIN
+    SET NOCOUNT ON;
+    BEGIN TRY
+        IF NOT EXISTS (SELECT 1 FROM sgpn.EmpresaConcesionaria WHERE id = @id)
+            THROW 60110, 'La Empresa con el ID provisto no existe.', 1;
+
+        IF(@nombre IS NULL OR LTRIM(RTRIM(@nombre)) = '')
+            THROW 60111, 'El nombre ingresado para la Empresa no es válido.', 1;
+
+        IF(@razon_social IS NULL OR LTRIM(RTRIM(@razon_social)) = '')
+            THROW 60112, 'La razon social ingresada para la Empresa no es válida.', 1;
+
+        IF(@cuit >= 99999999999 OR @cuit <= 10000000000)
+            THROW 60113, 'CUIT inválido.', 1;
+
+        IF( @id_actividad_empresarial NOT IN(SELECT id FROM sgpn.ActividadEmpresarial) )
+            THROW 60114, 'No existe la Actividad', 1;
+
+        UPDATE sgpn.EmpresaConcesionaria
+        SET nombre = @nombre , descripcion = @descripcion, cuit = @cuit , razon_social = @razon_social, id_actividad_empresarial = @id_actividad_empresarial
+        WHERE id = @id;
+    END TRY
+    BEGIN CATCH
+        THROW;
+    END CATCH;
+END;
+GO
+
+-- Baja
+CREATE OR ALTER PROCEDURE sgpn.sp_eliminar_empresa_concesionaria
+    @id INT
+AS
+BEGIN
+    SET NOCOUNT ON;
+    BEGIN TRY
+
+        IF NOT EXISTS (SELECT 1 FROM sgpn.EmpresaConcesionaria WHERE id = @id)
+            THROW 60120, 'La Empresa con el ID provisto no existe.', 1;
+
+        IF EXISTS (SELECT 1 FROM sgpn.Concesion WHERE id_empresa_concesionaria = @id)
+            THROW 60121, 'La Empresa con el ID provisto tiene concesiones.', 1;
+
+        DELETE  FROM  sgpn.EmpresaConcesionaria WHERE id = @id;
+
+    END TRY
+    BEGIN CATCH
+        THROW;
+    END CATCH;
+END;
+GO
+
+-- ---------------------------------------------
+-- 2. ABM: ACTIVIDAD EMPRESARIAL
+-- ---------------------------------------------
+
+-- Alta
+CREATE OR ALTER PROCEDURE sgpn.sp_crear_actividad_empresarial
+    @nombre VARCHAR(100),
+    @descripcion VARCHAR(255)
+AS
+BEGIN
+    SET NOCOUNT ON;
+    BEGIN TRY
+        IF(@nombre IS NULL OR LTRIM(RTRIM(@nombre)) = '')
+            THROW 60130, 'El nombre ingresado para la actividad empresarial no es válido.', 1;
+            
+        INSERT INTO sgpn.ActividadEmpresarial(nombre)
+        VALUES (@nombre);
+    END TRY
+    BEGIN CATCH
+        THROW;
+    END CATCH;
+END;
+GO
+
+-- Modificación
+CREATE OR ALTER PROCEDURE sgpn.sp_modificar_actividad_empresarial
+    @id INT,
+    @nombre VARCHAR(100),
+    @descripcion VARCHAR(255)
+AS
+BEGIN
+    SET NOCOUNT ON;
+    BEGIN TRY
+        IF NOT EXISTS (SELECT 1 FROM sgpn.ActividadEmpresarial WHERE id = @id)
+            THROW 60131, 'La actividad empresarial con el ID provisto no existe.', 1;
+
+        IF(@nombre IS NULL OR LTRIM(RTRIM(@nombre)) = '')
+            THROW 60132, 'El nombre ingresado para la actividad empresarial no es válido.', 2;
+
+        UPDATE sgpn.ActividadEmpresarial
+        SET nombre = @nombre, descripcion= @descripcion
+        WHERE id = @id;
+    END TRY
+    BEGIN CATCH
+        THROW;
+    END CATCH;
+END;
+GO
+
+-- Baja
+CREATE OR ALTER PROCEDURE sgpn.sp_eliminar_actividad_empresarial
+    @id INT
+AS
+BEGIN
+    SET NOCOUNT ON;
+    BEGIN TRY
+        IF NOT EXISTS (SELECT 1 FROM sgpn.ActividadEmpresarial WHERE id = @id)
+            THROW 60133, 'La actividad empresarial con el ID provisto no existe.', 1;
+
+        IF EXISTS (SELECT 1 FROM sgpn.EmpresaConcesionaria WHERE id_actividad_empresarial = @id)
+            THROW 60134, 'La Actividad con el ID provisto tiene Empresas.', 1;
+
+        DELETE FROM ActividadEmpresarial WHERE id = @id;
+
+    END TRY
+    BEGIN CATCH
+        THROW;
+    END CATCH;
+END;
+GO
+-- ---------------------------------------------
+-- 3.  CONCESION
+-- ---------------------------------------------
+
+-- Alta
+
+CREATE OR ALTER PROCEDURE sgpn.sp_crear_concesion
+    @descripcion VARCHAR(255),
+    @fecha_inicio DATETIME,
+    @fecha_fin DATETIME,
+    @id_empresa_concesionaria INT,
+    @id_parque INT,
+AS
+BEGIN
+    SET NOCOUNT ON;
+    BEGIN TRY
+        IF( @fecha_inicio > @fecha_fin)
+            THROW 60200, 'La fecha de inicio es mayor a la de fin', 1;
+
+        IF( NOT EXISTS (SELECT 1 FROM sgpn.EmpresaConcesionaria WHERE id = @id_empresa_concesionaria) )
+            THROW 60201, 'No existe la empresa', 1;
+
+        IF( NOT EXISTS (SELECT 1 FROM sgpn.Parque WHERE id = @id_parque) )
+            THROW 60202, 'No existe el parque', 1;
+            
+        INSERT INTO sgpn.Concesion(descripcion,fecha_inicio,fecha_fin,id_empresa_concesionaria,id_parque)
+        VALUES (@descripcion,@fecha_inicio,@fecha_fin,@id_empresa_concesionaria,@id_parque);
+
+    END TRY
+    BEGIN CATCH
+        THROW;
+    END CATCH;
+END;
+GO
+
+-- Modificación
+CREATE OR ALTER PROCEDURE sgpn.sp_modificar_concesion
+    @id INT,
+    @fecha_inicio DATETIME,
+    @fecha_fin DATETIME,
+    @id_empresa_concesionaria INT,
+    @id_parque INT
+AS
+BEGIN
+    SET NOCOUNT ON;
+    BEGIN TRY
+        IF NOT EXISTS (SELECT 1 FROM sgpn.ActividadEmpresarial WHERE id = @id)
+            THROW 60131, 'La actividad empresarial con el ID provisto no existe.', 1;
+
+        IF( @fecha_inicio > @fecha_fin)
+            THROW 60200, 'La fecha de inicio es mayor a la de fin', 1;
+
+        IF( NOT EXISTS (SELECT 1 FROM sgpn.EmpresaConcesionaria WHERE id = @id_empresa_concesionaria) )
+            THROW 60201, 'No existe la empresa', 1;
+
+        IF( NOT EXISTS (SELECT 1 FROM sgpn.Parque WHERE id = @id_parque) )
+            THROW 60202, 'No existe el parque', 1;
+            
+
+        UPDATE sgpn.Concesion
+        SET descripcion = @descripcion, fecha_inicio = @fecha_inicio, fecha_fin = @fecha_fin, id_empresa_concesionaria = @id_empresa_concesionaria
+        WHERE id = @id;
+    END TRY
+    BEGIN CATCH
+        THROW;
+    END CATCH;
+END;
+GO
+
+-- Por logica de negocio no se permiten eliminar concesiones.
+
+-- ---------------------------------------------
+-- 4.  CANON
+-- ---------------------------------------------
+
+-- Alta
+
+
+-- Completar. Primero arreglar DER CANON-PAGO
+
+-- Por logica de negocio no se permiten modificar ni eliminar Tickets Factura.
+
+
+--- FALTAN TEST

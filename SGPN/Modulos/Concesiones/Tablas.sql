@@ -54,12 +54,18 @@ BEGIN
         fecha_inicio DATE NOT NULL DEFAULT CAST(GETDATE() AS DATE),
         fecha_fin DATE NOT NULL,
         id_empresa_concesionaria INT NOT NULL,
+        id_parque INT NOT NULL,
+        descripcion VARCHAR(255) NULL,
 
         CONSTRAINT PK_Concesion PRIMARY KEY (id),
 
         CONSTRAINT FK_Empresa_Concesion
             FOREIGN KEY (id_empresa_concesionaria)
-            REFERENCES sgpn.EmpresaConcesionaria(id)
+            REFERENCES sgpn.EmpresaConcesionaria(id),
+
+        CONSTRAINT FK_Empresa_Parque
+            FOREIGN KEY (id_parque)
+            REFERENCES sgpn.Parque(id)
 
     );
 

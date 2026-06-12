@@ -24,7 +24,8 @@ BEGIN
 
     CREATE TABLE sgpn.FormaPago(
         id INT IDENTITY (1,1),
-        descripcion VARCHAR(255) NULL,
+        nombre VARCHAR(100) NOT NULL,
+        estado BIT DEFAULT 1 NOT NULL,
 
         CONSTRAINT PK_FormaPago PRIMARY KEY (id)
     );
@@ -32,8 +33,9 @@ BEGIN
     CREATE TABLE sgpn.Pago(
         id INT IDENTITY (1,1),
         fecha_y_hora DATETIME NOT NULL DEFAULT GETDATE(),
-        id_reserva INT,
-        id_forma_pago INT,
+        id_reserva INT NOT NULL, -- REVISAR CON DER OPCIONALIDAD ( si es un pago de canon, id_reserva sera NULL)
+        id_forma_pago INT NOT NULL,
+        importe DECIMAL(15,2) NOT NULL,
 
         CONSTRAINT PK_Pago PRIMARY KEY (id),
 
@@ -43,13 +45,17 @@ BEGIN
 
         CONSTRAINT FK_Pago_FormaPago
             FOREIGN KEY (id_forma_pago)
-            REFERENCES sgpn.FormaPago(id)
+            REFERENCES sgpn.FormaPago(id),
+
+        CONSTRAINT CK_importe
+        CHECK (importe > 0) 
 
        );
 
     CREATE TABLE sgpn.PuntoVenta(
         id INT IDENTITY (1,1),
-        descripcion VARCHAR(255) NULL,
+        nombre VARCHAR(100) NULL,
+        estado BIT DEFAULT 1 NOT NULL,
 
         CONSTRAINT PK_PuntoVenta PRIMARY KEY (id)
     );
@@ -57,8 +63,8 @@ BEGIN
     CREATE TABLE sgpn.TicketFactura(
         id INT IDENTITY (1,1),
         fecha_y_hora DATETIME NOT NULL DEFAULT GETDATE(),
-        id_punto_venta INT,
-        id_pago INT,
+        id_punto_venta INT NOT NULL,
+        id_pago INT NOT NULL,
 
         CONSTRAINT PK_TicketFactura PRIMARY KEY (id),
 
