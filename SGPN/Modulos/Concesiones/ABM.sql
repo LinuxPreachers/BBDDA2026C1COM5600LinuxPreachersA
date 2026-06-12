@@ -1,12 +1,22 @@
+/*
+ * Universidad: UNLaM
+ * Materia: Bases de datos aplicadas
+ * Comisión: 5600
+ * Grupo: 02
+ * Integrantes: Conforti, Jaime, Laurelli, Porras
+ * Fecha:
+ * Script: Creación de SP ABM módulo concesiones
+*/
+
 USE LinuxPreachers;
 GO
--- MODULO CONCESIONES
+
 -- ---------------------------------------------
 -- 1. ABM: EMPRESA CONCESIONARIA
 -- ---------------------------------------------
 
 -- Alta
-CREATE OR ALTER PROCEDURE sgpn.sp_crear_empresa_concesionaria
+CREATE OR ALTER PROCEDURE concesiones.sp_crear_empresa_concesionaria
 
     @nombre VARCHAR(100),
     @descripcion VARCHAR(255),
@@ -26,14 +36,14 @@ BEGIN
         IF(@cuit >= 99999999999 OR @cuit <= 10000000000)
             THROW 60102, 'CUIT inválido.', 1;
 
-        IF(EXISTS(SELECT 1 FROM sgpn.EmpresaConcesionaria WHERE @cuit = cuit))
+        IF(EXISTS(SELECT 1 FROM concesiones.EmpresaConcesionaria WHERE @cuit = cuit))
             THROW 60103, 'CUIT ya cargado.', 1;
 
-        IF( @id_actividad_empresarial NOT IN(SELECT id FROM sgpn.ActividadEmpresarial) )
+        IF( @id_actividad_empresarial NOT IN(SELECT id FROM concesiones.ActividadEmpresarial) )
             THROW 60104, 'No existe la Actividad', 1;
 
             
-        INSERT INTO sgpn.EmpresaConcesionaria(nombre,descripcion,cuit,razon_social,id_actividad_empresarial)
+        INSERT INTO concesiones.EmpresaConcesionaria(nombre,descripcion,cuit,razon_social,id_actividad_empresarial)
         VALUES (@nombre,@descripcion,@cuit,@razon_social,@id_actividad_empresarial);
     END TRY
     BEGIN CATCH
@@ -43,7 +53,7 @@ END;
 GO
 
 -- Modificación
-CREATE OR ALTER PROCEDURE sgpn.sp_modificar_empresa_concesionaria
+CREATE OR ALTER PROCEDURE concesiones.sp_modificar_empresa_concesionaria
     @id INT,
     @nombre VARCHAR(100),
     @descripcion VARCHAR(255),
@@ -54,7 +64,7 @@ AS
 BEGIN
     SET NOCOUNT ON;
     BEGIN TRY
-        IF NOT EXISTS (SELECT 1 FROM sgpn.EmpresaConcesionaria WHERE id = @id)
+        IF NOT EXISTS (SELECT 1 FROM concesiones.EmpresaConcesionaria WHERE id = @id)
             THROW 60110, 'La Empresa con el ID provisto no existe.', 1;
 
         IF(@nombre IS NULL OR LTRIM(RTRIM(@nombre)) = '')
@@ -66,10 +76,10 @@ BEGIN
         IF(@cuit >= 99999999999 OR @cuit <= 10000000000)
             THROW 60113, 'CUIT inválido.', 1;
 
-        IF( @id_actividad_empresarial NOT IN(SELECT id FROM sgpn.ActividadEmpresarial) )
+        IF( @id_actividad_empresarial NOT IN(SELECT id FROM concesiones.ActividadEmpresarial) )
             THROW 60114, 'No existe la Actividad', 1;
 
-        UPDATE sgpn.EmpresaConcesionaria
+        UPDATE concesiones.EmpresaConcesionaria
         SET nombre = @nombre , descripcion = @descripcion, cuit = @cuit , razon_social = @razon_social, id_actividad_empresarial = @id_actividad_empresarial
         WHERE id = @id;
     END TRY
@@ -80,20 +90,20 @@ END;
 GO
 
 -- Baja
-CREATE OR ALTER PROCEDURE sgpn.sp_eliminar_empresa_concesionaria
+CREATE OR ALTER PROCEDURE concesiones.sp_eliminar_empresa_concesionaria
     @id INT
 AS
 BEGIN
     SET NOCOUNT ON;
     BEGIN TRY
 
-        IF NOT EXISTS (SELECT 1 FROM sgpn.EmpresaConcesionaria WHERE id = @id)
+        IF NOT EXISTS (SELECT 1 FROM concesiones.EmpresaConcesionaria WHERE id = @id)
             THROW 60120, 'La Empresa con el ID provisto no existe.', 1;
 
-        IF EXISTS (SELECT 1 FROM sgpn.Concesion WHERE id_empresa_concesionaria = @id)
+        IF EXISTS (SELECT 1 FROM concesiones.Concesion WHERE id_empresa_concesionaria = @id)
             THROW 60121, 'La Empresa con el ID provisto tiene concesiones.', 1;
 
-        DELETE  FROM  sgpn.EmpresaConcesionaria WHERE id = @id;
+        DELETE  FROM  concesiones.EmpresaConcesionaria WHERE id = @id;
 
     END TRY
     BEGIN CATCH
@@ -107,7 +117,7 @@ GO
 -- ---------------------------------------------
 
 -- Alta
-CREATE OR ALTER PROCEDURE sgpn.sp_crear_actividad_empresarial
+CREATE OR ALTER PROCEDURE concesiones.sp_crear_actividad_empresarial
     @nombre VARCHAR(100),
     @descripcion VARCHAR(255)
 AS
@@ -117,7 +127,7 @@ BEGIN
         IF(@nombre IS NULL OR LTRIM(RTRIM(@nombre)) = '')
             THROW 60130, 'El nombre ingresado para la actividad empresarial no es válido.', 1;
             
-        INSERT INTO sgpn.ActividadEmpresarial(nombre)
+        INSERT INTO concesiones.ActividadEmpresarial(nombre)
         VALUES (@nombre);
     END TRY
     BEGIN CATCH
@@ -127,7 +137,7 @@ END;
 GO
 
 -- Modificación
-CREATE OR ALTER PROCEDURE sgpn.sp_modificar_actividad_empresarial
+CREATE OR ALTER PROCEDURE concesiones.sp_modificar_actividad_empresarial
     @id INT,
     @nombre VARCHAR(100),
     @descripcion VARCHAR(255)
@@ -135,13 +145,13 @@ AS
 BEGIN
     SET NOCOUNT ON;
     BEGIN TRY
-        IF NOT EXISTS (SELECT 1 FROM sgpn.ActividadEmpresarial WHERE id = @id)
+        IF NOT EXISTS (SELECT 1 FROM concesiones.ActividadEmpresarial WHERE id = @id)
             THROW 60131, 'La actividad empresarial con el ID provisto no existe.', 1;
 
         IF(@nombre IS NULL OR LTRIM(RTRIM(@nombre)) = '')
             THROW 60132, 'El nombre ingresado para la actividad empresarial no es válido.', 2;
 
-        UPDATE sgpn.ActividadEmpresarial
+        UPDATE concesiones.ActividadEmpresarial
         SET nombre = @nombre, descripcion= @descripcion
         WHERE id = @id;
     END TRY
@@ -152,16 +162,16 @@ END;
 GO
 
 -- Baja
-CREATE OR ALTER PROCEDURE sgpn.sp_eliminar_actividad_empresarial
+CREATE OR ALTER PROCEDURE concesiones.sp_eliminar_actividad_empresarial
     @id INT
 AS
 BEGIN
     SET NOCOUNT ON;
     BEGIN TRY
-        IF NOT EXISTS (SELECT 1 FROM sgpn.ActividadEmpresarial WHERE id = @id)
+        IF NOT EXISTS (SELECT 1 FROM concesiones.ActividadEmpresarial WHERE id = @id)
             THROW 60133, 'La actividad empresarial con el ID provisto no existe.', 1;
 
-        IF EXISTS (SELECT 1 FROM sgpn.EmpresaConcesionaria WHERE id_actividad_empresarial = @id)
+        IF EXISTS (SELECT 1 FROM concesiones.EmpresaConcesionaria WHERE id_actividad_empresarial = @id)
             THROW 60134, 'La Actividad con el ID provisto tiene Empresas.', 1;
 
         DELETE FROM ActividadEmpresarial WHERE id = @id;
@@ -178,12 +188,12 @@ GO
 
 -- Alta
 
-CREATE OR ALTER PROCEDURE sgpn.sp_crear_concesion
+CREATE OR ALTER PROCEDURE concesiones.sp_crear_concesion
     @descripcion VARCHAR(255),
     @fecha_inicio DATETIME,
     @fecha_fin DATETIME,
     @id_empresa_concesionaria INT,
-    @id_parque INT,
+    @id_parque INT
 AS
 BEGIN
     SET NOCOUNT ON;
@@ -191,13 +201,13 @@ BEGIN
         IF( @fecha_inicio > @fecha_fin)
             THROW 60200, 'La fecha de inicio es mayor a la de fin', 1;
 
-        IF( NOT EXISTS (SELECT 1 FROM sgpn.EmpresaConcesionaria WHERE id = @id_empresa_concesionaria) )
+        IF( NOT EXISTS (SELECT 1 FROM concesiones.EmpresaConcesionaria WHERE id = @id_empresa_concesionaria) )
             THROW 60201, 'No existe la empresa', 1;
 
-        IF( NOT EXISTS (SELECT 1 FROM sgpn.Parque WHERE id = @id_parque) )
+        IF( NOT EXISTS (SELECT 1 FROM parques.Parque WHERE id = @id_parque) )
             THROW 60202, 'No existe el parque', 1;
             
-        INSERT INTO sgpn.Concesion(descripcion,fecha_inicio,fecha_fin,id_empresa_concesionaria,id_parque)
+        INSERT INTO concesiones.Concesion(descripcion,fecha_inicio,fecha_fin,id_empresa_concesionaria,id_parque)
         VALUES (@descripcion,@fecha_inicio,@fecha_fin,@id_empresa_concesionaria,@id_parque);
 
     END TRY
@@ -208,8 +218,9 @@ END;
 GO
 
 -- Modificación
-CREATE OR ALTER PROCEDURE sgpn.sp_modificar_concesion
+CREATE OR ALTER PROCEDURE concesiones.sp_modificar_concesion
     @id INT,
+    @descripcion VARCHAR(255),
     @fecha_inicio DATETIME,
     @fecha_fin DATETIME,
     @id_empresa_concesionaria INT,
@@ -218,20 +229,20 @@ AS
 BEGIN
     SET NOCOUNT ON;
     BEGIN TRY
-        IF NOT EXISTS (SELECT 1 FROM sgpn.ActividadEmpresarial WHERE id = @id)
+        IF NOT EXISTS (SELECT 1 FROM concesiones.ActividadEmpresarial WHERE id = @id)
             THROW 60131, 'La actividad empresarial con el ID provisto no existe.', 1;
 
         IF( @fecha_inicio > @fecha_fin)
             THROW 60200, 'La fecha de inicio es mayor a la de fin', 1;
 
-        IF( NOT EXISTS (SELECT 1 FROM sgpn.EmpresaConcesionaria WHERE id = @id_empresa_concesionaria) )
+        IF( NOT EXISTS (SELECT 1 FROM concesiones.EmpresaConcesionaria WHERE id = @id_empresa_concesionaria) )
             THROW 60201, 'No existe la empresa', 1;
 
-        IF( NOT EXISTS (SELECT 1 FROM sgpn.Parque WHERE id = @id_parque) )
+        IF( NOT EXISTS (SELECT 1 FROM parques.Parque WHERE id = @id_parque) )
             THROW 60202, 'No existe el parque', 1;
             
 
-        UPDATE sgpn.Concesion
+        UPDATE concesiones.Concesion
         SET descripcion = @descripcion, fecha_inicio = @fecha_inicio, fecha_fin = @fecha_fin, id_empresa_concesionaria = @id_empresa_concesionaria
         WHERE id = @id;
     END TRY

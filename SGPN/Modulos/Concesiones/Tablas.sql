@@ -5,24 +5,24 @@
  * Grupo: 02
  * Integrantes: Conforti, Jaime, Laurelli, Porras
  * Fecha:
- * Script: Creación de tablas módulo reservas
+ * Script: Creación de tablas módulo concesiones
 */
 
 USE LinuxPreachers
 -- Schema
-IF NOT EXISTS ( SELECT 1 FROM sys.schemas WHERE name = 'sgpn' )
+IF NOT EXISTS ( SELECT 1 FROM sys.schemas WHERE name = 'concesiones' )
 BEGIN 
-EXEC('CREATE SCHEMA sgpn'); 
+    EXEC('CREATE SCHEMA concesiones'); 
 END;
 GO
 
 -- Este SP asume que no existe ninguna tabla para el módulo 
-CREATE OR ALTER PROCEDURE sgpn.sp_crear_tablas_modulo_concesiones
+CREATE OR ALTER PROCEDURE concesiones.sp_crear_tablas_modulo_concesiones
 AS
 BEGIN
     SET NOCOUNT ON;
 
-    CREATE TABLE sgpn.ActividadEmpresarial(
+    CREATE TABLE concesiones.ActividadEmpresarial(
         id INT IDENTITY (1,1),
         nombre VARCHAR (100) NOT NULL,
         descripcion VARCHAR(255) NULL,
@@ -30,7 +30,7 @@ BEGIN
         CONSTRAINT PK_ActividadEmpresarial PRIMARY KEY (id)
     );
 
-    CREATE TABLE sgpn.EmpresaConcesionaria(
+    CREATE TABLE concesiones.EmpresaConcesionaria(
         id INT IDENTITY (1,1),
         nombre VARCHAR (100) NOT NULL,
         descripcion VARCHAR(255) NULL,
@@ -42,14 +42,14 @@ BEGIN
 
         CONSTRAINT FK_Empresa_Actividad
             FOREIGN KEY (id_actividad_empresarial)
-            REFERENCES sgpn.ActividadEmpresarial(id),
+            REFERENCES concesiones.ActividadEmpresarial(id),
 
         CONSTRAINT CK_Cuit_Longitud
             CHECK (cuit < 99999999999 AND cuit >10000000000) -- Investigar digito verificador
 
     );
 
-    CREATE TABLE sgpn.Concesion(
+    CREATE TABLE concesiones.Concesion(
         id INT IDENTITY (1,1),
         fecha_inicio DATE NOT NULL DEFAULT CAST(GETDATE() AS DATE),
         fecha_fin DATE NOT NULL,
@@ -61,15 +61,15 @@ BEGIN
 
         CONSTRAINT FK_Empresa_Concesion
             FOREIGN KEY (id_empresa_concesionaria)
-            REFERENCES sgpn.EmpresaConcesionaria(id),
+            REFERENCES concesiones.EmpresaConcesionaria(id),
 
         CONSTRAINT FK_Empresa_Parque
             FOREIGN KEY (id_parque)
-            REFERENCES sgpn.Parque(id)
+            REFERENCES parques.Parque(id)
 
     );
 
-    CREATE TABLE sgpn.Canon(
+    CREATE TABLE concesiones.Canon(
         id INT IDENTITY (1,1),
         periodo DATE NOT NULL, --Se guarda como date, luego se puede llevar a otro formato en vista o consulta
         monto DECIMAL(15,2) NOT NULL,
@@ -81,11 +81,11 @@ BEGIN
 
         CONSTRAINT FK_Canon_Concesion
             FOREIGN KEY (id_concesion)
-            REFERENCES sgpn.Concesion(id),
+            REFERENCES concesiones.Concesion(id),
 
        CONSTRAINT FK_Canon_forma_pago
            FOREIGN KEY (id_concesion)
-           REFERENCES sgpn.Concesion(id)
+           REFERENCES concesiones.Concesion(id)
 
     );
 
@@ -93,7 +93,7 @@ END;
 GO
 
 -- SP Wrapper con verificaciones
-CREATE OR ALTER PROCEDURE sgpn.sp_crear_modulo_concesiones
+CREATE OR ALTER PROCEDURE concesiones.sp_crear_modulo_concesiones
 AS
 BEGIN
     SET NOCOUNT ON;
@@ -108,7 +108,7 @@ BEGIN
     FROM sys.tables t
     INNER JOIN sys.schemas s
         ON s.schema_id = t.schema_id
-    WHERE s.name = 'sgpn'
+    WHERE s.name = 'concesiones'
       AND t.name IN (
             'ActividadEmpresarial',
             'EmpresaConcesionaria',
@@ -118,7 +118,7 @@ BEGIN
 
     IF EXISTS (SELECT 1 FROM @tablas_existentes)
     BEGIN
-        RAISERROR('No se puede crear el modulo: ya existe al menos una tabla del modulo actividades en el esquema sgpn.', 16, 1);
+        RAISERROR('No se puede crear el modulo: ya existe al menos una tabla del modulo actividades en el esquema concesiones.', 16, 1);
         RETURN;
     END;
 
@@ -138,7 +138,7 @@ BEGIN
         FROM sys.tables t
         INNER JOIN sys.schemas s
             ON s.schema_id = t.schema_id
-        WHERE s.name = 'sgpn'
+        WHERE s.name = 'pagos'
           AND t.name = d.nombre
     );
 
@@ -149,21 +149,21 @@ BEGIN
     END;
 
     -- Si pasamos los controles, ejecutamos la creación
-    EXEC sgpn.sp_crear_tablas_modulo_concesiones;
+    EXEC concesiones.sp_crear_tablas_modulo_concesiones;
 END;
 GO
 
 -- SP para destruir el módulo (respetando orden de integridad referencial)
-CREATE OR ALTER PROCEDURE sgpn.sp_eliminar_modulo_concesiones
+CREATE OR ALTER PROCEDURE concesiones.sp_eliminar_modulo_concesiones
 AS
 BEGIN
     BEGIN TRY
         BEGIN TRANSACTION;
 
-            DROP TABLE IF EXISTS sgpn.Canon;
-            DROP TABLE IF EXISTS sgpn.Concesion;
-            DROP TABLE IF EXISTS sgpn.EmpresaConcesionaria;
-            DROP TABLE IF EXISTS sgpn.ActividadEmpresarial;
+            DROP TABLE IF EXISTS concesiones.Canon;
+            DROP TABLE IF EXISTS concesiones.Concesion;
+            DROP TABLE IF EXISTS concesiones.EmpresaConcesionaria;
+            DROP TABLE IF EXISTS concesiones.ActividadEmpresarial;
 
 
         COMMIT TRANSACTION;
@@ -184,14 +184,14 @@ GO
 
 -- Ejecucion (Comentado para evitar ejecución accidental si copiás el script de corrido)
 /*
-EXEC sgpn.sp_crear_modulo_concesiones;
-SELECT * FROM sys.tables WHERE schema_id = SCHEMA_ID('sgpn') ORDER BY create_date DESC;
+EXEC concesiones.sp_crear_modulo_concesiones;
+SELECT * FROM sys.tables WHERE schema_id = SCHEMA_ID('concesiones') ORDER BY create_date DESC;
 GO
 */
 
 -- Autodestruccion (Comentado para evitar ejecución accidental)
 /*
-EXEC sgpn.sp_eliminar_modulo_concesiones;
-SELECT * FROM sys.tables WHERE schema_id = SCHEMA_ID('sgpn');
+EXEC concesiones.sp_eliminar_modulo_concesiones;
+SELECT * FROM sys.tables WHERE schema_id = SCHEMA_ID('concesiones');
 GO
 */

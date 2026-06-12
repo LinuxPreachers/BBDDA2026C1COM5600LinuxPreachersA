@@ -1,26 +1,37 @@
-USE LinuxPreachers
+/*
+ * Universidad: UNLaM
+ * Materia: Bases de datos aplicadas
+ * Comisión: 5600
+ * Grupo: 02
+ * Integrantes: Conforti, Jaime, Laurelli, Porras
+ * Fecha:
+ * Script: Creación de tablas módulo parques
+*/
+
+USE LinuxPreachers;
+GO
 
 -- Schema
-IF NOT EXISTS ( SELECT 1 FROM sys.schemas WHERE name = 'sgpn' )
+IF NOT EXISTS ( SELECT 1 FROM sys.schemas WHERE name = 'parques' )
 BEGIN 
-    EXEC('CREATE SCHEMA sgpn'); 
-END
+    EXEC('CREATE SCHEMA parques'); 
+END;
 GO
 
 -- Este SP Asume que no existe ninguna tabla
-CREATE OR ALTER PROCEDURE sgpn.crear_tablas_modulo_parques
+CREATE OR ALTER PROCEDURE parques.crear_tablas_modulo_parques
 AS
 BEGIN
     SET NOCOUNT ON;
 
-    CREATE TABLE sgpn.Region (
+    CREATE TABLE parques.Region (
         id INT IDENTITY(1,1) NOT NULL,
         nombre VARCHAR(100) NOT NULL,
 
         CONSTRAINT PK_Region PRIMARY KEY (id)
     );
 
-    CREATE TABLE sgpn.Provincia (
+    CREATE TABLE parques.Provincia (
         id INT IDENTITY(1,1) NOT NULL,
         nombre VARCHAR(100) NOT NULL,
         id_region INT NOT NULL,
@@ -29,10 +40,10 @@ BEGIN
 
         CONSTRAINT FK_Provincia_Region
             FOREIGN KEY (id_region)
-            REFERENCES sgpn.Region(id)
+            REFERENCES parques.Region(id)
     );
 
-    CREATE TABLE sgpn.TipoVisitante (
+    CREATE TABLE parques.TipoVisitante (
         id INT IDENTITY(1,1) NOT NULL,
         nombre VARCHAR(100) NOT NULL,
         descripcion VARCHAR(255) NULL,
@@ -40,14 +51,14 @@ BEGIN
         CONSTRAINT PK_TipoVisitante PRIMARY KEY (id)
     );
 
-    CREATE TABLE sgpn.TipoParque (
+    CREATE TABLE parques.TipoParque (
         id INT IDENTITY(1,1) NOT NULL,
         descripcion VARCHAR(255) NOT NULL,
 
         CONSTRAINT PK_TipoParque PRIMARY KEY (id)
     );
 
-    CREATE TABLE sgpn.Parque (
+    CREATE TABLE parques.Parque (
         id INT IDENTITY(1,1) NOT NULL,
         nombre VARCHAR(100) NOT NULL,
         superficie_km2 DECIMAL(10,2) NULL,
@@ -59,7 +70,7 @@ BEGIN
 
         CONSTRAINT FK_Parque_TipoParque
             FOREIGN KEY (id_tipo_parque)
-            REFERENCES sgpn.TipoParque(id),
+            REFERENCES parques.TipoParque(id),
 
         CONSTRAINT CK_Parque_Superficie
             CHECK (superficie_km2 IS NULL OR superficie_km2 >= 0),
@@ -71,7 +82,7 @@ BEGIN
             CHECK (longitud IS NULL OR longitud BETWEEN -180 AND 180)
     );
 
-    CREATE TABLE sgpn.EstadisticaVisitantes (
+    CREATE TABLE parques.EstadisticaVisitantes (
         id INT IDENTITY(1,1) NOT NULL,
         periodo VARCHAR(50) NOT NULL,
         periodo_inicio DATETIME NOT NULL,
@@ -83,13 +94,13 @@ BEGIN
 
         CONSTRAINT FK_EstadisticaVisitantes_Region
             FOREIGN KEY (id_region)
-            REFERENCES sgpn.Region(id),
+            REFERENCES parques.Region(id),
 
         CONSTRAINT CK_EstadisticaVisitantes_Cantidad
             CHECK (cantidad >= 0)
     );
 
-    CREATE TABLE sgpn.ProvinciaParque (
+    CREATE TABLE parques.ProvinciaParque (
         id_provincia INT NOT NULL,
         id_parque INT NOT NULL,
         direccion VARCHAR(255) NULL,
@@ -99,14 +110,14 @@ BEGIN
 
         CONSTRAINT FK_ProvinciaParque_Provincia
             FOREIGN KEY (id_provincia)
-            REFERENCES sgpn.Provincia(id),
+            REFERENCES parques.Provincia(id),
 
         CONSTRAINT FK_ProvinciaParque_Parque
             FOREIGN KEY (id_parque)
-            REFERENCES sgpn.Parque(id)
+            REFERENCES parques.Parque(id)
     );
 
-    CREATE TABLE sgpn.ParqueTipoVisitante (
+    CREATE TABLE parques.ParqueTipoVisitante (
         id_parque INT NOT NULL,
         id_tipo_visitante INT NOT NULL,
         precio DECIMAL(10,2) NOT NULL,
@@ -116,11 +127,11 @@ BEGIN
 
         CONSTRAINT FK_ParqueTipoVisitante_Parque
             FOREIGN KEY (id_parque)
-            REFERENCES sgpn.Parque(id),
+            REFERENCES parques.Parque(id),
 
         CONSTRAINT FK_ParqueTipoVisitante_TipoVisitante
             FOREIGN KEY (id_tipo_visitante)
-            REFERENCES sgpn.TipoVisitante(id),
+            REFERENCES parques.TipoVisitante(id),
 
         CONSTRAINT CK_ParqueTipoVisitante_Precio
             CHECK (precio >= 0)
@@ -130,7 +141,7 @@ END;
 GO
 
 -- SP Wrapper con verificaciones
-CREATE OR ALTER PROCEDURE sgpn.sp_crear_modulo_parques
+CREATE OR ALTER PROCEDURE parques.sp_crear_modulo_parques
 AS
 BEGIN
 
@@ -143,7 +154,7 @@ BEGIN
     FROM sys.tables t
     INNER JOIN sys.schemas s
         ON s.schema_id = t.schema_id
-    WHERE s.name = 'sgpn'
+    WHERE s.name = 'parques'
         AND t.name IN (
             'Region',
             'Provincia',
@@ -159,32 +170,32 @@ BEGIN
 
     IF EXISTS (SELECT 1 FROM @tablas_existentes)
     BEGIN
-        --THROW 50001, 'No se puede crear el modulo: ya existe al menos una tabla del modulo en el esquema sgpn.', 1;
-        RAISERROR('No se puede crear el modulo: ya existe al menos una tabla del modulo en el esquema sgpn.',16,1);
+        --THROW 50001, 'No se puede crear el modulo: ya existe al menos una tabla del modulo en el esquema parques.', 1;
+        RAISERROR('No se puede crear el modulo: ya existe al menos una tabla del modulo en el esquema parques.',16,1);
     END;
 
-    EXEC sgpn.crear_tablas_modulo_parques;
+    EXEC parques.crear_tablas_modulo_parques;
 
 END;
 GO
 
-CREATE OR ALTER PROCEDURE sgpn.sp_eliminar_modulo_parques
+CREATE OR ALTER PROCEDURE parques.sp_eliminar_modulo_parques
 AS
 BEGIN
     BEGIN TRY
         BEGIN TRANSACTION;
-            DROP TABLE IF EXISTS sgpn.ParqueTipoVisitante;
-            DROP TABLE IF EXISTS sgpn.ProvinciaParque;
-            DROP TABLE IF EXISTS sgpn.Actividad;
-            DROP TABLE IF EXISTS sgpn.Concesion;
-            DROP TABLE IF EXISTS sgpn.EstadisticaVisitantes;
+            DROP TABLE IF EXISTS parques.ParqueTipoVisitante;
+            DROP TABLE IF EXISTS parques.ProvinciaParque;
+            DROP TABLE IF EXISTS parques.Actividad;
+            DROP TABLE IF EXISTS parques.Concesion;
+            DROP TABLE IF EXISTS parques.EstadisticaVisitantes;
 
-            DROP TABLE IF EXISTS sgpn.Parque;
-            DROP TABLE IF EXISTS sgpn.Provincia;
+            DROP TABLE IF EXISTS parques.Parque;
+            DROP TABLE IF EXISTS parques.Provincia;
 
-            DROP TABLE IF EXISTS sgpn.TipoVisitante;
-            DROP TABLE IF EXISTS sgpn.TipoParque;
-            DROP TABLE IF EXISTS sgpn.Region;
+            DROP TABLE IF EXISTS parques.TipoVisitante;
+            DROP TABLE IF EXISTS parques.TipoParque;
+            DROP TABLE IF EXISTS parques.Region;
         COMMIT TRANSACTION;
     END TRY
     BEGIN CATCH
@@ -203,17 +214,17 @@ GO
 
 /*
 -- Ejecucion
-EXEC sgpn.sp_crear_modulo_parques;
+EXEC parques.sp_crear_modulo_parques;
 select * from sys.tables
 GO
 
 -- Autodestruccion
-EXEC sgpn.sp_eliminar_modulo_parques;
+EXEC parques.sp_eliminar_modulo_parques;
 select * from sys.tables
 GO
 
 -- Otra Verif
 SELECT * 
 FROM INFORMATION_SCHEMA.TABLES
-WHERE TABLE_SCHEMA = 'sgpn';
+WHERE TABLE_SCHEMA = 'parques';
 */

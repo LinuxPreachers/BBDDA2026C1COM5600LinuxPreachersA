@@ -1,21 +1,37 @@
+/*
+ * Universidad: UNLaM
+ * Materia: Bases de datos aplicadas
+ * Comisión: 5600
+ * Grupo: 02
+ * Integrantes: Conforti, Jaime, Laurelli, Porras
+ * Fecha:
+ * Script: Creación de tablas módulo empleados
+*/
+
+USE LinuxPreachers;
+GO
+
 -- Schema
-IF NOT EXISTS ( SELECT 1 FROM sys.schemas WHERE name = 'sgpn' )
-BEGIN EXEC('CREATE SCHEMA sgpn'); END; GO
+IF NOT EXISTS ( SELECT 1 FROM sys.schemas WHERE name = 'empleados' )
+BEGIN 
+    EXEC('CREATE SCHEMA empleados'); 
+END; 
+GO
 
 -- Este SP asume que no existe ninguna tabla
-CREATE OR ALTER PROCEDURE sgpn.crear_tablas_modulo_empleados
+CREATE OR ALTER PROCEDURE empleados.crear_tablas_modulo_empleados
 AS
 BEGIN
     SET NOCOUNT ON;
 
-    CREATE TABLE sgpn.TipoDocumento (
+    CREATE TABLE empleados.TipoDocumento (
         id INT IDENTITY(1,1) NOT NULL,
         nombre VARCHAR(100) NOT NULL,
 
         CONSTRAINT PK_TipoDocumento PRIMARY KEY (id)
     );
 
-    CREATE TABLE sgpn.Empleado (
+    CREATE TABLE empleados.Empleado (
         id INT IDENTITY(1,1) NOT NULL,
         nombre VARCHAR(100) NOT NULL,
         apellido VARCHAR(100) NOT NULL,
@@ -26,13 +42,13 @@ BEGIN
 
         CONSTRAINT FK_Empleado_TipoDocumento
             FOREIGN KEY (id_tipo_documento)
-            REFERENCES sgpn.TipoDocumento(id),
+            REFERENCES empleados.TipoDocumento(id),
 
         CONSTRAINT UQ_Empleado_Documento
             UNIQUE (id_tipo_documento, nro_doc)
     );
 
-    CREATE TABLE sgpn.Especialidad (
+    CREATE TABLE empleados.Especialidad (
         id INT IDENTITY(1,1) NOT NULL,
         nombre VARCHAR(100) NOT NULL,
         descripcion VARCHAR(255) NULL,
@@ -40,7 +56,7 @@ BEGIN
         CONSTRAINT PK_Especialidad PRIMARY KEY (id)
     );
 
-    CREATE TABLE sgpn.Titulo (
+    CREATE TABLE empleados.Titulo (
         id INT IDENTITY(1,1) NOT NULL,
         nombre VARCHAR(100) NOT NULL,
         institucion VARCHAR(100) NOT NULL,
@@ -49,12 +65,12 @@ BEGIN
     );
 
     -- Sacar
-    CREATE TABLE sgpn.Habilitacion (
+    CREATE TABLE empleados.Habilitacion (
         id INT IDENTITY(1,1) NOT NULL,
         CONSTRAINT PK_Habilitacion PRIMARY KEY (id)
     );
 
-    CREATE TABLE sgpn.Guia (
+    CREATE TABLE empleados.Guia (
         nro_registro INT NOT NULL,
         id_empleado INT NOT NULL,
         id_especialidad INT NOT NULL,
@@ -64,18 +80,18 @@ BEGIN
 
         CONSTRAINT FK_Guia_Empleado
             FOREIGN KEY (id_empleado)
-            REFERENCES sgpn.Empleado(id),
+            REFERENCES empleados.Empleado(id),
 
         CONSTRAINT FK_Guia_Especialidad
             FOREIGN KEY (id_especialidad)
-            REFERENCES sgpn.Especialidad(id),
+            REFERENCES empleados.Especialidad(id),
 
         CONSTRAINT FK_Guia_Titulo
             FOREIGN KEY (id_titulo)
-            REFERENCES sgpn.Titulo(id)
+            REFERENCES empleados.Titulo(id)
     );
 
-    CREATE TABLE sgpn.Guardaparque (
+    CREATE TABLE empleados.Guardaparque (
         nro_matricula INT NOT NULL,
         id_empleado INT NOT NULL,
 
@@ -83,10 +99,10 @@ BEGIN
 
         CONSTRAINT FK_Guardaparque_Empleado
             FOREIGN KEY (id_empleado)
-            REFERENCES sgpn.Empleado(id)
+            REFERENCES empleados.Empleado(id)
     );
 
-    CREATE TABLE sgpn.GuardaparqueAsignado (
+    CREATE TABLE empleados.GuardaparqueAsignado (
         id_empleado INT NOT NULL,
         id_parque INT NOT NULL,
         fecha_ingreso DATE NOT NULL,
@@ -98,17 +114,17 @@ BEGIN
 
         CONSTRAINT FK_GuardaparqueAsignado_Guardaparque
             FOREIGN KEY (id_empleado)
-            REFERENCES sgpn.Guardaparque(id_empleado),
+            REFERENCES empleados.Guardaparque(id_empleado),
 
         CONSTRAINT FK_GuardaparqueAsignado_Parque
             FOREIGN KEY (id_parque)
-            REFERENCES sgpn.Parque(id),
+            REFERENCES parques.Parque(id),
 
         CONSTRAINT CK_GuardaparqueParqueAsignado_Fechas
             CHECK (fecha_egreso IS NULL OR fecha_egreso >= fecha_ingreso)
     );
 
-    CREATE TABLE sgpn.GuiaEstaEnActividad (
+    CREATE TABLE empleados.GuiaEstaEnActividad (
         id_empleado INT NOT NULL,
         id_actividad INT NOT NULL,
         fecha_inicio DATE NOT NULL,
@@ -119,17 +135,17 @@ BEGIN
 
         CONSTRAINT FK_GuiaActividad_Guia
             FOREIGN KEY (id_empleado)
-            REFERENCES sgpn.Guia(id_empleado),
+            REFERENCES empleados.Guia(id_empleado),
 
         CONSTRAINT FK_GuiaActividad_Actividad
             FOREIGN KEY (id_actividad)
-            REFERENCES sgpn.Actividad(id),
+            REFERENCES actividades.Actividad(id),
 
         CONSTRAINT CK_GuiaActividad_Fechas
             CHECK (fecha_fin IS NULL OR fecha_fin >= fecha_inicio)
     );
 
-    CREATE TABLE sgpn.GuiaPoseeHabilitacion (
+    CREATE TABLE empleados.GuiaPoseeHabilitacion (
         id_empleado INT NOT NULL,
         id_habilitacion INT NOT NULL,
         fecha_inicio DATE NOT NULL,
@@ -139,18 +155,18 @@ BEGIN
 
         CONSTRAINT FK_GuiaHabilitacion_Guia
             FOREIGN KEY (id_empleado)
-            REFERENCES sgpn.Guia(id_empleado),
+            REFERENCES empleados.Guia(id_empleado),
 
         CONSTRAINT FK_GuiaHabilitacion_Habilitacion
             FOREIGN KEY (id_habilitacion)
-            REFERENCES sgpn.Habilitacion(id)
+            REFERENCES empleados.Habilitacion(id)
     );
 
 END;
 GO
 
 -- SP Wrapper con verificaciones
-CREATE OR ALTER PROCEDURE sgpn.sp_crear_modulo_empleados
+CREATE OR ALTER PROCEDURE empleados.sp_crear_modulo_empleados
 AS
 BEGIN
     SET NOCOUNT ON;
@@ -164,7 +180,7 @@ BEGIN
     FROM sys.tables t
     INNER JOIN sys.schemas s
         ON s.schema_id = t.schema_id
-    WHERE s.name = 'sgpn'
+    WHERE s.name = 'empleados'
       AND t.name IN (
             'TipoDocumento',
             'Empleado',
@@ -180,7 +196,7 @@ BEGIN
 
     IF EXISTS (SELECT 1 FROM @tablas_existentes)
     BEGIN
-        RAISERROR('No se puede crear el modulo: ya existe al menos una tabla del modulo empleados en el esquema sgpn.', 16, 1);
+        RAISERROR('No se puede crear el modulo: ya existe al menos una tabla del modulo empleados en el esquema empleados.', 16, 1);
         RETURN;
     END;
 
@@ -202,7 +218,7 @@ BEGIN
         FROM sys.tables t
         INNER JOIN sys.schemas s
             ON s.schema_id = t.schema_id
-        WHERE s.name = 'sgpn'
+        WHERE s.name = 'parques' OR s.name = 'actividades'
           AND t.name = d.nombre
     );
 
@@ -212,29 +228,29 @@ BEGIN
         RETURN;
     END;
 
-    EXEC sgpn.crear_tablas_modulo_empleados;
+    EXEC empleados.crear_tablas_modulo_empleados;
 END;
 GO
 
-CREATE OR ALTER PROCEDURE sgpn.sp_eliminar_modulo_empleados
+CREATE OR ALTER PROCEDURE empleados.sp_eliminar_modulo_empleados
 AS
 BEGIN
     BEGIN TRY
         BEGIN TRANSACTION;
 
-            DROP TABLE IF EXISTS sgpn.GuiaPoseeHabilitacion;
-            DROP TABLE IF EXISTS sgpn.GuiaActividad;
-            DROP TABLE IF EXISTS sgpn.GuardaparqueAsignado;
+            DROP TABLE IF EXISTS empleados.GuiaPoseeHabilitacion;
+            DROP TABLE IF EXISTS empleados.GuiaActividad;
+            DROP TABLE IF EXISTS empleados.GuardaparqueAsignado;
 
-            DROP TABLE IF EXISTS sgpn.Guia;
-            DROP TABLE IF EXISTS sgpn.Guardaparque;
+            DROP TABLE IF EXISTS empleados.Guia;
+            DROP TABLE IF EXISTS empleados.Guardaparque;
 
-            --DROP TABLE IF EXISTS sgpn.Habilitacion;
-            DROP TABLE IF EXISTS sgpn.Titulo;
-            DROP TABLE IF EXISTS sgpn.Especialidad;
+            --DROP TABLE IF EXISTS empleados.Habilitacion;
+            DROP TABLE IF EXISTS empleados.Titulo;
+            DROP TABLE IF EXISTS empleados.Especialidad;
 
-            DROP TABLE IF EXISTS sgpn.Empleado;
-            DROP TABLE IF EXISTS sgpn.TipoDocumento;
+            DROP TABLE IF EXISTS empleados.Empleado;
+            DROP TABLE IF EXISTS empleados.TipoDocumento;
 
         COMMIT TRANSACTION;
     END TRY
@@ -253,11 +269,11 @@ END;
 GO
 
 -- Ejecucion
-EXEC sgpn.sp_crear_modulo_empleados;
+EXEC empleados.sp_crear_modulo_empleados;
 SELECT * FROM sys.tables;
 GO
 
 -- Autodestruccion
-EXEC sgpn.sp_eliminar_modulo_empleados;
+EXEC empleados.sp_eliminar_modulo_empleados;
 SELECT * FROM sys.tables;
 GO

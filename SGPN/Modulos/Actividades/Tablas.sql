@@ -1,25 +1,37 @@
-USE LinuxPreachers
+/*
+ * Universidad: UNLaM
+ * Materia: Bases de datos aplicadas
+ * Comisión: 5600
+ * Grupo: 02
+ * Integrantes: Conforti, Jaime, Laurelli, Porras
+ * Fecha:
+ * Script: Creación de tablas módulo actividades
+*/
+
+USE LinuxPreachers;
+GO
+
 -- Schema
-IF NOT EXISTS ( SELECT 1 FROM sys.schemas WHERE name = 'sgpn' )
+IF NOT EXISTS ( SELECT 1 FROM sys.schemas WHERE name = 'actividades' )
 BEGIN 
-EXEC('CREATE SCHEMA sgpn'); 
+    EXEC('CREATE SCHEMA actividades'); 
 END;
 GO
 
 -- Este SP asume que no existe ninguna tabla para el módulo actividades
-CREATE OR ALTER PROCEDURE sgpn.sp_crear_tablas_modulo_actividades
+CREATE OR ALTER PROCEDURE actividades.sp_crear_tablas_modulo_actividades
 AS
 BEGIN
     SET NOCOUNT ON;
 
-    CREATE TABLE sgpn.TipoActividad (
+    CREATE TABLE actividades.TipoActividad (
         id INT IDENTITY(1,1) NOT NULL,
         nombre VARCHAR(100) NOT NULL,
 
         CONSTRAINT PK_TipoActividad PRIMARY KEY (id)
     );
 
-    CREATE TABLE sgpn.Habilitacion (
+    CREATE TABLE actividades.Habilitacion (
         id INT IDENTITY(1,1) NOT NULL,
         nombre VARCHAR(100) NOT NULL,
         descripcion VARCHAR(255) NULL,
@@ -27,7 +39,7 @@ BEGIN
         CONSTRAINT PK_Habilitacion PRIMARY KEY (id)
     );
 
-    CREATE TABLE sgpn.Actividad (
+    CREATE TABLE actividades.Actividad (
         id INT IDENTITY(1,1) NOT NULL,
         nombre VARCHAR(100) NOT NULL,
         descripcion VARCHAR(255) NULL,
@@ -41,17 +53,17 @@ BEGIN
 
         CONSTRAINT FK_Actividad_Parque
             FOREIGN KEY (id_parque)
-            REFERENCES sgpn.Parque(id),
+            REFERENCES parques.Parque(id),
 
         CONSTRAINT FK_Actividad_TipoActividad
             FOREIGN KEY (id_tipo_actividad)
-            REFERENCES sgpn.TipoActividad(id),
+            REFERENCES actividades.TipoActividad(id),
             
         CONSTRAINT CK_Actividad_ValoresPositivos
             CHECK (cupo_maximo > 0 AND duracion_minutos > 0 AND precio >= 0)
     );
 
-    CREATE TABLE sgpn.Horario (
+    CREATE TABLE actividades.Horario (
         id INT IDENTITY(1,1) NOT NULL,
         hora_inicio TIME NOT NULL,
         hora_fin TIME NOT NULL,
@@ -65,7 +77,7 @@ BEGIN
 
         CONSTRAINT FK_Horario_Actividad
             FOREIGN KEY (id_actividad)
-            REFERENCES sgpn.Actividad(id),
+            REFERENCES actividades.Actividad(id),
 
         CONSTRAINT CK_Horario_RangoFechas
             CHECK (fecha_vigencia_fin IS NULL OR fecha_vigencia_fin >= fecha_vigencia_ini),
@@ -77,7 +89,7 @@ BEGIN
             CHECK (dia_semana BETWEEN 1 AND 7)
     );
 
-    CREATE TABLE sgpn.HabilitacionRegulaActividad (
+    CREATE TABLE actividades.HabilitacionRegulaActividad (
         id_habilitacion INT NOT NULL,
         id_actividad INT NOT NULL,
 
@@ -86,18 +98,18 @@ BEGIN
 
         CONSTRAINT FK_HabilitacionRegulaActividad_Habilitacion
             FOREIGN KEY (id_habilitacion)
-            REFERENCES sgpn.Habilitacion(id),
+            REFERENCES actividades.Habilitacion(id),
 
         CONSTRAINT FK_HabilitacionRegulaActividad_Actividad
             FOREIGN KEY (id_actividad)
-            REFERENCES sgpn.Actividad(id)
+            REFERENCES actividades.Actividad(id)
     );
 
 END;
 GO
 
 -- SP Wrapper con verificaciones
-CREATE OR ALTER PROCEDURE sgpn.sp_crear_modulo_actividades
+CREATE OR ALTER PROCEDURE actividades.sp_crear_modulo_actividades
 AS
 BEGIN
     SET NOCOUNT ON;
@@ -112,7 +124,7 @@ BEGIN
     FROM sys.tables t
     INNER JOIN sys.schemas s
         ON s.schema_id = t.schema_id
-    WHERE s.name = 'sgpn'
+    WHERE s.name = 'actividades'
       AND t.name IN (
             'TipoActividad',
             'Habilitacion',
@@ -123,7 +135,7 @@ BEGIN
 
     IF EXISTS (SELECT 1 FROM @tablas_existentes)
     BEGIN
-        RAISERROR('No se puede crear el modulo: ya existe al menos una tabla del modulo actividades en el esquema sgpn.', 16, 1);
+        RAISERROR('No se puede crear el modulo: ya existe al menos una tabla del modulo actividades en el esquema actividades.', 16, 1);
         RETURN;
     END;
 
@@ -143,7 +155,7 @@ BEGIN
         FROM sys.tables t
         INNER JOIN sys.schemas s
             ON s.schema_id = t.schema_id
-        WHERE s.name = 'sgpn'
+        WHERE s.name = 'parques'
           AND t.name = d.nombre
     );
 
@@ -154,27 +166,27 @@ BEGIN
     END;
 
     -- Si pasamos los controles, ejecutamos la creación
-    EXEC sgpn.sp_crear_tablas_modulo_actividades;
+    EXEC actividades.sp_crear_tablas_modulo_actividades;
 END;
 GO
 
 -- SP para destruir el módulo (respetando orden de integridad referencial)
-CREATE OR ALTER PROCEDURE sgpn.sp_eliminar_modulo_actividades
+CREATE OR ALTER PROCEDURE actividades.sp_eliminar_modulo_actividades
 AS
 BEGIN
     BEGIN TRY
         BEGIN TRANSACTION;
 
             -- 1. Eliminar relaciones dependientes
-            DROP TABLE IF EXISTS sgpn.HabilitacionRegulaActividad;
-            DROP TABLE IF EXISTS sgpn.Horario;
+            DROP TABLE IF EXISTS actividades.HabilitacionRegulaActividad;
+            DROP TABLE IF EXISTS actividades.Horario;
             
             -- 2. Eliminar entidades dependientes de tipos
-            DROP TABLE IF EXISTS sgpn.Actividad;
+            DROP TABLE IF EXISTS actividades.Actividad;
             
             -- 3. Eliminar entidades maestras o catálogos
-            DROP TABLE IF EXISTS sgpn.TipoActividad;
-            DROP TABLE IF EXISTS sgpn.Habilitacion;
+            DROP TABLE IF EXISTS actividades.TipoActividad;
+            DROP TABLE IF EXISTS actividades.Habilitacion;
 
         COMMIT TRANSACTION;
     END TRY
@@ -194,14 +206,14 @@ GO
 
 -- Ejecucion (Comentado para evitar ejecución accidental si copiás el script de corrido)
 /*
-EXEC sgpn.sp_crear_modulo_actividades;
-SELECT * FROM sys.tables WHERE schema_id = SCHEMA_ID('sgpn');
+EXEC actividades.sp_crear_modulo_actividades;
+SELECT * FROM sys.tables WHERE schema_id = SCHEMA_ID('actividades');
 GO
 */
 
 -- Autodestruccion (Comentado para evitar ejecución accidental)
 /*
-EXEC sgpn.sp_eliminar_modulo_actividades;
-SELECT * FROM sys.tables WHERE schema_id = SCHEMA_ID('sgpn');
+EXEC actividades.sp_eliminar_modulo_actividades;
+SELECT * FROM sys.tables WHERE schema_id = SCHEMA_ID('actividades');
 GO
 */

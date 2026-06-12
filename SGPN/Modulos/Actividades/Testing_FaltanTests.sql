@@ -1,3 +1,13 @@
+/*
+ * Universidad: UNLaM
+ * Materia: Bases de datos aplicadas
+ * Comisión: 5600
+ * Grupo: 02
+ * Integrantes: Conforti, Jaime, Laurelli, Porras
+ * Fecha:
+ * Script: Creación de SP Testing módulo actividades
+*/
+
 USE LinuxPreachers;
 GO
 
@@ -14,10 +24,10 @@ DECLARE @id_actividad_insertada INT;
 /**
     FALTA LA CREACION DEL SP PARA PODER REALIZAR EL TESTING
 */
--- EXEC sgpn.sp_crear_parque @nombre=,@ubicacion=,@superficie=, @tipo= ) 
+-- EXEC actividades.sp_crear_parque @nombre=,@ubicacion=,@superficie=, @tipo= ) 
 
 
-EXEC sgpn.sp_crear_tipo_actividad @nombre = 'Excursión de Prueba';
+EXEC actividades.sp_crear_tipo_actividad @nombre = 'Excursión de Prueba';
 
 PRINT '==================================================';
 PRINT 'INICIO DE TESTING: ABM ACTIVIDADES';
@@ -28,7 +38,7 @@ PRINT '==================================================';
 -- ------------------------------------------------------------------------------
 PRINT  '>>> PRUEBA 1: Alta Exitosa de Actividad';
 BEGIN TRY
-    EXEC sgpn.sp_crear_actividad 
+    EXEC actividades.sp_crear_actividad 
         @nombre = 'Caminata Nocturna',
         @descripcion = 'Recorrido guiado bajo las estrellas',
         @cupo_maximo = 20,
@@ -38,12 +48,12 @@ BEGIN TRY
         @id_tipo_actividad = @id_tipo_actividad_test;
 
     -- Recuperar el ID generado para la evidencia
-    SELECT TOP 1 @id_actividad_insertada = id FROM sgpn.Actividad ORDER BY id DESC;
+    SELECT TOP 1 @id_actividad_insertada = id FROM actividades.Actividad ORDER BY id DESC;
     
     PRINT 'RESULTADO: OK - Actividad creada correctamente.';
     
     -- Evidencia:
-    SELECT 'EVIDENCIA DE ALTA EJECUTADA CORRECTAMENTE' AS Operacion, * FROM sgpn.Actividad WHERE id = @id_actividad_insertada;
+    SELECT 'EVIDENCIA DE ALTA EJECUTADA CORRECTAMENTE' AS Operacion, * FROM actividades.Actividad WHERE id = @id_actividad_insertada;
 END TRY
 BEGIN CATCH
     PRINT 'ERROR INESPERADO: ' + ERROR_MESSAGE();
@@ -54,7 +64,7 @@ END CATCH;
 -- ------------------------------------------------------------------------------
 PRINT '>>> PRUEBA 2: Alta Fallida (Nombre nulo, precio negativo, cupo 0)';
 BEGIN TRY
-    EXEC sgpn.sp_crear_actividad 
+    EXEC actividades.sp_crear_actividad 
         @nombre = '',                 -- Error: Vacío
         @descripcion = 'Invalido',
         @cupo_maximo = 0,             -- Error: Cupo 0
@@ -75,7 +85,7 @@ END CATCH;
 -- ------------------------------------------------------------------------------
 PRINT CHAR(13) + '>>> PRUEBA 3: Modificación Exitosa de Actividad';
 BEGIN TRY
-    EXEC sgpn.sp_modificar_actividad 
+    EXEC actividades.sp_modificar_actividad 
         @id = @id_actividad_insertada,
         @nombre = 'Caminata Nocturna Extendida',
         @descripcion = 'Recorrido de 3 horas modificado',
@@ -88,7 +98,7 @@ BEGIN TRY
     PRINT 'RESULTADO: OK - Actividad modificada correctamente.';
     
     -- Evidencia:
-    SELECT 'EVIDENCIA MODIFICACION' AS Operacion, * FROM sgpn.Actividad WHERE id = @id_actividad_insertada;
+    SELECT 'EVIDENCIA MODIFICACION' AS Operacion, * FROM actividades.Actividad WHERE id = @id_actividad_insertada;
 END TRY
 BEGIN CATCH
     PRINT 'ERROR INESPERADO: ' + ERROR_MESSAGE();
@@ -99,7 +109,7 @@ END CATCH;
 -- ------------------------------------------------------------------------------
 PRINT CHAR(13) + '>>> PRUEBA 4: Modificación Fallida (Parque Inexistente)';
 BEGIN TRY
-    EXEC sgpn.sp_modificar_actividad 
+    EXEC actividades.sp_modificar_actividad 
         @id = @id_actividad_insertada,
         @nombre = 'Caminata Nocturna',
         @descripcion = 'Intento de asginar a parque falso',
@@ -122,13 +132,13 @@ END CATCH;
 PRINT CHAR(13) + '>>> PRUEBA 5: Baja Fallida (Actividad con Horario asignado)';
 BEGIN TRY
     -- Insertamos un horario dependiente para forzar la falla
-    EXEC sgpn.sp_crear_horario 
+    EXEC actividades.sp_crear_horario 
         @hora_inicio = '10:00', @hora_fin = '12:00', @dia_semana = 1, 
         @fecha_vigencia_ini = '2026-01-01', @fecha_vigencia_fin = NULL, 
         @visible = 1, @id_actividad = @id_actividad_insertada;
 
     -- Intentamos eliminar
-    EXEC sgpn.sp_eliminar_actividad @id = @id_actividad_insertada;
+    EXEC actividades.sp_eliminar_actividad @id = @id_actividad_insertada;
 
     PRINT 'RESULTADO: FALLO - El SP permitió eliminar una actividad con dependencias.';
 END TRY
@@ -143,15 +153,15 @@ END CATCH;
 PRINT CHAR(13) + '>>> PRUEBA 6: Baja Exitosa de Actividad';
 BEGIN TRY
     -- Limpiamos la dependencia primero
-    DELETE FROM sgpn.Horario WHERE id_actividad = @id_actividad_insertada;
+    DELETE FROM actividades.Horario WHERE id_actividad = @id_actividad_insertada;
 
     -- Ejecutamos el SP de baja
-    EXEC sgpn.sp_eliminar_actividad @id = @id_actividad_insertada;
+    EXEC actividades.sp_eliminar_actividad @id = @id_actividad_insertada;
 
     PRINT 'RESULTADO: OK - Actividad eliminada correctamente.';
     
     -- Evidencia:
-    SELECT 'EVIDENCIA BAJA (Debe estar vacio)' AS Operacion, * FROM sgpn.Actividad WHERE id = @id_actividad_insertada;
+    SELECT 'EVIDENCIA BAJA (Debe estar vacio)' AS Operacion, * FROM actividades.Actividad WHERE id = @id_actividad_insertada;
 END TRY
 BEGIN CATCH
     PRINT 'ERROR INESPERADO: ' + ERROR_MESSAGE();
@@ -160,8 +170,8 @@ END CATCH;
 -- ------------------------------------------------------------------------------
 -- LIMPIEZA DE ENTORNO (Rollback manual del Mock Data)
 -- ------------------------------------------------------------------------------
-DELETE FROM sgpn.TipoActividad WHERE id = @id_tipo_actividad_test;
-DELETE FROM sgpn.Parque WHERE id = @id_parque_test;
+DELETE FROM actividades.TipoActividad WHERE id = @id_tipo_actividad_test;
+DELETE FROM parques.Parque WHERE id = @id_parque_test;
 
 PRINT CHAR(13) + '==================================================';
 PRINT 'FIN DE TESTING';

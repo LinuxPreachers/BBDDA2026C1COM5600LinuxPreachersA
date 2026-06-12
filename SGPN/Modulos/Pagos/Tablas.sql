@@ -5,24 +5,26 @@
  * Grupo: 02
  * Integrantes: Conforti, Jaime, Laurelli, Porras
  * Fecha:
- * Script: Creación de tablas módulo reservas
+ * Script: Creación de tablas módulo pagos
 */
 
-USE LinuxPreachers
+USE LinuxPreachers;
+GO
+
 -- Schema
-IF NOT EXISTS ( SELECT 1 FROM sys.schemas WHERE name = 'sgpn' )
+IF NOT EXISTS ( SELECT 1 FROM sys.schemas WHERE name = 'pagos' )
 BEGIN 
-EXEC('CREATE SCHEMA sgpn'); 
+    EXEC('CREATE SCHEMA pagos'); 
 END;
 GO
 
 -- Este SP asume que no existe ninguna tabla para el módulo 
-CREATE OR ALTER PROCEDURE sgpn.sp_crear_tablas_modulo_pagos
+CREATE OR ALTER PROCEDURE pagos.sp_crear_tablas_modulo_pagos
 AS
 BEGIN
     SET NOCOUNT ON;
 
-    CREATE TABLE sgpn.FormaPago(
+    CREATE TABLE pagos.FormaPago(
         id INT IDENTITY (1,1),
         nombre VARCHAR(100) NOT NULL,
         estado BIT DEFAULT 1 NOT NULL,
@@ -30,7 +32,7 @@ BEGIN
         CONSTRAINT PK_FormaPago PRIMARY KEY (id)
     );
 
-    CREATE TABLE sgpn.Pago(
+    CREATE TABLE pagos.Pago(
         id INT IDENTITY (1,1),
         fecha_y_hora DATETIME NOT NULL DEFAULT GETDATE(),
         id_reserva INT NOT NULL, -- REVISAR CON DER OPCIONALIDAD ( si es un pago de canon, id_reserva sera NULL)
@@ -41,18 +43,18 @@ BEGIN
 
         CONSTRAINT FK_Pago_Reserva
             FOREIGN KEY (id_reserva)
-            REFERENCES sgpn.Reserva(id),
+            REFERENCES reservas.Reserva(id),
 
         CONSTRAINT FK_Pago_FormaPago
             FOREIGN KEY (id_forma_pago)
-            REFERENCES sgpn.FormaPago(id),
+            REFERENCES pagos.FormaPago(id),
 
         CONSTRAINT CK_importe
         CHECK (importe > 0) 
 
        );
 
-    CREATE TABLE sgpn.PuntoVenta(
+    CREATE TABLE pagos.PuntoVenta(
         id INT IDENTITY (1,1),
         nombre VARCHAR(100) NULL,
         estado BIT DEFAULT 1 NOT NULL,
@@ -60,7 +62,7 @@ BEGIN
         CONSTRAINT PK_PuntoVenta PRIMARY KEY (id)
     );
 
-    CREATE TABLE sgpn.TicketFactura(
+    CREATE TABLE pagos.TicketFactura(
         id INT IDENTITY (1,1),
         fecha_y_hora DATETIME NOT NULL DEFAULT GETDATE(),
         id_punto_venta INT NOT NULL,
@@ -70,11 +72,11 @@ BEGIN
 
         CONSTRAINT FK_TicketFactura_PuntoVenta
             FOREIGN KEY (id_punto_venta)
-            REFERENCES sgpn.Reserva(id),
+            REFERENCES reservas.Reserva(id),
 
         CONSTRAINT FK_TicketFactura_Pago
             FOREIGN KEY (id_pago)
-            REFERENCES sgpn.Pago(id)
+            REFERENCES pagos.Pago(id)
 
        );
 
@@ -82,7 +84,7 @@ END;
 GO
 
 -- SP Wrapper con verificaciones
-CREATE OR ALTER PROCEDURE sgpn.sp_crear_modulo_pagos
+CREATE OR ALTER PROCEDURE pagos.sp_crear_modulo_pagos
 AS
 BEGIN
     SET NOCOUNT ON;
@@ -97,7 +99,7 @@ BEGIN
     FROM sys.tables t
     INNER JOIN sys.schemas s
         ON s.schema_id = t.schema_id
-    WHERE s.name = 'sgpn'
+    WHERE s.name = 'pagos'
       AND t.name IN (
             'FormaPago',
             'Pago',
@@ -107,7 +109,7 @@ BEGIN
 
     IF EXISTS (SELECT 1 FROM @tablas_existentes)
     BEGIN
-        RAISERROR('No se puede crear el modulo: ya existe al menos una tabla del modulo actividades en el esquema sgpn.', 16, 1);
+        RAISERROR('No se puede crear el modulo: ya existe al menos una tabla del modulo actividades en el esquema pagos.', 16, 1);
         RETURN;
     END;
 
@@ -127,7 +129,7 @@ BEGIN
         FROM sys.tables t
         INNER JOIN sys.schemas s
             ON s.schema_id = t.schema_id
-        WHERE s.name = 'sgpn'
+        WHERE s.name = 'reservas'
           AND t.name = d.nombre
     );
 
@@ -138,21 +140,21 @@ BEGIN
     END;
 
     -- Si pasamos los controles, ejecutamos la creación
-    EXEC sgpn.sp_crear_tablas_modulo_pagos;
+    EXEC pagos.sp_crear_tablas_modulo_pagos;
 END;
 GO
 
 -- SP para destruir el módulo (respetando orden de integridad referencial)
-CREATE OR ALTER PROCEDURE sgpn.sp_eliminar_modulo_pagos
+CREATE OR ALTER PROCEDURE pagos.sp_eliminar_modulo_pagos
 AS
 BEGIN
     BEGIN TRY
         BEGIN TRANSACTION;
 
-            DROP TABLE IF EXISTS sgpn.TicketFactura;
-            DROP TABLE IF EXISTS sgpn.PuntoVenta;
-            DROP TABLE IF EXISTS sgpn.Pago;
-            DROP TABLE IF EXISTS sgpn.FormaPago;
+            DROP TABLE IF EXISTS pagos.TicketFactura;
+            DROP TABLE IF EXISTS pagos.PuntoVenta;
+            DROP TABLE IF EXISTS pagos.Pago;
+            DROP TABLE IF EXISTS pagos.FormaPago;
 
 
         COMMIT TRANSACTION;
@@ -173,14 +175,14 @@ GO
 
 -- Ejecucion (Comentado para evitar ejecución accidental si copiás el script de corrido)
 /*
-EXEC sgpn.sp_crear_modulo_pagos;
-SELECT * FROM sys.tables WHERE schema_id = SCHEMA_ID('sgpn') ORDER BY create_date DESC;
+EXEC pagos.sp_crear_modulo_pagos;
+SELECT * FROM sys.tables WHERE schema_id = SCHEMA_ID('pagos') ORDER BY create_date DESC;
 GO
 */
 
 -- Autodestruccion (Comentado para evitar ejecución accidental)
 /*
-EXEC sgpn.sp_eliminar_modulo_pagos;
-SELECT * FROM sys.tables WHERE schema_id = SCHEMA_ID('sgpn');
+EXEC pagos.sp_eliminar_modulo_pagos;
+SELECT * FROM sys.tables WHERE schema_id = SCHEMA_ID('pagos');
 GO
 */
