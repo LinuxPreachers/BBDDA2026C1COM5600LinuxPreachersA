@@ -260,10 +260,69 @@ GO
 
 -- Alta
 
+CREATE OR ALTER PROCEDURE pagos.sp_crear_canon
+        @periodo DATE,
+        @monto DECIMAL(15,2),
+        @fecha_pago DATE ,
+        @id_concesion INT,
+        @id_forma_pago INT
+AS
+BEGIN
+    SET NOCOUNT ON;
+    BEGIN TRY
+
+        IF( @id_concesion NOT IN(SELECT id FROM concesiones.Concesion) )
+            THROW 60031, 'No existe la concesion', 1;
+
+        IF( @id_forma_pago NOT IN(SELECT id FROM pagos.FormaPago) )
+            THROW 60032, 'No existe la forma de pago', 1;
+
+        IF (@monto <= 0)
+            THROW 60033, 'Monto menor o igual 0',1;
+            
+        INSERT INTO concesiones.Canon(periodo,monto,fecha_pago,id_concesion,id_forma_pago)
+        VALUES (@periodo,@monto,@fecha_pago,@id_concesion,@id_forma_pago);
+    END TRY
+    BEGIN CATCH
+        THROW;
+    END CATCH;
+END;
+GO
 
 -- Completar. Primero arreglar DER CANON-PAGO
 
--- Por logica de negocio no se permiten modificar ni eliminar Tickets Factura.
+-- Modificar
+CREATE OR ALTER PROCEDURE pagos.sp_modificar_canon
+        @id INT,
+        @periodo DATE,
+        @monto DECIMAL(15,2),
+        @fecha_pago DATE ,
+        @id_concesion INT,
+        @id_forma_pago INT
+AS
+BEGIN
+    SET NOCOUNT ON;
+    BEGIN TRY
+
+        IF( @id_concesion NOT IN(SELECT id FROM concesiones.Concesion) )
+            THROW 60031, 'No existe la concesion', 1;
+
+        IF( @id_forma_pago NOT IN(SELECT id FROM pagos.FormaPago) )
+            THROW 60032, 'No existe la forma de pago', 1;
+
+        IF (@monto <= 0)
+            THROW 60033, 'Monto menor o igual 0',1;
+            
+
+        UPDATE concesiones.Canon
+        SET periodo = @periodo, monto = @monto, fecha_pago = @fecha_pago, id_concesion = @id_concesion, id_forma_pago = @id_forma_pago
+        WHERE id = @id;
+    END TRY
+    BEGIN CATCH
+        THROW;
+    END CATCH;
+END;
+GO
 
 
---- FALTAN TEST
+-- Por logica de negocio no se permite eliminar Canon

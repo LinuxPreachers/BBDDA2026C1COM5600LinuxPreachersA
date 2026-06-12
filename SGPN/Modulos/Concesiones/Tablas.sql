@@ -23,7 +23,7 @@ BEGIN
     SET NOCOUNT ON;
 
     CREATE TABLE concesiones.ActividadEmpresarial(
-        id INT IDENTITY (1,1),
+        id SMALLINT IDENTITY (1,1),
         nombre VARCHAR (100) NOT NULL,
         descripcion VARCHAR(255) NULL,
 
@@ -36,7 +36,7 @@ BEGIN
         descripcion VARCHAR(255) NULL,
         cuit BIGINT NOT NULL UNIQUE,
         razon_social VARCHAR(100) NOT NULL UNIQUE,
-        id_actividad_empresarial INT NOT NULL,
+        id_actividad_empresarial SMALLINT NOT NULL,
 
         CONSTRAINT PK_EmpresaConcesionaria PRIMARY KEY (id),
 

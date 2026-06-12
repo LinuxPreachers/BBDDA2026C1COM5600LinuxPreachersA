@@ -1,4 +1,4 @@
-/*
+/*a
  * Universidad: UNLaM
  * Materia: Bases de datos aplicadas
  * Comisión: 5600
@@ -36,7 +36,7 @@ GO
 
 -- Modificación
 CREATE OR ALTER PROCEDURE pagos.sp_modificar_forma_pago
-    @id INT,
+    @id SMALLINT,
     @nombre VARCHAR(100)
 AS
 BEGIN
@@ -60,7 +60,7 @@ GO
 
 -- Baja
 CREATE OR ALTER PROCEDURE pagos.sp_eliminar_forma_pago
-    @id INT
+    @id SMALLINT
 AS
 BEGIN
     SET NOCOUNT ON;
@@ -101,7 +101,7 @@ GO
 
 -- Modificación
 CREATE OR ALTER PROCEDURE pagos.sp_modificar_punto_venta
-    @id INT,
+    @id SMALLINT,
     @nombre VARCHAR(100)
 AS
 BEGIN
@@ -125,7 +125,7 @@ GO
 
 -- Baja
 CREATE OR ALTER PROCEDURE pagos.sp_eliminar_forma_pago
-    @id INT
+    @id SMALLINT
 AS
 BEGIN
     SET NOCOUNT ON;
@@ -151,7 +151,7 @@ GO
 CREATE OR ALTER PROCEDURE pagos.sp_crear_pago
     @fecha_y_hora DATETIME,
     @id_reserva INT,
-    @id_forma_pago INT,
+    @id_forma_pago SMALLINT,
     @importe DECIMAL(15,2)
 AS
 BEGIN
@@ -191,7 +191,7 @@ GO
 
 CREATE OR ALTER PROCEDURE pagos.sp_crear_ticket_factura
     @fecha_y_hora DATETIME,
-    @id_punto_venta INT,
+    @id_punto_venta SMALLINT,
     @id_pago INT
 AS
 BEGIN
@@ -216,6 +216,3 @@ END;
 GO
 
 -- Por logica de negocio no se permiten modificar ni eliminar Tickets Factura.
-
-
---- FALTAN TEST
