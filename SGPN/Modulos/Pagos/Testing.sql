@@ -5,7 +5,7 @@
  * Grupo: 02
  * Integrantes: Conforti, Jaime, Laurelli, Porras
  * Fecha:
- * Script: Creación de SP ABM módulo pagos
+ * Script: Testing ABM módulo pagos
 */
 
 

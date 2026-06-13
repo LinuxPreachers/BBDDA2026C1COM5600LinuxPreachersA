@@ -27,22 +27,26 @@ AS
 BEGIN
     SET NOCOUNT ON;
     BEGIN TRY
+        DECLARE @errores VARCHAR(4000) = '';
+
         IF(@nombre IS NULL OR LTRIM(RTRIM(@nombre)) = '')
-            THROW 50400, 'El nombre ingresado para la Empresa no es válido.', 1;
+            SET @errores = @errores + 'El nombre ingresado para la Empresa no es válido. ';
 
         IF(@razon_social IS NULL OR LTRIM(RTRIM(@razon_social)) = '')
-            THROW 50401, 'La razon social ingresada para la Empresa no es válida.', 1;
+            SET @errores = @errores + 'La razon social ingresada para la Empresa no es válida. ';
 
         IF(@cuit >= 99999999999 OR @cuit <= 10000000000)
-            THROW 50402, 'CUIT inválido.', 1;
+            SET @errores = @errores + 'CUIT inválido. ';
 
-        IF(EXISTS(SELECT 1 FROM concesiones.EmpresaConcesionaria WHERE @cuit = cuit))
-            THROW 50403, 'CUIT ya cargado.', 1;
+        IF(EXISTS(SELECT 1 FROM concesiones.EmpresaConcesionaria WHERE cuit = @cuit))
+            SET @errores = @errores + 'CUIT ya cargado. ';
 
-        IF( @id_actividad_empresarial NOT IN(SELECT id FROM concesiones.ActividadEmpresarial) )
-            THROW 50404, 'No existe la Actividad', 1;
+        IF(@id_actividad_empresarial NOT IN(SELECT id FROM concesiones.ActividadEmpresarial))
+            SET @errores = @errores + 'No existe la Actividad. ';
 
-            
+        IF LEN(@errores) > 0
+            THROW 50400, @errores, 1;
+
         INSERT INTO concesiones.EmpresaConcesionaria(nombre,descripcion,cuit,razon_social,id_actividad_empresarial)
         VALUES (@nombre,@descripcion,@cuit,@razon_social,@id_actividad_empresarial);
     END TRY
@@ -64,23 +68,28 @@ AS
 BEGIN
     SET NOCOUNT ON;
     BEGIN TRY
+        DECLARE @errores VARCHAR(4000) = '';
+
         IF NOT EXISTS (SELECT 1 FROM concesiones.EmpresaConcesionaria WHERE id = @id)
-            THROW 50410, 'La Empresa con el ID provisto no existe.', 1;
+            SET @errores = @errores + 'La Empresa con el ID provisto no existe. ';
 
         IF(@nombre IS NULL OR LTRIM(RTRIM(@nombre)) = '')
-            THROW 50411, 'El nombre ingresado para la Empresa no es válido.', 1;
+            SET @errores = @errores + 'El nombre ingresado para la Empresa no es válido. ';
 
         IF(@razon_social IS NULL OR LTRIM(RTRIM(@razon_social)) = '')
-            THROW 50412, 'La razon social ingresada para la Empresa no es válida.', 1;
+            SET @errores = @errores + 'La razon social ingresada para la Empresa no es válida. ';
 
         IF(@cuit >= 99999999999 OR @cuit <= 10000000000)
-            THROW 50413, 'CUIT inválido.', 1;
+            SET @errores = @errores + 'CUIT inválido. ';
 
-        IF( @id_actividad_empresarial NOT IN(SELECT id FROM concesiones.ActividadEmpresarial) )
-            THROW 50414, 'No existe la Actividad', 1;
+        IF(@id_actividad_empresarial NOT IN(SELECT id FROM concesiones.ActividadEmpresarial))
+            SET @errores = @errores + 'No existe la Actividad. ';
+
+        IF LEN(@errores) > 0
+            THROW 50410, @errores, 1;
 
         UPDATE concesiones.EmpresaConcesionaria
-        SET nombre = @nombre , descripcion = @descripcion, cuit = @cuit , razon_social = @razon_social, id_actividad_empresarial = @id_actividad_empresarial
+        SET nombre = @nombre, descripcion = @descripcion, cuit = @cuit, razon_social = @razon_social, id_actividad_empresarial = @id_actividad_empresarial
         WHERE id = @id;
     END TRY
     BEGIN CATCH
@@ -96,22 +105,24 @@ AS
 BEGIN
     SET NOCOUNT ON;
     BEGIN TRY
+        DECLARE @errores VARCHAR(4000) = '';
 
         IF NOT EXISTS (SELECT 1 FROM concesiones.EmpresaConcesionaria WHERE id = @id)
-            THROW 50420, 'La Empresa con el ID provisto no existe.', 1;
+            SET @errores = @errores + 'La Empresa con el ID provisto no existe. ';
 
         IF EXISTS (SELECT 1 FROM concesiones.Concesion WHERE id_empresa_concesionaria = @id)
-            THROW 50421, 'La Empresa con el ID provisto tiene concesiones.', 1;
+            SET @errores = @errores + 'La Empresa con el ID provisto tiene concesiones. ';
 
-        DELETE  FROM  concesiones.EmpresaConcesionaria WHERE id = @id;
+        IF LEN(@errores) > 0
+            THROW 50420, @errores, 1;
 
+        DELETE FROM concesiones.EmpresaConcesionaria WHERE id = @id;
     END TRY
     BEGIN CATCH
         THROW;
     END CATCH;
 END;
 GO
-
 -- ---------------------------------------------
 -- 2. ABM: ACTIVIDAD EMPRESARIAL
 -- ---------------------------------------------
@@ -145,14 +156,19 @@ AS
 BEGIN
     SET NOCOUNT ON;
     BEGIN TRY
+        DECLARE @errores VARCHAR(4000) = '';
+
         IF NOT EXISTS (SELECT 1 FROM concesiones.ActividadEmpresarial WHERE id = @id)
-            THROW 50431, 'La actividad empresarial con el ID provisto no existe.', 1;
+            SET @errores = @errores + 'La actividad empresarial con el ID provisto no existe. ';
 
         IF(@nombre IS NULL OR LTRIM(RTRIM(@nombre)) = '')
-            THROW 50432, 'El nombre ingresado para la actividad empresarial no es válido.', 2;
+            SET @errores = @errores + 'El nombre ingresado para la actividad empresarial no es válido. ';
+
+        IF LEN(@errores) > 0
+            THROW 50431, @errores, 1;
 
         UPDATE concesiones.ActividadEmpresarial
-        SET nombre = @nombre, descripcion= @descripcion
+        SET nombre = @nombre, descripcion = @descripcion
         WHERE id = @id;
     END TRY
     BEGIN CATCH
@@ -168,14 +184,18 @@ AS
 BEGIN
     SET NOCOUNT ON;
     BEGIN TRY
+        DECLARE @errores VARCHAR(4000) = '';
+
         IF NOT EXISTS (SELECT 1 FROM concesiones.ActividadEmpresarial WHERE id = @id)
-            THROW 50433, 'La actividad empresarial con el ID provisto no existe.', 1;
+            SET @errores = @errores + 'La actividad empresarial con el ID provisto no existe. ';
 
         IF EXISTS (SELECT 1 FROM concesiones.EmpresaConcesionaria WHERE id_actividad_empresarial = @id)
-            THROW 50434, 'La Actividad con el ID provisto tiene Empresas.', 1;
+            SET @errores = @errores + 'La Actividad con el ID provisto tiene Empresas. ';
 
-        DELETE FROM ActividadEmpresarial WHERE id = @id;
+        IF LEN(@errores) > 0
+            THROW 50433, @errores, 1;
 
+        DELETE FROM concesiones.ActividadEmpresarial WHERE id = @id;
     END TRY
     BEGIN CATCH
         THROW;
@@ -198,18 +218,22 @@ AS
 BEGIN
     SET NOCOUNT ON;
     BEGIN TRY
-        IF( @fecha_inicio > @fecha_fin)
-            THROW 50400, 'La fecha de inicio es mayor a la de fin', 1;
+        DECLARE @errores VARCHAR(4000) = '';
 
-        IF( NOT EXISTS (SELECT 1 FROM concesiones.EmpresaConcesionaria WHERE id = @id_empresa_concesionaria) )
-            THROW 50401, 'No existe la empresa', 1;
+        IF(@fecha_inicio > @fecha_fin)
+            SET @errores = @errores + 'La fecha de inicio es mayor a la de fin. ';
 
-        IF( NOT EXISTS (SELECT 1 FROM parques.Parque WHERE id = @id_parque) )
-            THROW 50402, 'No existe el parque', 1;
-            
+        IF(NOT EXISTS (SELECT 1 FROM concesiones.EmpresaConcesionaria WHERE id = @id_empresa_concesionaria))
+            SET @errores = @errores + 'No existe la empresa. ';
+
+        IF(NOT EXISTS (SELECT 1 FROM parques.Parque WHERE id = @id_parque))
+            SET @errores = @errores + 'No existe el parque. ';
+
+        IF LEN(@errores) > 0
+            THROW 50400, @errores, 1;
+
         INSERT INTO concesiones.Concesion(descripcion,fecha_inicio,fecha_fin,id_empresa_concesionaria,id_parque)
         VALUES (@descripcion,@fecha_inicio,@fecha_fin,@id_empresa_concesionaria,@id_parque);
-
     END TRY
     BEGIN CATCH
         THROW;
@@ -229,18 +253,22 @@ AS
 BEGIN
     SET NOCOUNT ON;
     BEGIN TRY
-        IF NOT EXISTS (SELECT 1 FROM concesiones.ActividadEmpresarial WHERE id = @id)
-            THROW 50431, 'La actividad empresarial con el ID provisto no existe.', 1;
+        DECLARE @errores VARCHAR(4000) = '';
 
-        IF( @fecha_inicio > @fecha_fin)
-            THROW 50400, 'La fecha de inicio es mayor a la de fin', 1;
+         IF NOT EXISTS (SELECT 1 FROM concesiones.Concesion WHERE id = @id)
+            SET @errores = @errores + 'La Concesion con el ID provisto no existe. ';
 
-        IF( NOT EXISTS (SELECT 1 FROM concesiones.EmpresaConcesionaria WHERE id = @id_empresa_concesionaria) )
-            THROW 50401, 'No existe la empresa', 1;
+        IF(@fecha_inicio > @fecha_fin)
+            SET @errores = @errores + 'La fecha de inicio es mayor a la de fin. ';
 
-        IF( NOT EXISTS (SELECT 1 FROM parques.Parque WHERE id = @id_parque) )
-            THROW 50402, 'No existe el parque', 1;
-            
+        IF(NOT EXISTS (SELECT 1 FROM concesiones.EmpresaConcesionaria WHERE id = @id_empresa_concesionaria))
+            SET @errores = @errores + 'No existe la empresa. ';
+
+        IF(NOT EXISTS (SELECT 1 FROM parques.Parque WHERE id = @id_parque))
+            SET @errores = @errores + 'No existe el parque. ';
+
+        IF LEN(@errores) > 0
+            THROW 50431, @errores, 1;
 
         UPDATE concesiones.Concesion
         SET descripcion = @descripcion, fecha_inicio = @fecha_inicio, fecha_fin = @fecha_fin, id_empresa_concesionaria = @id_empresa_concesionaria
@@ -251,7 +279,6 @@ BEGIN
     END CATCH;
 END;
 GO
-
 -- Por logica de negocio no se permiten eliminar concesiones.
 
 -- ---------------------------------------------
@@ -270,16 +297,20 @@ AS
 BEGIN
     SET NOCOUNT ON;
     BEGIN TRY
+        DECLARE @errores VARCHAR(4000) = '';
 
-        IF( @id_concesion NOT IN(SELECT id FROM concesiones.Concesion) )
-            THROW 50431, 'No existe la concesion', 1;
+        IF(@id_concesion NOT IN(SELECT id FROM concesiones.Concesion))
+            SET @errores = @errores + 'No existe la concesion. ';
 
-        IF( @id_forma_pago NOT IN(SELECT id FROM pagos.FormaPago) )
-            THROW 50432, 'No existe la forma de pago', 1;
+        IF(@id_forma_pago NOT IN(SELECT id FROM pagos.FormaPago))
+            SET @errores = @errores + 'No existe la forma de pago. ';
 
-        IF (@monto <= 0)
-            THROW 50433, 'Monto menor o igual 0',1;
-            
+        IF(@monto <= 0)
+            SET @errores = @errores + 'Monto menor o igual 0. ';
+
+        IF LEN(@errores) > 0
+            THROW 50431, @errores, 1;
+
         INSERT INTO concesiones.Canon(periodo,monto,fecha_pago,id_concesion,id_forma_pago)
         VALUES (@periodo,@monto,@fecha_pago,@id_concesion,@id_forma_pago);
     END TRY
@@ -301,16 +332,19 @@ AS
 BEGIN
     SET NOCOUNT ON;
     BEGIN TRY
+        DECLARE @errores VARCHAR(4000) = '';
 
-        IF( @id_concesion NOT IN(SELECT id FROM concesiones.Concesion) )
-            THROW 50431, 'No existe la concesion', 1;
+        IF(@id_concesion NOT IN(SELECT id FROM concesiones.Concesion))
+            SET @errores = @errores + 'No existe la concesion. ';
 
-        IF( @id_forma_pago NOT IN(SELECT id FROM pagos.FormaPago) )
-            THROW 50432, 'No existe la forma de pago', 1;
+        IF(@id_forma_pago NOT IN(SELECT id FROM pagos.FormaPago))
+            SET @errores = @errores + 'No existe la forma de pago. ';
 
-        IF (@monto <= 0)
-            THROW 50433, 'Monto menor o igual 0',1;
-            
+        IF(@monto <= 0)
+            SET @errores = @errores + 'Monto menor o igual 0. ';
+
+        IF LEN(@errores) > 0
+            THROW 50431, @errores, 1;
 
         UPDATE concesiones.Canon
         SET periodo = @periodo, monto = @monto, fecha_pago = @fecha_pago, id_concesion = @id_concesion, id_forma_pago = @id_forma_pago
