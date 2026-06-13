@@ -41,15 +41,22 @@ CREATE OR ALTER PROCEDURE actividades.sp_modificar_tipo_actividad
     @nombre VARCHAR(100)
 AS
 BEGIN
+    DECLARE @msj_error varchar(100) = ' ';
     SET NOCOUNT ON;
     BEGIN TRY
-
+        IF @nombre IS NULL OR LTRIM(RTRIM(@nombre)) = ''
+            SET @msj_error += '- Nombre del tipo de actividad invalido';
+            
         IF NOT EXISTS (SELECT 1 FROM actividades.TipoActividad WHERE id = @id)
-            THROW 50004, 'El Tipo de Actividad con el ID provisto no existe.', 1;
+            SET @msj_error += '- El Tipo de Actividad con el ID provisto no existe.';
 
+        IF(LEN(@msj_error)>0)
+            THROW 50004, @msj_error,1;
+        
         UPDATE actividades.TipoActividad
         SET nombre = @nombre
         WHERE id = @id;
+
     END TRY
     BEGIN CATCH
         THROW;
@@ -62,19 +69,27 @@ CREATE OR ALTER PROCEDURE actividades.sp_eliminar_tipo_actividad
     @id INT
 AS
 BEGIN
+    DECLARE @msj_error VARCHAR (200) = ' ';
     SET NOCOUNT ON;
     BEGIN TRY
 
         IF NOT EXISTS (SELECT 1 FROM actividades.TipoActividad WHERE id = @id)
-            THROW 50005, 'El Tipo de Actividad con el ID provisto no existe.', 1;
+            SET @msj_error += '- El Tipo de Actividad con el ID provisto no existe.';
 
-        IF EXISTS (SELECT 1 FROM actividades.Actividad WHERE id_parque=@id)
-            THROW 50005, 'El Tipo de Actividad no es posible eliminar debido a que tiene Actividades asociadas.',2;
+        IF EXISTS (SELECT 1 FROM actividades.Actividad WHERE id_tipo_actividad=@id)
+            SET @msj_error += '- El Tipo de Actividad no es posible eliminar debido a que tiene Actividades asociadas.';
+
+        IF(LEN(@msj_error)>0)
+            THROW 50005, @msj_error,1;
 
         DELETE FROM actividades.TipoActividad WHERE id = 1;
+
     END TRY
+
     BEGIN CATCH
+
         THROW;
+
     END CATCH;
 END;
 GO
@@ -93,7 +108,7 @@ BEGIN
     BEGIN TRY
 
     IF @nombre IS NULL
-        THROW 50006,'El nombre ingresado para la habilitacion no es valido para ser insertado',1;
+        THROW 50006,'- El nombre ingresado para la habilitacion no es valido para ser insertado',1;
 
     INSERT INTO actividades.Habilitacion (nombre, descripcion)
     VALUES (@nombre, @descripcion);
@@ -112,11 +127,17 @@ CREATE OR ALTER PROCEDURE actividades.sp_modificar_habilitacion
     @descripcion VARCHAR(255) = NULL
 AS
 BEGIN
+    DECLARE @msj_error VARCHAR(200) = ' ';
     SET NOCOUNT ON;
     BEGIN TRY
-
+        IF @nombre IS NULL OR LTRIM(RTRIM(@nombre))='' 
+           SET @msj_error += '- El nombre a modificar de la habilitacion es invalido';
         IF NOT EXISTS (SELECT 1 FROM actividades.Habilitacion WHERE id = @id)
-            THROW 50007, 'La Habilitación con el ID provisto no existe.', 1;
+           SET @msj_error += '- La Habilitación con el ID provisto no existe.';
+
+
+        IF( LEN(@msj_error)>0)
+            THROW 50007, @msj_error,1;
 
         UPDATE actividades.Habilitacion
         SET nombre = @nombre,
@@ -332,15 +353,19 @@ CREATE OR ALTER PROCEDURE actividades.sp_crear_horario
     @id_actividad INT
 AS
 BEGIN
+    DECLARE @msj_error VARCHAR (200) ='';
     SET NOCOUNT ON;
     BEGIN TRY
         IF NOT EXISTS(SELECT 1 FROM actividades.Actividad WHERE id=@id_actividad)
-            THROW 50012, ' - La actividad asociada al horario no existe',1;
+            SET @msj_error += ' - La actividad asociada al horario no existe';
 
         IF @hora_inicio IS NULL OR @hora_fin IS NULL OR @dia_semana IS NULL OR @fecha_vigencia_ini IS NULL 
-            THROW 50012, ' - Los datos NO pueden ser NULL.',2;
+            SET @msj_error += ' - Los datos NO pueden ser NULL.';
 
-        INSERT INTO actividades.Horario (hora_inicio, hora_fin, dia_semana, fecha_vigencia_ini, fecha_vigencia_fin, visible, id_actividad)
+        IF(LEN(@msj_error)>0)
+            THROW 50012,@msj_error,1;
+
+       INSERT INTO actividades.Horario (hora_inicio, hora_fin, dia_semana, fecha_vigencia_ini, fecha_vigencia_fin, visible, id_actividad)
         VALUES (@hora_inicio, @hora_fin, @dia_semana, @fecha_vigencia_ini, @fecha_vigencia_fin, @visible, @id_actividad);
        
     END TRY
@@ -362,16 +387,20 @@ CREATE OR ALTER PROCEDURE actividades.sp_modificar_horario
     @id_actividad INT
 AS
 BEGIN
+    DECLARE @msj_error VARCHAR(200) = '';
     SET NOCOUNT ON;
     BEGIN TRY
         IF NOT EXISTS (SELECT 1 FROM actividades.Horario WHERE id = @id)
-            THROW 50013, 'El Horario con el ID provisto no existe.', 1;
+            SET @msj_error += 'El Horario con el ID provisto no existe.';
 
         IF NOT EXISTS(SELECT 1 FROM actividades.Actividad WHERE id=@id_actividad)
-            THROW 50013, 'El ID para la Actividad especifica no existe',2;
+            SET @msj_error += 'El ID para la Actividad especifica no existe';
 
         IF @hora_inicio IS NULL OR @hora_fin IS NULL OR @dia_semana IS NULL OR @fecha_vigencia_ini IS NULL 
-            THROW 50013, ' - Los datos NO pueden ser NULL.',3;
+            SET @msj_error += ' - Los datos NO pueden ser NULL.';
+
+        IF(LEN(@msj_error)>0)
+            THROW 50013, @msj_error,1;
 
         UPDATE actividades.Horario
         SET hora_inicio = @hora_inicio,
@@ -389,7 +418,9 @@ BEGIN
 END;
 GO
 
--- Baja (Física)
+
+
+-- Baja (Lógica)
 CREATE OR ALTER PROCEDURE actividades.sp_eliminar_horario
     @id INT
 AS
@@ -451,3 +482,5 @@ BEGIN
     END CATCH;
 END;
 GO
+
+
