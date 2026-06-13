@@ -1,14 +1,18 @@
 {
   "Version": 1,
-  "WorkspaceRootPath": "D:\\Facultad\\TP-BDA\\BBDDA2026C1COM5600LinuxPreachersA\\SGPN\\",
+  "WorkspaceRootPath": "D:\\FACU\\01 - MATERIAS\\Archivos\\3641 - BASES DE DATOS APLICADA\\tp\\SGPN\\",
   "Documents": [
     {
-      "AbsoluteMoniker": "D:0:0:{9571DDE5-8EDF-4007-B9A9-703393C3718B}|Empleados{9571DDE5-8EDF-4007-B9A9-703393C3718B}|D:\\Facultad\\TP-BDA\\BBDDA2026C1COM5600LinuxPreachersA\\SGPN\\Modulos\\Empleados\\Tablas.sql||{B5A506EB-11BE-4782-9A18-21265C2CA0B4}",
-      "RelativeMoniker": "D:0:0:{9571DDE5-8EDF-4007-B9A9-703393C3718B}|Empleados{9571DDE5-8EDF-4007-B9A9-703393C3718B}|solutionrelative:Modulos\\Empleados\\Tablas.sql||{B5A506EB-11BE-4782-9A18-21265C2CA0B4}"
+      "AbsoluteMoniker": "D:0:0:{C0BE212A-2DC4-4F1D-A5FF-DDB3A8A4B624}|Parques{C0BE212A-2DC4-4F1D-A5FF-DDB3A8A4B624}|D:\\FACU\\01 - MATERIAS\\Archivos\\3641 - BASES DE DATOS APLICADA\\tp\\SGPN\\Modulos\\Parques\\Tablas.sql||{B5A506EB-11BE-4782-9A18-21265C2CA0B4}",
+      "RelativeMoniker": "D:0:0:{C0BE212A-2DC4-4F1D-A5FF-DDB3A8A4B624}|Parques{C0BE212A-2DC4-4F1D-A5FF-DDB3A8A4B624}|solutionrelative:Modulos\\Parques\\Tablas.sql||{B5A506EB-11BE-4782-9A18-21265C2CA0B4}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{AF293F3A-72EA-43CC-9594-4C385FA1A6E6}|Reservas{AF293F3A-72EA-43CC-9594-4C385FA1A6E6}|D:\\Facultad\\TP-BDA\\BBDDA2026C1COM5600LinuxPreachersA\\SGPN\\Modulos\\Reservas\\ABM.sql||{B5A506EB-11BE-4782-9A18-21265C2CA0B4}",
-      "RelativeMoniker": "D:0:0:{AF293F3A-72EA-43CC-9594-4C385FA1A6E6}|Reservas{AF293F3A-72EA-43CC-9594-4C385FA1A6E6}|solutionrelative:Modulos\\Reservas\\ABM.sql||{B5A506EB-11BE-4782-9A18-21265C2CA0B4}"
+      "AbsoluteMoniker": "D:0:0:{C0BE212A-2DC4-4F1D-A5FF-DDB3A8A4B624}|Parques{C0BE212A-2DC4-4F1D-A5FF-DDB3A8A4B624}|D:\\FACU\\01 - MATERIAS\\Archivos\\3641 - BASES DE DATOS APLICADA\\tp\\SGPN\\Modulos\\Parques\\ABM.sql||{B5A506EB-11BE-4782-9A18-21265C2CA0B4}",
+      "RelativeMoniker": "D:0:0:{C0BE212A-2DC4-4F1D-A5FF-DDB3A8A4B624}|Parques{C0BE212A-2DC4-4F1D-A5FF-DDB3A8A4B624}|solutionrelative:Modulos\\Parques\\ABM.sql||{B5A506EB-11BE-4782-9A18-21265C2CA0B4}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{4DF9D534-4687-48EE-B7CF-4556869A802A}|Actividades{4DF9D534-4687-48EE-B7CF-4556869A802A}|D:\\FACU\\01 - MATERIAS\\Archivos\\3641 - BASES DE DATOS APLICADA\\tp\\SGPN\\Modulos\\Actividades\\Testing.sql||{B5A506EB-11BE-4782-9A18-21265C2CA0B4}",
+      "RelativeMoniker": "D:0:0:{4DF9D534-4687-48EE-B7CF-4556869A802A}|Actividades{4DF9D534-4687-48EE-B7CF-4556869A802A}|solutionrelative:Modulos\\Actividades\\Testing.sql||{B5A506EB-11BE-4782-9A18-21265C2CA0B4}"
     }
   ],
   "DocumentGroupContainers": [
@@ -23,26 +27,38 @@
             {
               "$type": "Document",
               "DocumentIndex": 0,
-              "Title": "Tablas.sql - localhost.master (DESKTOP-KOIKGVK\\Luis (52))",
-              "DocumentMoniker": "D:\\Facultad\\TP-BDA\\BBDDA2026C1COM5600LinuxPreachersA\\SGPN\\Modulos\\Empleados\\Tablas.sql",
-              "RelativeDocumentMoniker": "Modulos\\Empleados\\Tablas.sql",
-              "ToolTip": "D:\\Facultad\\TP-BDA\\BBDDA2026C1COM5600LinuxPreachersA\\SGPN\\Modulos\\Empleados\\Tablas.sql - localhost.master (DESKTOP-KOIKGVK\\Luis (52))",
-              "RelativeToolTip": "Modulos\\Empleados\\Tablas.sql - localhost.master (DESKTOP-KOIKGVK\\Luis (52))",
+              "Title": "Tablas.sql - DESKTOP-U54AKC1\\SQLEXPRESS.master (DESKTOP-U54AKC1\\Usuario (63))",
+              "DocumentMoniker": "D:\\FACU\\01 - MATERIAS\\Archivos\\3641 - BASES DE DATOS APLICADA\\tp\\SGPN\\Modulos\\Parques\\Tablas.sql",
+              "RelativeDocumentMoniker": "Modulos\\Parques\\Tablas.sql",
+              "ToolTip": "D:\\FACU\\01 - MATERIAS\\Archivos\\3641 - BASES DE DATOS APLICADA\\tp\\SGPN\\Modulos\\Parques\\Tablas.sql - DESKTOP-U54AKC1\\SQLEXPRESS.master (DESKTOP-U54AKC1\\Usuario (63))",
+              "RelativeToolTip": "Modulos\\Parques\\Tablas.sql - DESKTOP-U54AKC1\\SQLEXPRESS.master (DESKTOP-U54AKC1\\Usuario (63))",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000826|",
-              "WhenOpened": "2026-06-12T19:21:51.031Z",
-              "EditorCaption": " - localhost.master (DESKTOP-KOIKGVK\\Luis (52))"
+              "WhenOpened": "2026-06-13T12:50:13.361Z",
+              "EditorCaption": " - DESKTOP-U54AKC1\\SQLEXPRESS.master (DESKTOP-U54AKC1\\Usuario (63))"
             },
             {
               "$type": "Document",
               "DocumentIndex": 1,
-              "Title": "ABM.sql - localhost.master (DESKTOP-KOIKGVK\\Luis (51))",
-              "DocumentMoniker": "D:\\Facultad\\TP-BDA\\BBDDA2026C1COM5600LinuxPreachersA\\SGPN\\Modulos\\Reservas\\ABM.sql",
-              "RelativeDocumentMoniker": "Modulos\\Reservas\\ABM.sql",
-              "ToolTip": "D:\\Facultad\\TP-BDA\\BBDDA2026C1COM5600LinuxPreachersA\\SGPN\\Modulos\\Reservas\\ABM.sql - localhost.master (DESKTOP-KOIKGVK\\Luis (51))",
-              "RelativeToolTip": "Modulos\\Reservas\\ABM.sql - localhost.master (DESKTOP-KOIKGVK\\Luis (51))",
+              "Title": "ABM.sql - DESKTOP-U54AKC1\\SQLEXPRESS.LinuxPreachers (DESKTOP-U54AKC1\\Usuario (104))",
+              "DocumentMoniker": "D:\\FACU\\01 - MATERIAS\\Archivos\\3641 - BASES DE DATOS APLICADA\\tp\\SGPN\\Modulos\\Parques\\ABM.sql",
+              "RelativeDocumentMoniker": "Modulos\\Parques\\ABM.sql",
+              "ToolTip": "D:\\FACU\\01 - MATERIAS\\Archivos\\3641 - BASES DE DATOS APLICADA\\tp\\SGPN\\Modulos\\Parques\\ABM.sql - DESKTOP-U54AKC1\\SQLEXPRESS.LinuxPreachers (DESKTOP-U54AKC1\\Usuario (104))",
+              "RelativeToolTip": "Modulos\\Parques\\ABM.sql - DESKTOP-U54AKC1\\SQLEXPRESS.LinuxPreachers (DESKTOP-U54AKC1\\Usuario (104))",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000826|",
-              "WhenOpened": "2026-06-12T19:21:33.522Z",
-              "EditorCaption": " - localhost.master (DESKTOP-KOIKGVK\\Luis (51))"
+              "WhenOpened": "2026-06-13T12:50:00.606Z",
+              "EditorCaption": " - DESKTOP-U54AKC1\\SQLEXPRESS.LinuxPreachers (DESKTOP-U54AKC1\\Usuario (104))"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 2,
+              "Title": "Testing.sql - DESKTOP-U54AKC1\\SQLEXPRESS.master (DESKTOP-U54AKC1\\Usuario (56))",
+              "DocumentMoniker": "D:\\FACU\\01 - MATERIAS\\Archivos\\3641 - BASES DE DATOS APLICADA\\tp\\SGPN\\Modulos\\Actividades\\Testing.sql",
+              "RelativeDocumentMoniker": "Modulos\\Actividades\\Testing.sql",
+              "ToolTip": "D:\\FACU\\01 - MATERIAS\\Archivos\\3641 - BASES DE DATOS APLICADA\\tp\\SGPN\\Modulos\\Actividades\\Testing.sql - DESKTOP-U54AKC1\\SQLEXPRESS.master (DESKTOP-U54AKC1\\Usuario (56))",
+              "RelativeToolTip": "Modulos\\Actividades\\Testing.sql - DESKTOP-U54AKC1\\SQLEXPRESS.master (DESKTOP-U54AKC1\\Usuario (56))",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000826|",
+              "WhenOpened": "2026-06-13T12:47:36.838Z",
+              "EditorCaption": " - DESKTOP-U54AKC1\\SQLEXPRESS.master (DESKTOP-U54AKC1\\Usuario (56))"
             }
           ]
         }

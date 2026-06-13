@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# SQL Server Management Studio Version 22
-VisualStudioVersion = 18.7.11903.348
+# SQL Server Management Studio Version 21
+VisualStudioVersion = 17.14.36603.0 d17.14
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{4F2E2C19-372F-40D8-9FA7-9D2138C6997A}") = "SGPN", "SGPN.ssmssqlproj", "{CE4A56E1-1995-9F01-1989-9941B5F28028}"
 EndProject
@@ -11,6 +11,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Parques", "Parques", "{C0BE
 	ProjectSection(SolutionItems) = preProject
 		Modulos\Parques\ABM.sql = Modulos\Parques\ABM.sql
 		Modulos\Parques\Tablas.sql = Modulos\Parques\Tablas.sql
+		Modulos\Parques\Testing.sql = Modulos\Parques\Testing.sql
 	EndProjectSection
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Empleados", "Empleados", "{9571DDE5-8EDF-4007-B9A9-703393C3718B}"
@@ -54,7 +55,7 @@ Global
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
 		{CE4A56E1-1995-9F01-1989-9941B5F28028}.Default|Default.ActiveCfg = Default
-		{EF1647BD-90F7-4C04-AE75-7F32053301CD}.Default|Default.ActiveCfg = Default
+		{F700EE09-3AD8-4852-910E-91A55DC37F8D}.Default|Default.ActiveCfg = Default
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
