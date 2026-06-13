@@ -358,3 +358,100 @@ GO
 
 
 -- Por logica de negocio no se permite eliminar Canon
+
+
+-- ---------------------------------------------
+-- 5.  OTROS
+-- ---------------------------------------------
+-- Crea una concesión y generar todos los períodos de canon entre fecha_inicio y fecha_fin
+-- en una sola transacción atómica. Si cualquier paso falla, se deshace todo.
+
+CREATE OR ALTER PROCEDURE concesiones.sp_generar_concesion_y_canon
+    @descripcion VARCHAR(255),
+    @fecha_inicio DATE,
+    @fecha_fin DATE,
+    @id_empresa_concesionaria INT,
+    @id_parque INT,
+    @monto_canon DECIMAL(15,2),
+    @id_forma_pago INT,
+    @cantidad_dias_vencimiento INT
+AS
+BEGIN
+    SET NOCOUNT ON;
+    BEGIN TRY
+        -- Validación exclusiva del high-level (no la hacen los low-level SPs)
+        IF @cantidad_dias_vencimiento IS NULL OR @cantidad_dias_vencimiento <= 0
+            THROW 51000, '@cantidad_dias_vencimiento debe ser un entero positivo.', 1;
+
+        BEGIN TRANSACTION;
+
+        -- 1. Crear concesión (low-level SP valida fechas, empresa, parque)
+        EXEC concesiones.sp_crear_concesion
+            @descripcion = @descripcion,
+            @fecha_inicio = @fecha_inicio,
+            @fecha_fin = @fecha_fin,
+            @id_empresa_concesionaria = @id_empresa_concesionaria,
+            @id_parque = @id_parque;
+
+        -- Obtener el ID de la concesión recién creada buscando por campos coincidentes
+        DECLARE @id_concesion INT;
+        SELECT TOP 1 @id_concesion = id
+        FROM concesiones.Concesion
+        WHERE descripcion = @descripcion
+          AND fecha_inicio = @fecha_inicio
+          AND fecha_fin = @fecha_fin
+          AND id_empresa_concesionaria = @id_empresa_concesionaria
+          AND id_parque = @id_parque
+        ORDER BY id DESC;
+
+        -- 2. Generar períodos de canon (mes completo desde fecha_inicio hasta fecha_fin)
+        DECLARE @periodo_actual DATE = DATEFROMPARTS(YEAR(@fecha_inicio), MONTH(@fecha_inicio), 1);
+        DECLARE @periodo_limite DATE = DATEFROMPARTS(YEAR(@fecha_fin), MONTH(@fecha_fin), 1);
+
+        WHILE @periodo_actual <= @periodo_limite
+        BEGIN
+            DECLARE @fecha_pago_calculada DATE = DATEADD(day, @cantidad_dias_vencimiento, @periodo_actual);
+
+            EXEC concesiones.sp_crear_canon
+                @periodo = @periodo_actual,
+                @monto = @monto_canon,
+                @fecha_pago = @fecha_pago_calculada,
+                @id_concesion = @id_concesion,
+                @id_forma_pago = @id_forma_pago;
+
+            SET @periodo_actual = DATEADD(month, 1, @periodo_actual);
+        END;
+
+        COMMIT TRANSACTION;
+    END TRY
+    BEGIN CATCH
+        IF @@TRANCOUNT > 0
+            ROLLBACK TRANSACTION;
+        THROW;
+    END CATCH;
+END;
+GO
+
+
+-- Finalizar una concesion anticipadamente
+CREATE OR ALTER PROCEDURE concesiones.sp_finalizar_concesion
+    @fecha_fin DATE,
+    @id_concesion INT
+AS
+BEGIN
+    SET NOCOUNT ON;
+    BEGIN TRY
+        IF NOT EXISTS (SELECT 1 FROM concesiones.Concesion WHERE id = @id_concesion)
+            THROW 51000, 'La concesion con el ID provisto no existe.', 1;
+
+        IF @fecha_fin < (SELECT TOP 1 periodo FROM concesiones.Canon
+                          WHERE id_concesion = @id_concesion AND fecha_pago IS NOT NULL
+                          ORDER BY periodo DESC)
+            THROW 51000, '@fecha_fin no puede ser menor que la fecha del periodo del ultimo canon pago.', 1;
+
+        UPDATE concesiones.Concesion SET fecha_fin = @fecha_fin WHERE id = @id_concesion;
+    END TRY
+    BEGIN CATCH
+        THROW;
+    END CATCH;
+END;
