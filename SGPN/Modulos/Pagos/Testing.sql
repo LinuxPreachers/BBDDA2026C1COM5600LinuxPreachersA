@@ -1,199 +1,197 @@
---------------------------------------------------------------------------------
--- PRUEBA 1: ALTA EXITOSA PARA LAS 4 TABLAS
---------------------------------------------------------------------------------
+/*
+ * Universidad: UNLaM
+ * Materia: Bases de datos aplicadas
+ * Comisión: 5600
+ * Grupo: 02
+ * Integrantes: Conforti, Jaime, Laurelli, Porras
+ * Fecha:
+ * Script: Creación de SP ABM módulo pagos
+*/
 
-DECLARE @id_forma_pago_test INT;
 
-PRINT  '>>> PRUEBA 1: Alta Exitosa de FormaPago';
+
+/* OPCIONAL: BORRAR DATOS ANTERIORES
+
+DELETE FROM pagos.TicketFactura;
+DELETE FROM pagos.Pago;
+DELETE FROM pagos.PuntoVenta;
+DELETE FROM pagos.FormaPago;
+*/
+
+-- Aseguramos que la reserva de prueba con ID 1 exista
+IF NOT EXISTS (SELECT 1 FROM reservas.Reserva WHERE id = 1)
+BEGIN
+    SET IDENTITY_INSERT reservas.Reserva ON;
+    INSERT INTO reservas.Reserva (id, fecha_y_hora) VALUES (1, GETDATE());
+    SET IDENTITY_INSERT reservas.Reserva OFF;
+END
+GO
+
+
+-- =============================================================================
+-- SECCIÓN 1: PRUEBAS DE ÉXITO PARA TODOS LOS SP
+-- =============================================================================
+
+--------------------------------------------------------------------------------
+-- 1.1 sp_crear_forma_pago
+--------------------------------------------------------------------------------
+PRINT '>>> 1.1: Alta Exitosa de FormaPago';
 BEGIN TRY
-    EXEC pagos.sp_crear_forma_pago
-        @nombre = 'Efectivo' 
-
-    -- Recuperar el ID generado para la evidencia
-    SELECT TOP 1 @id_forma_pago_test = id FROM pagos.FormaPago ORDER BY id DESC;
-    
-    PRINT 'RESULTADO: OK - Actividad creada correctamente.';
-    
-    -- Evidencia:
-    SELECT 'EVIDENCIA DE ALTA EJECUTADA CORRECTAMENTE' AS Operacion, * FROM pagos.FormaPago WHERE id = @id_forma_pago_test;
+    EXEC pagos.sp_crear_forma_pago @nombre = 'Efectivo';
+    PRINT 'RESULTADO: OK';
+    SELECT 'EVIDENCIA ALTA FORMA PAGO' AS Operacion, * FROM pagos.FormaPago WHERE id = (SELECT TOP 1 id FROM pagos.FormaPago ORDER BY id DESC);
 END TRY
 BEGIN CATCH
-
     PRINT 'ERROR INESPERADO: ' + ERROR_MESSAGE();
-
 END CATCH;
 GO
------------------------------------------------------------
 
-DECLARE @id_pago_test INT;
-PRINT  '>>> PRUEBA 2: Alta Exitosa de Pago';
+--------------------------------------------------------------------------------
+-- 1.2 sp_modificar_forma_pago
+--------------------------------------------------------------------------------
+PRINT '>>> 1.2: Modificación Exitosa de FormaPago';
 BEGIN TRY
-    --Se necesita una reserva
-   --Todavia no implementado EXEC reservas.sp_crear_reserva
-   INSERT INTO reservas.Reserva (fecha_y_hora) VALUES (GETDATE()); --Borrar despues
+    DECLARE @id_fp SMALLINT;
+    SELECT TOP 1 @id_fp = id FROM pagos.FormaPago ORDER BY id DESC;
+
+    EXEC pagos.sp_modificar_forma_pago @id = @id_fp, @nombre = 'Efectivo Modificado';
+    PRINT 'RESULTADO: OK';
+    SELECT 'EVIDENCIA MODIFICACION FORMA PAGO' AS Operacion, * FROM pagos.FormaPago WHERE id = @id_fp;
+END TRY
+BEGIN CATCH
+    PRINT 'ERROR INESPERADO: ' + ERROR_MESSAGE();
+END CATCH;
+GO
+
+--------------------------------------------------------------------------------
+-- 1.3 sp_crear_punto_venta
+--------------------------------------------------------------------------------
+PRINT '>>> 1.3: Alta Exitosa de PuntoVenta';
+BEGIN TRY
+    EXEC pagos.sp_crear_punto_venta @nombre = 'Mostrador Principal';
+    PRINT 'RESULTADO: OK';
+    SELECT 'EVIDENCIA ALTA PUNTO VENTA' AS Operacion, * FROM pagos.PuntoVenta WHERE id = (SELECT TOP 1 id FROM pagos.PuntoVenta ORDER BY id DESC);
+END TRY
+BEGIN CATCH
+    PRINT 'ERROR INESPERADO: ' + ERROR_MESSAGE();
+END CATCH;
+GO
+
+--------------------------------------------------------------------------------
+-- 1.4 sp_modificar_punto_venta
+--------------------------------------------------------------------------------
+PRINT '>>> 1.4: Modificación Exitosa de PuntoVenta';
+BEGIN TRY
+    DECLARE @id_pv SMALLINT;
+    SELECT TOP 1 @id_pv = id FROM pagos.PuntoVenta ORDER BY id DESC;
+
+    EXEC pagos.sp_modificar_punto_venta @id = @id_pv, @nombre = 'Mostrador Modificado';
+    PRINT 'RESULTADO: OK';
+    SELECT 'EVIDENCIA MODIFICACION PUNTO VENTA' AS Operacion, * FROM pagos.PuntoVenta WHERE id = @id_pv;
+END TRY
+BEGIN CATCH
+    PRINT 'ERROR INESPERADO: ' + ERROR_MESSAGE();
+END CATCH;
+GO
+
+--------------------------------------------------------------------------------
+-- 1.5 sp_crear_pago
+--------------------------------------------------------------------------------
+PRINT '>>> 1.5: Alta Exitosa de Pago';
+BEGIN TRY
+    DECLARE @id_fp SMALLINT;
+    DECLARE @id_re INT;
+
+    SELECT TOP 1 @id_fp = id FROM pagos.FormaPago WHERE estado = 1;
+
+    SELECT TOP 1 @id_re = id FROM reservas.Reserva;
 
     EXEC pagos.sp_crear_pago    
-    @fecha_y_hora = '2026-06-12 17:59:30', 
-    @id_reserva = 1, 
-    @id_forma_pago = 1,
-    @importe = 100.10;
+        @fecha_y_hora = '2026-06-12 17:59:30', 
+        @id_reserva = @id_re, 
+        @id_forma_pago = @id_fp,
+        @importe = 250.75;
 
-    -- Recuperar el ID generado para la evidencia
-    SELECT TOP 1 @id_pago_test = id FROM pagos.Pago ORDER BY id DESC;
-    
-    PRINT 'RESULTADO: OK - Pago creada correctamente.';
-    
-    -- Evidencia:
-    SELECT 'EVIDENCIA DE ALTA EJECUTADA CORRECTAMENTE' AS Operacion, * FROM pagos.Pago WHERE id = @id_pago_test;
+    PRINT 'RESULTADO: OK';
+    SELECT 'EVIDENCIA ALTA PAGO' AS Operacion, * FROM pagos.Pago WHERE id = (SELECT TOP 1 id FROM pagos.Pago ORDER BY id DESC);
 END TRY
 BEGIN CATCH
-
     PRINT 'ERROR INESPERADO: ' + ERROR_MESSAGE();
-
 END CATCH;
 GO
 
---------------------------------------------------------------
-DECLARE @id_punto_venta_test INT;
-
-PRINT  '>>> PRUEBA 3: Alta Exitosa de PuntoVenta';
+--------------------------------------------------------------------------------
+-- 1.6 sp_crear_ticket_factura
+--------------------------------------------------------------------------------
+PRINT '>>> 1.6: Alta Exitosa de TicketFactura';
 BEGIN TRY
-    EXEC pagos.sp_crear_punto_venta
-        @nombre = 'Mostrador' 
-
-    -- Recuperar el ID generado para la evidencia
-    SELECT TOP 1 @id_punto_venta_test = id FROM pagos.PuntoVenta ORDER BY id DESC;
-    
-    PRINT 'RESULTADO: OK - PuntoVenta creada correctamente.';
-    
-    -- Evidencia:
-    SELECT 'EVIDENCIA DE ALTA EJECUTADA CORRECTAMENTE' AS Operacion, * FROM pagos.PuntoVenta WHERE id = @id_punto_venta_test;
-END TRY
-BEGIN CATCH
-
-    PRINT 'ERROR INESPERADO: ' + ERROR_MESSAGE();
-
-END CATCH;
-GO
-------------------------------------------------------------
-
-DECLARE @id_ticket_factura_test INT;
-
-PRINT  '>>> PRUEBA 4: Alta Exitosa de TicketFactura';
-BEGIN TRY
+    DECLARE @id_pv SMALLINT, @id_pago INT;
+    SELECT TOP 1 @id_pv = id FROM pagos.PuntoVenta WHERE estado = 1 ORDER BY id DESC;
+    SELECT TOP 1 @id_pago = id FROM pagos.Pago ORDER BY id DESC;
 
     EXEC pagos.sp_crear_ticket_factura
-    @fecha_y_hora = '2026-06-12 17:59:30', 
-    @id_punto_venta = 1, 
-    @id_pago = 1;
+        @fecha_y_hora = '2026-06-12 18:05:00', 
+        @id_punto_venta = @id_pv, 
+        @id_pago = @id_pago;
 
-    -- Recuperar el ID generado para la evidencia
-    SELECT TOP 1 @id_ticket_factura_test = id FROM pagos.TicketFactura  ORDER BY id DESC;
-    
-    PRINT 'RESULTADO: OK - TicketFactura creada correctamente.';
-    
-    -- Evidencia:
-    SELECT 'EVIDENCIA DE ALTA EJECUTADA CORRECTAMENTE' AS Operacion, * FROM pagos.TicketFactura WHERE id = @id_ticket_factura_test;
+    PRINT 'RESULTADO: OK';
+    SELECT 'EVIDENCIA ALTA TICKET FACTURA' AS Operacion, * FROM pagos.TicketFactura WHERE id = (SELECT TOP 1 id FROM pagos.TicketFactura ORDER BY id DESC);
 END TRY
 BEGIN CATCH
-
     PRINT 'ERROR INESPERADO: ' + ERROR_MESSAGE();
-
 END CATCH;
 GO
---------------------------------------------------------
 
 --------------------------------------------------------------------------------
--- PRUEBA 2: ERRORES FORMA PAGO
+-- 1.7 sp_eliminar_forma_pago
 --------------------------------------------------------------------------------
-
-DECLARE @id_forma_pago_test INT;
-
-PRINT  '>>> Alta con nombre nulo de FormaPago';
+PRINT '>>> 1.7: Baja Exitosa de FormaPago (Borrado Lógico)';
 BEGIN TRY
-    EXEC pagos.sp_crear_forma_pago
-        @nombre = ''  --ERROR NOMBRE NULL
+    EXEC pagos.sp_crear_forma_pago @nombre = 'Temporal Baja';
+    
+    DECLARE @id_fp SMALLINT;
+    SELECT TOP 1 @id_fp = id FROM pagos.FormaPago ORDER BY id DESC;
 
-    -- Recuperar el ID generado para la evidencia
-    SELECT TOP 1 @id_forma_pago_test = id FROM pagos.FormaPago ORDER BY id DESC;
-    
-    PRINT 'RESULTADO: OK - Actividad creada correctamente.';
-    
-    -- Evidencia:
-    SELECT 'EVIDENCIA DE ALTA EJECUTADA CORRECTAMENTE' AS Operacion, * FROM pagos.FormaPago WHERE id = @id_forma_pago_test;
+    EXEC pagos.sp_eliminar_forma_pago @id = @id_fp;
+    PRINT 'RESULTADO: OK';
+    SELECT 'EVIDENCIA BAJA FORMA PAGO' AS Operacion, * FROM pagos.FormaPago WHERE id = @id_fp;
 END TRY
 BEGIN CATCH
-
-    PRINT 'ERROR ESPERADO: ' + ERROR_MESSAGE();
-
+    PRINT 'ERROR INESPERADO: ' + ERROR_MESSAGE();
 END CATCH;
 GO
+
 --------------------------------------------------------------------------------
-
-DECLARE @id_forma_pago_test INT;
-
-PRINT  '>>> Modificacion con id inexistente de FormaPago';
+-- 1.8 sp_eliminar_punto_venta
+--------------------------------------------------------------------------------
+PRINT '>>> 1.8: Baja Exitosa de PuntoVenta (Borrado Lógico)';
 BEGIN TRY
-    EXEC pagos.sp_modificar_forma_pago
-        @nombre = 'nombre',
-        @id = 0 --ERROR ID NO EXISTE
+    EXEC pagos.sp_crear_punto_venta @nombre = 'Temporal PV Baja';
+    
+    DECLARE @id_pv SMALLINT;
+    SELECT TOP 1 @id_pv = id FROM pagos.PuntoVenta ORDER BY id DESC;
 
-    -- Recuperar el ID generado para la evidencia
-    SELECT TOP 1 @id_forma_pago_test = id FROM pagos.FormaPago ORDER BY id DESC;
-    
-    PRINT 'RESULTADO: OK - Actividad creada correctamente.';
-    
-    -- Evidencia:
-    SELECT 'EVIDENCIA DE ALTA EJECUTADA CORRECTAMENTE' AS Operacion, * FROM pagos.FormaPago WHERE id = @id_forma_pago_test;
+    EXEC pagos.sp_eliminar_punto_venta @id = @id_pv;
+    PRINT 'RESULTADO: OK';
+    SELECT 'EVIDENCIA BAJA PUNTO VENTA' AS Operacion, * FROM pagos.PuntoVenta WHERE id = @id_pv;
 END TRY
 BEGIN CATCH
-
-    PRINT 'ERROR ESPERADO: ' + ERROR_MESSAGE();
-
+    PRINT 'ERROR INESPERADO: ' + ERROR_MESSAGE();
 END CATCH;
 GO
+
+
+-- =============================================================================
+-- SECCIÓN 2: PRUEBAS DE VALIDACIÓN Y CONTROL DE ERRORES (PAGOS)
+-- =============================================================================
+
 --------------------------------------------------------------------------------
-
-DECLARE @id_forma_pago_test INT;
-
-PRINT  '>>> Modificacion con id inexistente de FormaPago';
-BEGIN TRY
-    EXEC pagos.sp_modificar_forma_pago
-        @nombre = 'nombre',
-        @id = 0 --ERROR ID NO EXISTE
-
-    -- Recuperar el ID generado para la evidencia
-    SELECT TOP 1 @id_forma_pago_test = id FROM pagos.FormaPago ORDER BY id DESC;
-    
-    PRINT 'RESULTADO: OK - Actividad creada correctamente.';
-    
-    -- Evidencia:
-    SELECT 'EVIDENCIA DE ALTA EJECUTADA CORRECTAMENTE' AS Operacion, * FROM pagos.FormaPago WHERE id = @id_forma_pago_test;
-
-END TRY
-BEGIN CATCH
-
-    PRINT 'ERROR ESPERADO: ' + ERROR_MESSAGE();
-
-END CATCH;
-GO
+-- 2.1 FormaPago: Error en Alta (Nombre vacío)
 --------------------------------------------------------------------------------
-
-DECLARE @id_forma_pago_test INT;
-
-PRINT  '>>> Modificacion con nombre nulo de FormaPago';
+PRINT '>>> 2.1: Error de Validación en Alta de FormaPago (Nombre vacío)';
 BEGIN TRY
-    EXEC pagos.sp_modificar_forma_pago
-        @nombre = '' , --ERROR NOMBRE NULL
-        @id = 1
-
-    -- Recuperar el ID generado para la evidencia
-    SELECT TOP 1 @id_forma_pago_test = id FROM pagos.FormaPago ORDER BY id DESC;
-    
-    PRINT 'RESULTADO: OK - Actividad creada correctamente.';
-    
-    -- Evidencia:
-    SELECT 'EVIDENCIA DE ALTA EJECUTADA CORRECTAMENTE' AS Operacion, * FROM pagos.FormaPago WHERE id = @id_forma_pago_test;
+    EXEC pagos.sp_crear_forma_pago @nombre = '   ';
+    PRINT 'RESULTADO: ERROR (Debió lanzar excepción)';
 END TRY
 BEGIN CATCH
     PRINT 'ERROR ESPERADO: ' + ERROR_MESSAGE();
@@ -201,22 +199,26 @@ END CATCH;
 GO
 
 --------------------------------------------------------------------------------
-
-DECLARE @id_forma_pago_test INT;
-
-PRINT  '>>> Modificacion exitosade FormaPago';
+-- 2.2 FormaPago: Errores Combinados en Modificación
+--------------------------------------------------------------------------------
+PRINT '>>> 2.2: Error de Validación Combinada en Modificación de FormaPago (ID Inexistente y Nombre Inválido)';
 BEGIN TRY
-    EXEC pagos.sp_modificar_forma_pago
-        @nombre = 'efectivo' , --ERROR NOMBRE NULL
-        @id = 1
+    EXEC pagos.sp_modificar_forma_pago @id = -1, @nombre = '';
+    PRINT 'RESULTADO: ERROR (Debió lanzar excepción)';
+END TRY
+BEGIN CATCH
+    PRINT 'ERROR ESPERADO (MENSAJE COMBINADO):';
+    PRINT '  ' + ERROR_MESSAGE();
+END CATCH;
+GO
 
-    -- Recuperar el ID generado para la evidencia
-    SELECT TOP 1 @id_forma_pago_test = id FROM pagos.FormaPago ORDER BY id DESC;
-    
-    PRINT 'RESULTADO: OK - Actividad creada correctamente.';
-    
-    -- Evidencia:
-    SELECT 'EVIDENCIA DE ALTA EJECUTADA CORRECTAMENTE' AS Operacion, * FROM pagos.FormaPago WHERE id = @id_forma_pago_test;
+--------------------------------------------------------------------------------
+-- 2.3 FormaPago: Error en Baja (ID Inexistente)
+--------------------------------------------------------------------------------
+PRINT '>>> 2.3: Error de Validación en Baja de FormaPago (ID Inexistente)';
+BEGIN TRY
+    EXEC pagos.sp_eliminar_forma_pago @id = -1;
+    PRINT 'RESULTADO: ERROR (Debió lanzar excepción)';
 END TRY
 BEGIN CATCH
     PRINT 'ERROR ESPERADO: ' + ERROR_MESSAGE();
@@ -224,342 +226,78 @@ END CATCH;
 GO
 
 --------------------------------------------------------------------------------
-
-DECLARE @id_forma_pago_test INT;
-
-PRINT  '>>> BAja con id no existente de FormaPago';
+-- 2.4 PuntoVenta: Error en Alta (Nombre vacío)
+--------------------------------------------------------------------------------
+PRINT '>>> 2.4: Error de Validación en Alta de PuntoVenta (Nombre vacío)';
 BEGIN TRY
-    EXEC pagos.sp_eliminar_forma_pago
-        @id = 0 --ERROR ID NO ENCONTRADO
-
-    -- Recuperar el ID generado para la evidencia
-    SELECT TOP 1 @id_forma_pago_test = id FROM pagos.FormaPago ORDER BY id DESC;
-    
-    PRINT 'RESULTADO: OK - Actividad creada correctamente.';
-    
-    -- Evidencia:
-    SELECT 'EVIDENCIA DE ALTA EJECUTADA CORRECTAMENTE' AS Operacion, * FROM pagos.FormaPago WHERE id = @id_forma_pago_test;
+    EXEC pagos.sp_crear_punto_venta @nombre = '';
+    PRINT 'RESULTADO: ERROR (Debió lanzar excepción)';
 END TRY
 BEGIN CATCH
     PRINT 'ERROR ESPERADO: ' + ERROR_MESSAGE();
 END CATCH;
 GO
 
-
 --------------------------------------------------------------------------------
--- PRUEBA 3: ERRORES PAGO
+-- 2.5 PuntoVenta: Errores Combinados en Modificación
 --------------------------------------------------------------------------------
-
-DECLARE @id_pago_test INT;
-PRINT  '>>> Error fecha de Pago';
+PRINT '>>> 2.5: Error de Validación Combinada en Modificación de PuntoVenta (ID Inexistente y Nombre Inválido)';
 BEGIN TRY
+    EXEC pagos.sp_modificar_punto_venta @id = -1, @nombre = '  ';
+    PRINT 'RESULTADO: ERROR (Debió lanzar excepción)';
+END TRY
+BEGIN CATCH
+    PRINT 'ERROR ESPERADO (MENSAJE COMBINADO):';
+    PRINT '  ' + ERROR_MESSAGE();
+END CATCH;
+GO
 
+--------------------------------------------------------------------------------
+-- 2.6 PuntoVenta: Error en Baja (ID Inexistente)
+--------------------------------------------------------------------------------
+PRINT '>>> 2.6: Error de Validación en Baja de PuntoVenta (ID Inexistente)';
+BEGIN TRY
+    EXEC pagos.sp_eliminar_punto_venta @id = -1;
+    PRINT 'RESULTADO: ERROR (Debió lanzar excepción)';
+END TRY
+BEGIN CATCH
+    PRINT 'ERROR ESPERADO: ' + ERROR_MESSAGE();
+END CATCH;
+GO
+
+--------------------------------------------------------------------------------
+-- 2.7 Pago: Errores Combinados en Alta
+--------------------------------------------------------------------------------
+PRINT '>>> 2.7: Error de Validación Combinada en Alta de Pago (Fecha Futura, Reserva Inexistente, Forma Pago Inválida e Importe Negativo)';
+BEGIN TRY
     EXEC pagos.sp_crear_pago    
-    @fecha_y_hora = '2038-06-12 18:59:30', --mayor a actual
-    @id_reserva = 1, 
-    @id_forma_pago = 1,
-    @importe = 100.10;
+        @fecha_y_hora = '2038-01-01 12:00:00', 
+        @id_reserva = -1,                     
+        @id_forma_pago = -1,                   
+        @importe = -500.00;                   
 
-    -- Recuperar el ID generado para la evidencia
-    SELECT TOP 1 @id_pago_test = id FROM pagos.Pago ORDER BY id DESC;
-    
-    PRINT 'RESULTADO: OK - Pago creada correctamente.';
-    
-    -- Evidencia:
-    SELECT 'EVIDENCIA DE ALTA EJECUTADA CORRECTAMENTE' AS Operacion, * FROM pagos.Pago WHERE id = @id_pago_test;
+    PRINT 'RESULTADO: ERROR (Debió lanzar excepción)';
 END TRY
 BEGIN CATCH
-
-    PRINT 'ERROR ESPERADO: ' + ERROR_MESSAGE();
-
-END CATCH;
-GO
---------------------------------------------------------------------------------
-
-DECLARE @id_pago_test INT;
-PRINT  '>>> Error reserva en Pago';
-BEGIN TRY
-
-    EXEC pagos.sp_crear_pago    
-    @fecha_y_hora = '2026-06-12 17:59:30', 
-    @id_reserva = 0, -- no existe reserva
-    @id_forma_pago = 1,
-    @importe = 100.10;
-
-    -- Recuperar el ID generado para la evidencia
-    SELECT TOP 1 @id_pago_test = id FROM pagos.Pago ORDER BY id DESC;
-    
-    PRINT 'RESULTADO: OK - Pago creada correctamente.';
-    
-    -- Evidencia:
-    SELECT 'EVIDENCIA DE ALTA EJECUTADA CORRECTAMENTE' AS Operacion, * FROM pagos.Pago WHERE id = @id_pago_test;
-END TRY
-BEGIN CATCH
-
-    PRINT 'ERROR ESPERADO: ' + ERROR_MESSAGE();
-
+    PRINT 'ERROR ESPERADO (MENSAJE COMBINADO):';
+    PRINT '  ' + ERROR_MESSAGE();
 END CATCH;
 GO
 
 --------------------------------------------------------------------------------
-
-DECLARE @id_pago_test INT;
-PRINT  '>>> Error forma pago en Pago';
-BEGIN TRY
-
-    EXEC pagos.sp_crear_pago    
-    @fecha_y_hora = '2026-06-12 17:59:30', 
-    @id_reserva = 1,
-    @id_forma_pago = 0,  -- no existe forma pago
-    @importe = 100.10;
-
-    -- Recuperar el ID generado para la evidencia
-    SELECT TOP 1 @id_pago_test = id FROM pagos.Pago ORDER BY id DESC;
-    
-    PRINT 'RESULTADO: OK - Pago creada correctamente.';
-    
-    -- Evidencia:
-    SELECT 'EVIDENCIA DE ALTA EJECUTADA CORRECTAMENTE' AS Operacion, * FROM pagos.Pago WHERE id = @id_pago_test;
-END TRY
-BEGIN CATCH
-
-    PRINT 'ERROR ESPERADO: ' + ERROR_MESSAGE();
-
-END CATCH;
-GO
-
+-- 2.8 TicketFactura: Errores Combinados en Alta
 --------------------------------------------------------------------------------
-
-DECLARE @id_pago_test INT;
-PRINT  '>>> Error importe en Pago';
+PRINT '>>> 2.8: Error de Validación Combinada en Alta de TicketFactura (Fecha Futura, Punto Venta Inexistente y Pago Inexistente)';
 BEGIN TRY
-
-    EXEC pagos.sp_crear_pago    
-    @fecha_y_hora = '2026-06-12 17:59:30', 
-    @id_reserva = 1,
-    @id_forma_pago = 1,  
-    @importe = -100.10; --IMPORTE NEGATIVO
-
-    -- Recuperar el ID generado para la evidencia
-    SELECT TOP 1 @id_pago_test = id FROM pagos.Pago ORDER BY id DESC;
-    
-    PRINT 'RESULTADO: OK - Pago creada correctamente.';
-    
-    -- Evidencia:
-    SELECT 'EVIDENCIA DE ALTA EJECUTADA CORRECTAMENTE' AS Operacion, * FROM pagos.Pago WHERE id = @id_pago_test;
-END TRY
-BEGIN CATCH
-
-    PRINT 'ERROR ESPERADO: ' + ERROR_MESSAGE();
-
-END CATCH;
-GO
-
-
---------------------------------------------------------------------------------
--- PRUEBA 4: ERRORES PUNTO VENTA
---------------------------------------------------------------------------------
-
-DECLARE @id_punto_venta_test INT;
-
-PRINT  '>>>Error Alta sin nombre de PuntoVenta';
-BEGIN TRY
-    EXEC pagos.sp_crear_punto_venta
-        @nombre = '' -- NOMBRE VACIO
-
-    -- Recuperar el ID generado para la evidencia
-    SELECT TOP 1 @id_punto_venta_test = id FROM pagos.PuntoVenta ORDER BY id DESC;
-    
-    PRINT 'RESULTADO: OK - PuntoVenta creada correctamente.';
-    
-    -- Evidencia:
-    SELECT 'EVIDENCIA DE ALTA EJECUTADA CORRECTAMENTE' AS Operacion, * FROM pagos.PuntoVenta WHERE id = @id_punto_venta_test;
-END TRY
-BEGIN CATCH
-
-    PRINT 'ERROR INESPERADO: ' + ERROR_MESSAGE();
-
-END CATCH;
-GO
-
---------------------------------------------------------------------------------
-
-DECLARE @id_punto_venta_test INT;
-
-PRINT  '>>>Error Modificacion sin nombre de PuntoVenta';
-BEGIN TRY
-    EXEC pagos.sp_modificar_punto_venta
-        @id = 1 ,
-        @nombre = '' -- NOMBRE VACIO
-
-    -- Recuperar el ID generado para la evidencia
-    SELECT TOP 1 @id_punto_venta_test = id FROM pagos.PuntoVenta ORDER BY id DESC;
-    
-    PRINT 'RESULTADO: OK - PuntoVenta creada correctamente.';
-    
-    -- Evidencia:
-    SELECT 'EVIDENCIA DE ALTA EJECUTADA CORRECTAMENTE' AS Operacion, * FROM pagos.PuntoVenta WHERE id = @id_punto_venta_test;
-END TRY
-BEGIN CATCH
-
-    PRINT 'ERROR INESPERADO: ' + ERROR_MESSAGE();
-
-END CATCH;
-GO
-
---------------------------------------------------------------------------------
-
-DECLARE @id_punto_venta_test INT;
-
-PRINT  '>>>Error Modificacion id de PuntoVenta';
-BEGIN TRY
-    EXEC pagos.sp_modificar_punto_venta
-        @id = 0 , --id no existe
-        @nombre = 'nombre' 
-
-    -- Recuperar el ID generado para la evidencia
-    SELECT TOP 1 @id_punto_venta_test = id FROM pagos.PuntoVenta ORDER BY id DESC;
-    
-    PRINT 'RESULTADO: OK - PuntoVenta creada correctamente.';
-    
-    -- Evidencia:
-    SELECT 'EVIDENCIA DE ALTA EJECUTADA CORRECTAMENTE' AS Operacion, * FROM pagos.PuntoVenta WHERE id = @id_punto_venta_test;
-END TRY
-BEGIN CATCH
-
-    PRINT 'ERROR INESPERADO: ' + ERROR_MESSAGE();
-
-END CATCH;
-GO
-
---------------------------------------------------------------------------------
-
-DECLARE @id_punto_venta_test INT;
-
-PRINT  '>>>Exito Modificacion de PuntoVenta';
-BEGIN TRY
-    EXEC pagos.sp_modificar_punto_venta
-        @id = 1 , 
-        @nombre = 'nombre' 
-
-    -- Recuperar el ID generado para la evidencia
-    SELECT TOP 1 @id_punto_venta_test = id FROM pagos.PuntoVenta ORDER BY id DESC;
-    
-    PRINT 'RESULTADO: OK - PuntoVenta creada correctamente.';
-    
-    -- Evidencia:
-    SELECT 'EVIDENCIA DE ALTA EJECUTADA CORRECTAMENTE' AS Operacion, * FROM pagos.PuntoVenta WHERE id = @id_punto_venta_test;
-END TRY
-BEGIN CATCH
-
-    PRINT 'ERROR INESPERADO: ' + ERROR_MESSAGE();
-
-END CATCH;
-GO
-
---------------------------------------------------------------------------------
-
-DECLARE @id_punto_venta_test INT;
-
-PRINT  '>>>Error Baja id de PuntoVenta';
-BEGIN TRY
-    EXEC pagos.sp_eliminar_punto_venta
-        @id = 0  --id no existe 
-
-    -- Recuperar el ID generado para la evidencia
-    SELECT TOP 1 @id_punto_venta_test = id FROM pagos.PuntoVenta ORDER BY id DESC;
-    
-    PRINT 'RESULTADO: OK - PuntoVenta creada correctamente.';
-    
-    -- Evidencia:
-    SELECT 'EVIDENCIA DE ALTA EJECUTADA CORRECTAMENTE' AS Operacion, * FROM pagos.PuntoVenta WHERE id = @id_punto_venta_test;
-END TRY
-BEGIN CATCH
-
-    PRINT 'ERROR INESPERADO: ' + ERROR_MESSAGE();
-
-END CATCH;
-GO
-
--- ------------------------------------------------------------------------------
--- PRUEBA 5: ERRORES TICKET FACTURA
--- ------------------------------------------------------------------------------
-
-DECLARE @id_ticket_factura_test INT;
-
-PRINT  '>>>ERROR Alta fecha de TicketFactura';
-BEGIN TRY
-
     EXEC pagos.sp_crear_ticket_factura
-    @fecha_y_hora = '2036-06-12 17:59:30',  -- FECHA mayor a actual
-    @id_punto_venta = 1, 
-    @id_pago = 1;
+        @fecha_y_hora = '2038-01-01 12:00:00', 
+        @id_punto_venta = -1,                  
+        @id_pago = -1;                         
 
-    -- Recuperar el ID generado para la evidencia
-    SELECT TOP 1 @id_ticket_factura_test = id FROM pagos.TicketFactura  ORDER BY id DESC;
-    
-    PRINT 'RESULTADO: OK - TicketFactura creada correctamente.';
-    
-    -- Evidencia:
-    SELECT 'EVIDENCIA DE ALTA EJECUTADA CORRECTAMENTE' AS Operacion, * FROM pagos.TicketFactura WHERE id = @id_ticket_factura_test;
+    PRINT 'RESULTADO: ERROR (Debió lanzar excepción)';
 END TRY
 BEGIN CATCH
-
-    PRINT 'ERROR INESPERADO: ' + ERROR_MESSAGE();
-
-END CATCH;
-GO
-
---------------------------------------------------------------------------------
-
-DECLARE @id_ticket_factura_test INT;
-
-PRINT  '>>>ERROR Alta punto de venta TicketFactura';
-BEGIN TRY
-
-    EXEC pagos.sp_crear_ticket_factura
-    @fecha_y_hora = '2026-06-12 17:59:30',
-    @id_punto_venta = 0,  -- No existe
-    @id_pago = 1;
-
-    -- Recuperar el ID generado para la evidencia
-    SELECT TOP 1 @id_ticket_factura_test = id FROM pagos.TicketFactura  ORDER BY id DESC;
-    
-    PRINT 'RESULTADO: OK - TicketFactura creada correctamente.';
-    
-    -- Evidencia:
-    SELECT 'EVIDENCIA DE ALTA EJECUTADA CORRECTAMENTE' AS Operacion, * FROM pagos.TicketFactura WHERE id = @id_ticket_factura_test;
-END TRY
-BEGIN CATCH
-
-    PRINT 'ERROR INESPERADO: ' + ERROR_MESSAGE();
-
-END CATCH;
-GO
-
---------------------------------------------------------------------------------
-
-DECLARE @id_ticket_factura_test INT;
-
-PRINT  '>>>ERROR Alta punto de pago TicketFactura';
-BEGIN TRY
-
-    EXEC pagos.sp_crear_ticket_factura
-    @fecha_y_hora = '2026-06-12 17:59:30',
-    @id_punto_venta = 1,  
-    @id_pago = 0; -- No existe
-
-    -- Recuperar el ID generado para la evidencia
-    SELECT TOP 1 @id_ticket_factura_test = id FROM pagos.TicketFactura  ORDER BY id DESC;
-    
-    PRINT 'RESULTADO: OK - TicketFactura creada correctamente.';
-    
-    -- Evidencia:
-    SELECT 'EVIDENCIA DE ALTA EJECUTADA CORRECTAMENTE' AS Operacion, * FROM pagos.TicketFactura WHERE id = @id_ticket_factura_test;
-END TRY
-BEGIN CATCH
-
-    PRINT 'ERROR INESPERADO: ' + ERROR_MESSAGE();
-
+    PRINT 'ERROR ESPERADO (MENSAJE COMBINADO):';
+    PRINT '  ' + ERROR_MESSAGE();
 END CATCH;
 GO

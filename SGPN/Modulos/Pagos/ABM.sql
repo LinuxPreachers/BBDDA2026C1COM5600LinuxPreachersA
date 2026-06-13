@@ -42,11 +42,16 @@ AS
 BEGIN
     SET NOCOUNT ON;
     BEGIN TRY
+        DECLARE @errores VARCHAR(4000) = '';
+
         IF NOT EXISTS (SELECT 1 FROM pagos.FormaPago WHERE id = @id)
-            THROW 50501, 'La Forma de Pago con el ID provisto no existe.', 1;
+            SET @errores = @errores + 'La Forma de Pago con el ID provisto no existe. ';
 
         IF(@nombre IS NULL OR LTRIM(RTRIM(@nombre)) = '')
-            THROW 50502, 'El nombre ingresado para la Forma de Pago no es válido.', 2;
+            SET @errores = @errores + 'El nombre ingresado para la Forma de Pago no es válido. ';
+
+        IF LEN(@errores) > 0
+            THROW 50501, @errores, 1;
 
         UPDATE pagos.FormaPago
         SET nombre = @nombre
@@ -107,11 +112,16 @@ AS
 BEGIN
     SET NOCOUNT ON;
     BEGIN TRY
+        DECLARE @errores VARCHAR(4000) = '';
+
         IF NOT EXISTS (SELECT 1 FROM pagos.PuntoVenta WHERE id = @id)
-            THROW 50505, 'El Punto de Venta con el ID provisto no existe.', 1;
+            SET @errores = @errores + 'El Punto de Venta con el ID provisto no existe. ';
 
         IF(@nombre IS NULL OR LTRIM(RTRIM(@nombre)) = '')
-            THROW 50506, 'El nombre ingresado para el Punto de Venta no es válido.', 2;
+            SET @errores = @errores + 'El nombre ingresado para el Punto de Venta no es válido. ';
+
+        IF LEN(@errores) > 0
+            THROW 50505, @errores, 1;
 
         UPDATE pagos.PuntoVenta
         SET nombre = @nombre
@@ -157,17 +167,22 @@ AS
 BEGIN
     SET NOCOUNT ON;
     BEGIN TRY
+        DECLARE @errores VARCHAR(4000) = '';
+
         IF( @fecha_y_hora > GETDATE())
-            THROW 50508, 'La fecha hora de pago es mayor a la actual', 1;
+            SET @errores = @errores + 'La fecha hora de pago es mayor a la actual. ';
 
         IF( @id_reserva NOT IN(SELECT id FROM reservas.Reserva) )
-            THROW 50509, 'No existe la reserva', 1;
+            SET @errores = @errores + 'No existe la reserva. ';
 
         IF( @id_forma_pago NOT IN(SELECT id FROM pagos.FormaPago WHERE estado = 1) )
-            THROW 50510, 'Forma de pago no válida', 1;
+            SET @errores = @errores + 'Forma de pago no válida. ';
 
         IF( @importe < 0 )
-            THROW 50511, 'Importe de Pago negativo', 1;
+            SET @errores = @errores + 'Importe de Pago negativo. ';
+
+        IF LEN(@errores) > 0
+            THROW 50508, @errores, 1;
 
         INSERT INTO pagos.Pago(fecha_y_hora,id_reserva,id_forma_pago,importe)
         VALUES (@fecha_y_hora,@id_reserva,@id_forma_pago,@importe);
@@ -194,15 +209,20 @@ AS
 BEGIN
     SET NOCOUNT ON;
     BEGIN TRY
+        DECLARE @errores VARCHAR(4000) = '';
+
         IF( @fecha_y_hora > GETDATE())
-            THROW 50513, 'La fecha hora de ticket es mayor a la actual', 1;
+            SET @errores = @errores + 'La fecha hora de ticket es mayor a la actual. ';
 
         IF( @id_punto_venta NOT IN(SELECT id FROM pagos.PuntoVenta WHERE estado = 1) )
-            THROW 50514, 'No existe el punto de venta', 1;
+            SET @errores = @errores + 'No existe el punto de venta. ';
 
         IF( @id_pago NOT IN(SELECT id FROM pagos.Pago) )
-            THROW 50515, 'No existe el pago', 1;
+            SET @errores = @errores + 'No existe el pago. ';
             
+        IF LEN(@errores) > 0
+            THROW 50513, @errores, 1;
+
         INSERT INTO pagos.TicketFactura(fecha_y_hora,id_punto_venta,id_pago)
         VALUES (@fecha_y_hora,@id_punto_venta,@id_pago);
     END TRY
