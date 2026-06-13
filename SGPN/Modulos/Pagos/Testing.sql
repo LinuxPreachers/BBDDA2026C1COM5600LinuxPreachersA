@@ -204,6 +204,29 @@ GO
 
 DECLARE @id_forma_pago_test INT;
 
+PRINT  '>>> Modificacion exitosade FormaPago';
+BEGIN TRY
+    EXEC pagos.sp_modificar_forma_pago
+        @nombre = 'efectivo' , --ERROR NOMBRE NULL
+        @id = 1
+
+    -- Recuperar el ID generado para la evidencia
+    SELECT TOP 1 @id_forma_pago_test = id FROM pagos.FormaPago ORDER BY id DESC;
+    
+    PRINT 'RESULTADO: OK - Actividad creada correctamente.';
+    
+    -- Evidencia:
+    SELECT 'EVIDENCIA DE ALTA EJECUTADA CORRECTAMENTE' AS Operacion, * FROM pagos.FormaPago WHERE id = @id_forma_pago_test;
+END TRY
+BEGIN CATCH
+    PRINT 'ERROR ESPERADO: ' + ERROR_MESSAGE();
+END CATCH;
+GO
+
+--------------------------------------------------------------------------------
+
+DECLARE @id_forma_pago_test INT;
+
 PRINT  '>>> BAja con id no existente de FormaPago';
 BEGIN TRY
     EXEC pagos.sp_eliminar_forma_pago
@@ -409,6 +432,30 @@ BEGIN CATCH
 END CATCH;
 GO
 
+--------------------------------------------------------------------------------
+
+DECLARE @id_punto_venta_test INT;
+
+PRINT  '>>>Exito Modificacion de PuntoVenta';
+BEGIN TRY
+    EXEC pagos.sp_modificar_punto_venta
+        @id = 1 , 
+        @nombre = 'nombre' 
+
+    -- Recuperar el ID generado para la evidencia
+    SELECT TOP 1 @id_punto_venta_test = id FROM pagos.PuntoVenta ORDER BY id DESC;
+    
+    PRINT 'RESULTADO: OK - PuntoVenta creada correctamente.';
+    
+    -- Evidencia:
+    SELECT 'EVIDENCIA DE ALTA EJECUTADA CORRECTAMENTE' AS Operacion, * FROM pagos.PuntoVenta WHERE id = @id_punto_venta_test;
+END TRY
+BEGIN CATCH
+
+    PRINT 'ERROR INESPERADO: ' + ERROR_MESSAGE();
+
+END CATCH;
+GO
 
 --------------------------------------------------------------------------------
 

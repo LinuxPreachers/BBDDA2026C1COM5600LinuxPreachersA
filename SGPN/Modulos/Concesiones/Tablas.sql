@@ -35,7 +35,7 @@ BEGIN
         nombre VARCHAR (100) NOT NULL,
         descripcion VARCHAR(255) NULL,
         cuit BIGINT NOT NULL UNIQUE,
-        razon_social VARCHAR(100) NOT NULL UNIQUE,
+        razon_social VARCHAR(100) NOT NULL,
         id_actividad_empresarial SMALLINT NOT NULL,
 
         CONSTRAINT PK_EmpresaConcesionaria PRIMARY KEY (id),
