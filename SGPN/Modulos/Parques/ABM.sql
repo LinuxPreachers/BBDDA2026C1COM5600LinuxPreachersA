@@ -217,11 +217,12 @@ BEGIN
     
     DECLARE @msj_errores VARCHAR(4000) = '';
 
-    IF NOT EXISTS (SELECT 1 FROM parques.Provincia WHERE id_region = @id_region)
-        SET @msj_errores += '- No hay ninguna provincia en la region. ';
-
     IF NOT EXISTS (SELECT 1 FROM parques.Region WHERE id = @id_region)
         SET @msj_errores += '- La Region con el ID provisto no existe. ';
+
+
+    IF NOT EXISTS (SELECT 1 FROM parques.Provincia WHERE id_region = @id_region)
+        SET @msj_errores += '- No hay ninguna provincia en la region. ';
 
     IF EXISTS (
         SELECT 1 
@@ -236,8 +237,17 @@ BEGIN
         RETURN;
     END;
 
-    DELETE FROM parques.Provincia
-    WHERE id_region = @id_region;
+    BEGIN TRANSACTION;
+        DECLARE @ProvinciasAEliminar TABLE ( id INT );
+        INSERT INTO @ProvinciasAEliminar (id) SELECT id FROM parques.Provincia WHERE id_region = @id_region;
+        DECLARE @id_provincia INT;
+        WHILE EXISTS (SELECT 1 FROM @ProvinciasAEliminar)
+        BEGIN
+            SELECT TOP 1 @id_provincia = id FROM @ProvinciasAEliminar;
+            EXEC parques.sp_eliminar_provincia @id_provincia;
+            DELETE FROM @ProvinciasAEliminar WHERE id = @id_provincia;
+        END;
+    COMMIT TRANSACTION;
 END;
 GO
 
@@ -295,7 +305,7 @@ BEGIN
     IF NOT EXISTS (SELECT 1 FROM parques.TipoVisitante WHERE id = @id)
         SET @msj_errores += '- El TipoVisitante con el ID provisto no existe. ';
 
-    IF (@nombre IS NOT NULL OR LTRIM(RTRIM(@nombre)) = '')
+    IF (@nombre IS NOT NULL AND LTRIM(RTRIM(@nombre)) = '')
         SET @msj_errores += '- El nombre del tipo de visitante no puede estar vacio. ';
 
     IF (LEN(@msj_errores) > 0)
@@ -553,8 +563,11 @@ BEGIN
         RETURN;
     END;
 
-    DELETE FROM parques.Parque
-    WHERE id = @id;
+    BEGIN TRANSACTION
+        DELETE FROM parques.ProvinciaParque WHERE id_parque = @id
+        DELETE FROM parques.ParqueTipoVisitante WHERE id_parque = @id
+        DELETE FROM parques.Parque WHERE id = @id;
+    COMMIT TRANSACTION
 END;
 GO
 
