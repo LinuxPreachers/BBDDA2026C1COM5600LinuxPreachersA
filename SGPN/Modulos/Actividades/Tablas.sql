@@ -135,10 +135,8 @@ BEGIN
 
     IF EXISTS (SELECT 1 FROM @tablas_existentes)
     BEGIN
-        RAISERROR('No se puede crear el modulo: ya existe al menos una tabla del modulo actividades en el esquema actividades.', 16, 1);
-        RETURN;
-    END;
-
+        ;THROW 50000,'No se puede crear el modulo: ya existe al menos una tabla del modulo actividades en el esquema actividades.',1;
+    END 
     DECLARE @dependencias_faltantes TABLE (
         nombre VARCHAR(128)
     );
@@ -161,9 +159,8 @@ BEGIN
 
     IF EXISTS (SELECT 1 FROM @dependencias_faltantes)
     BEGIN
-        RAISERROR('No se puede crear el modulo actividades: faltan tablas necesarias por relaciones (ej. Parque).', 16, 1);
-        RETURN;
-    END;
+        ;THROW 50001,'No se puede crear el modulo actividades: faltan tablas necesarias por relaciones (ej. Parque).', 1;
+    END
 
     -- Si pasamos los controles, ejecutamos la creación
     EXEC actividades.sp_crear_tablas_modulo_actividades;
@@ -194,15 +191,17 @@ BEGIN
         IF @@TRANCOUNT > 0
             ROLLBACK TRANSACTION;
 
-        DECLARE @mensaje_error VARCHAR(4000);
+        DECLARE @mensaje_error VARCHAR(400);
 
         SET @mensaje_error = ERROR_MESSAGE();
 
-        RAISERROR(@mensaje_error, 16, 1);
+        THROW 50002,@mensaje_error, 1;
         RETURN;
     END CATCH;
 END;
 GO
+
+
 
 -- Ejecucion (Comentado para evitar ejecución accidental si copiás el script de corrido)
 /*

@@ -1,0 +1,15 @@
+{
+  "ExpandedNodes": [
+    "",
+    "\\SGPN",
+    "\\SGPN\\Modulos",
+    "\\SGPN\\Modulos\\Actividades",
+    "\\SGPN\\Modulos\\Concesiones",
+    "\\SGPN\\Modulos\\Empleados",
+    "\\SGPN\\Modulos\\Pagos",
+    "\\SGPN\\Modulos\\Parques",
+    "\\SGPN\\Modulos\\Reservas"
+  ],
+  "SelectedNode": "\\SGPN\\Modulos\\Actividades\\Tablas.sql",
+  "PreviewInSolutionExplorer": false
+}

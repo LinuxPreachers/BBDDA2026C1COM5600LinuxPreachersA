@@ -22,8 +22,10 @@ AS
 BEGIN
     SET NOCOUNT ON;
     BEGIN TRY
+
         IF(@nombre IS NULL)
-            THROW 50000, 'El nombre ingresado para la actividad no es valido para ser insertado',1;
+            THROW 50003, 'El nombre ingresado para la actividad no es valido para ser insertado',1;
+
         INSERT INTO LinuxPreachers.actividades.TipoActividad (nombre)
         VALUES (@nombre);
     END TRY
@@ -41,8 +43,9 @@ AS
 BEGIN
     SET NOCOUNT ON;
     BEGIN TRY
+
         IF NOT EXISTS (SELECT 1 FROM actividades.TipoActividad WHERE id = @id)
-            THROW 50001, 'El Tipo de Actividad con el ID provisto no existe.', 1;
+            THROW 50004, 'El Tipo de Actividad con el ID provisto no existe.', 1;
 
         UPDATE actividades.TipoActividad
         SET nombre = @nombre
@@ -61,10 +64,14 @@ AS
 BEGIN
     SET NOCOUNT ON;
     BEGIN TRY
-        IF NOT EXISTS (SELECT 1 FROM actividades.TipoActividad WHERE id = @id)
-            THROW 50002, 'El Tipo de Actividad con el ID provisto no existe.', 1;
 
-        DELETE FROM actividades.TipoActividad WHERE id = @id;
+        IF NOT EXISTS (SELECT 1 FROM actividades.TipoActividad WHERE id = @id)
+            THROW 50005, 'El Tipo de Actividad con el ID provisto no existe.', 1;
+
+        IF EXISTS (SELECT 1 FROM actividades.Actividad WHERE id_parque=@id)
+            THROW 50005, 'El Tipo de Actividad no es posible eliminar debido a que tiene Actividades asociadas.',2;
+
+        DELETE FROM actividades.TipoActividad WHERE id = 1;
     END TRY
     BEGIN CATCH
         THROW;
@@ -84,10 +91,13 @@ AS
 BEGIN
     SET NOCOUNT ON;
     BEGIN TRY
+
     IF @nombre IS NULL
-        THROW 50003,'El nombre ingresado para la habilitacion no es valido para ser insertado',1;
-        INSERT INTO actividades.Habilitacion (nombre, descripcion)
-        VALUES (@nombre, @descripcion);
+        THROW 50006,'El nombre ingresado para la habilitacion no es valido para ser insertado',1;
+
+    INSERT INTO actividades.Habilitacion (nombre, descripcion)
+    VALUES (@nombre, @descripcion);
+    
     END TRY
     BEGIN CATCH
         THROW;
@@ -104,13 +114,15 @@ AS
 BEGIN
     SET NOCOUNT ON;
     BEGIN TRY
+
         IF NOT EXISTS (SELECT 1 FROM actividades.Habilitacion WHERE id = @id)
-            THROW 50004, 'La Habilitación con el ID provisto no existe.', 1;
+            THROW 50007, 'La Habilitación con el ID provisto no existe.', 1;
 
         UPDATE actividades.Habilitacion
         SET nombre = @nombre,
             descripcion = @descripcion
         WHERE id = @id;
+
     END TRY
     BEGIN CATCH
         THROW;
@@ -123,12 +135,24 @@ CREATE OR ALTER PROCEDURE actividades.sp_eliminar_habilitacion
     @id INT
 AS
 BEGIN
+    DECLARE @msj_errores VARCHAR(400) = '';
     SET NOCOUNT ON;
     BEGIN TRY
+
         IF NOT EXISTS (SELECT 1 FROM actividades.Habilitacion WHERE id = @id)
-            THROW 50005, 'La Habilitación con el ID provisto no existe.', 1;
+            SET @msj_errores = @msj_errores + '- La Habilitación con el ID provisto no existe.';
+
+        IF EXISTS (SELECT 1 FROM actividades.HabilitacionRegulaActividad WHERE id_habilitacion=@id)
+            SET @msj_errores = @msj_errores + '- La Habilitación no es posible eliminar debido a que tiene Actividades asociadas.';
+
+        IF EXISTS (SELECT 1 FROM empleados.GuiaPoseeHabilitacion WHERE id_habilitacion = @id)
+            SET @msj_errores = @msj_errores + '- La Habilitación no es posible eliminar debido a que tiene Guías asociados';
+
+        IF (LEN(@msj_errores) > 0)
+            THROW 50008, @msj_errores, 1;
 
         DELETE FROM actividades.Habilitacion WHERE id = @id;
+
     END TRY
     BEGIN CATCH
         THROW;
@@ -153,9 +177,9 @@ AS
 BEGIN
     SET NOCOUNT ON;
     BEGIN TRY
-        DECLARE @msj_errores VARCHAR(4000) = '';
+        DECLARE @msj_errores VARCHAR(400) = '';
 
-        -- Validaciones de formato y lógica de negocio
+        
         IF (@nombre IS NULL OR LTRIM(RTRIM(@nombre)) = '')
             SET @msj_errores += '- El nombre de la actividad no puede estar vacío. ';
 
@@ -175,9 +199,9 @@ BEGIN
         IF NOT EXISTS (SELECT 1 FROM actividades.TipoActividad WHERE id = @id_tipo_actividad)
             SET @msj_errores += '- El ID del Tipo de Actividad especificado no existe. ';
 
-        -- Lanza el error unificado si se incumplió alguna condición
+     
         IF (LEN(@msj_errores) > 0)
-            THROW 50006, @msj_errores, 1;
+            THROW 50009, @msj_errores, 1;
 
         -- Inserción
         INSERT INTO actividades.Actividad (nombre, descripcion, cupo_maximo, duracion_minutos, precio, id_parque, id_tipo_actividad)
@@ -212,10 +236,10 @@ BEGIN
         IF NOT EXISTS (SELECT 1 FROM actividades.Actividad WHERE id = @id) 
             SET @msj_errores += '- La Actividad con el ID provisto no existe. ';
 
-        -- Validaciones de formato y lógica de negocio
         IF (@nombre IS NULL OR LTRIM(RTRIM(@nombre)) = '')
             SET @msj_errores += '- El nombre de la actividad no puede estar vacío. ';
 
+        -- Validaciones de lógica de negocio
         IF (@cupo_maximo <= 0)
             SET @msj_errores += '- El cupo máximo debe ser mayor a 0. ';
 
@@ -225,16 +249,16 @@ BEGIN
         IF (@precio < 0)
             SET @msj_errores += '- El precio no puede ser un valor negativo. ';
 
-        -- Validaciones de integridad referencial
+        
         IF NOT EXISTS (SELECT 1 FROM parques.Parque WHERE id = @id_parque)
             SET @msj_errores += '- El ID del Parque especificado no existe. ';
 
         IF NOT EXISTS (SELECT 1 FROM actividades.TipoActividad WHERE id = @id_tipo_actividad)
             SET @msj_errores += '- El ID del Tipo de Actividad especificado no existe. ';
 
-        -- Lanza el error unificado si se incumplió alguna condición
+        
         IF (LEN(@msj_errores) > 0)
-            THROW 50007, @msj_errores, 1;
+            THROW 50010, @msj_errores, 1;
 
         -- Actualización
         UPDATE actividades.Actividad
@@ -260,23 +284,34 @@ CREATE OR ALTER PROCEDURE actividades.sp_eliminar_actividad
     @id INT
 AS
 BEGIN
+    DECLARE @msj_error VARCHAR(300) ='';
     SET NOCOUNT ON;
     BEGIN TRY
         -- Validación de existencia directa
         IF NOT EXISTS (SELECT 1 FROM actividades.Actividad WHERE id = @id)
-            THROW 50000, 'No se pudo eliminar: La Actividad con el ID provisto no existe.', 1;
+            SET @msj_error+= '- No se pudo eliminar: La Actividad con el ID provisto no existe.';
 
 
         -- Validación preventiva (Opcional, pero buena práctica): 
         -- Verificar si hay registros que dependen de esta actividad (ej. horarios) antes de borrar.
         IF EXISTS (SELECT 1 FROM actividades.Horario WHERE id_actividad = @id)
-            THROW 50008, 'No se puede eliminar la actividad porque tiene horarios asignados.', 1;
+            SET @msj_error += '- No se puede eliminar la actividad porque tiene horarios asignados.';
+
+        IF EXISTS(SELECT 1 FROM actividades.HabilitacionRegulaActividad WHERE id_actividad=@id)
+            SET @msj_error+= '- No se puede eliminar la actividad porque tiene habilitaciones que la regulan asignadas ';
+        
+        IF EXISTS(SELECT 1 FROM empleados.GuiaEstaEnActividad WHERE id_actividad=@id)
+            SET @msj_error+= '- No se puede eliminar la actividad porque tiene asociado guías. ';
+
+        IF LEN(@msj_error)>0
+            THROW 50011, @msj_error,1;
+
 
         DELETE FROM actividades.Actividad WHERE id = @id;
 
     END TRY
     BEGIN CATCH
-        ;THROW;
+        THROW;
     END CATCH;
 END;
 GO
@@ -299,6 +334,12 @@ AS
 BEGIN
     SET NOCOUNT ON;
     BEGIN TRY
+        IF NOT EXISTS(SELECT 1 FROM actividades.Actividad WHERE id=@id_actividad)
+            THROW 50012, ' - La actividad asociada al horario no existe',1;
+
+        IF @hora_inicio IS NULL OR @hora_fin IS NULL OR @dia_semana IS NULL OR @fecha_vigencia_ini IS NULL 
+            THROW 50012, ' - Los datos NO pueden ser NULL.',2;
+
         INSERT INTO actividades.Horario (hora_inicio, hora_fin, dia_semana, fecha_vigencia_ini, fecha_vigencia_fin, visible, id_actividad)
         VALUES (@hora_inicio, @hora_fin, @dia_semana, @fecha_vigencia_ini, @fecha_vigencia_fin, @visible, @id_actividad);
        
@@ -324,10 +365,14 @@ BEGIN
     SET NOCOUNT ON;
     BEGIN TRY
         IF NOT EXISTS (SELECT 1 FROM actividades.Horario WHERE id = @id)
-            THROW 50009, 'El Horario con el ID provisto no existe.', 1;
+            THROW 50013, 'El Horario con el ID provisto no existe.', 1;
 
         IF NOT EXISTS(SELECT 1 FROM actividades.Actividad WHERE id=@id_actividad)
-            THROW 50009, 'El ID para la Actividad especifica no existe',2;
+            THROW 50013, 'El ID para la Actividad especifica no existe',2;
+
+        IF @hora_inicio IS NULL OR @hora_fin IS NULL OR @dia_semana IS NULL OR @fecha_vigencia_ini IS NULL 
+            THROW 50013, ' - Los datos NO pueden ser NULL.',3;
+
         UPDATE actividades.Horario
         SET hora_inicio = @hora_inicio,
             hora_fin = @hora_fin,
@@ -352,9 +397,10 @@ BEGIN
     SET NOCOUNT ON;
     BEGIN TRY
         IF NOT EXISTS (SELECT 1 FROM actividades.Horario WHERE id = @id)
-            THROW 50010, 'El Horario con el ID provisto no existe.', 1;
+            THROW 50014, 'El Horario con el ID provisto no existe.', 1;
 
-        DELETE FROM actividades.Horario WHERE id = @id;
+       UPDATE actividades.Horario SET visible=0 WHERE id=@id;
+
     END TRY
     BEGIN CATCH
         THROW;
@@ -366,7 +412,7 @@ GO
 -- 5.ABM: HabilitacionRegulaActividad
 -- ---------------------------------------------
 
--- Alta de Relación
+-- Alta
 CREATE OR ALTER PROCEDURE actividades.sp_crear_habilitacion_regula_actividad
     @id_habilitacion INT,
     @id_actividad INT
@@ -375,7 +421,7 @@ BEGIN
     SET NOCOUNT ON;
     BEGIN TRY
         IF EXISTS (SELECT 1 FROM actividades.HabilitacionRegulaActividad WHERE id_habilitacion = @id_habilitacion AND id_actividad = @id_actividad)
-            THROW 50000, 'La relación entre la habilitación y la actividad ya se encuentra registrada.', 1;
+            THROW 50015, 'La relación entre la habilitación y la actividad ya se encuentra registrada.', 1;
 
         INSERT INTO actividades.HabilitacionRegulaActividad (id_habilitacion, id_actividad)
         VALUES (@id_habilitacion, @id_actividad);
@@ -395,7 +441,7 @@ BEGIN
     SET NOCOUNT ON;
     BEGIN TRY
         IF NOT EXISTS (SELECT 1 FROM actividades.HabilitacionRegulaActividad WHERE id_habilitacion = @id_habilitacion AND id_actividad = @id_actividad)
-            THROW 50000, 'No existe la relación especificada para eliminar.', 1;
+            THROW 50016, 'No existe la relación especificada para eliminar.', 1;
 
         DELETE FROM actividades.HabilitacionRegulaActividad 
         WHERE id_habilitacion = @id_habilitacion AND id_actividad = @id_actividad;

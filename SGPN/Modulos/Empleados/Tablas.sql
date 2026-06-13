@@ -37,6 +37,7 @@ BEGIN
         apellido VARCHAR(100) NOT NULL,
         nro_doc INT NOT NULL,
         id_tipo_documento INT NOT NULL,
+        activo BIT NOT NULL DEFAULT 1,
 
         CONSTRAINT PK_Empleado PRIMARY KEY (id),
 
@@ -62,12 +63,6 @@ BEGIN
         institucion VARCHAR(100) NOT NULL,
 
         CONSTRAINT PK_Titulo PRIMARY KEY (id)
-    );
-
-    -- Sacar
-    CREATE TABLE empleados.Habilitacion (
-        id INT IDENTITY(1,1) NOT NULL,
-        CONSTRAINT PK_Habilitacion PRIMARY KEY (id)
     );
 
     CREATE TABLE empleados.Guia (
@@ -103,6 +98,7 @@ BEGIN
     );
 
     CREATE TABLE empleados.GuardaparqueAsignado (
+        id INT NOT NULL,
         id_empleado INT NOT NULL,
         id_parque INT NOT NULL,
         fecha_ingreso DATE NOT NULL,
@@ -110,7 +106,7 @@ BEGIN
         motivo_egreso VARCHAR(255) NULL,
 
         CONSTRAINT PK_GuardaparqueAsignado
-            PRIMARY KEY (id_empleado, id_parque, fecha_ingreso),
+            PRIMARY KEY (id),
 
         CONSTRAINT FK_GuardaparqueAsignado_Guardaparque
             FOREIGN KEY (id_empleado)
@@ -125,13 +121,14 @@ BEGIN
     );
 
     CREATE TABLE empleados.GuiaEstaEnActividad (
+        id INT NOT NULL,
         id_empleado INT NOT NULL,
         id_actividad INT NOT NULL,
         fecha_inicio DATE NOT NULL,
         fecha_fin DATE NULL,
 
         CONSTRAINT PK_GuiaActividad
-            PRIMARY KEY (id_empleado, id_actividad, fecha_inicio),
+            PRIMARY KEY (id),
 
         CONSTRAINT FK_GuiaActividad_Guia
             FOREIGN KEY (id_empleado)
@@ -146,12 +143,14 @@ BEGIN
     );
 
     CREATE TABLE empleados.GuiaPoseeHabilitacion (
+        id INT NOT NULL,
         id_empleado INT NOT NULL,
         id_habilitacion INT NOT NULL,
         fecha_inicio DATE NOT NULL,
+        fecha_fin DATE NOT NULL,
 
         CONSTRAINT PK_GuiaHabilitacion
-            PRIMARY KEY (id_empleado, id_habilitacion, fecha_inicio),
+            PRIMARY KEY (id),
 
         CONSTRAINT FK_GuiaHabilitacion_Guia
             FOREIGN KEY (id_empleado)
@@ -159,7 +158,7 @@ BEGIN
 
         CONSTRAINT FK_GuiaHabilitacion_Habilitacion
             FOREIGN KEY (id_habilitacion)
-            REFERENCES empleados.Habilitacion(id)
+            REFERENCES actividades.Habilitacion(id)
     );
 
 END;
@@ -186,7 +185,6 @@ BEGIN
             'Empleado',
             'Especialidad',
             'Titulo',
-            --'Habilitacion',
             'Guia',
             'Guardaparque',
             'GuardaparqueAsignado',
@@ -196,10 +194,8 @@ BEGIN
 
     IF EXISTS (SELECT 1 FROM @tablas_existentes)
     BEGIN
-        RAISERROR('No se puede crear el modulo: ya existe al menos una tabla del modulo empleados en el esquema empleados.', 16, 1);
-        RETURN;
-    END;
-
+        ;THROW 50100,'No se puede crear el modulo: ya existe al menos una tabla del modulo empleados en el esquema empleados.',1;
+    END
 
     DECLARE @dependencias_faltantes TABLE (
         nombre VARCHAR(128)
@@ -224,9 +220,8 @@ BEGIN
 
     IF EXISTS (SELECT 1 FROM @dependencias_faltantes)
     BEGIN
-        RAISERROR('No se puede crear el modulo empleados: faltan tablas necesarias por relaciones.', 16, 1);
-        RETURN;
-    END;
+        ;THROW 50101,'No se puede crear el modulo empleados: faltan tablas necesarias por relaciones.', 1;
+    END 
 
     EXEC empleados.crear_tablas_modulo_empleados;
 END;
@@ -239,13 +234,13 @@ BEGIN
         BEGIN TRANSACTION;
 
             DROP TABLE IF EXISTS empleados.GuiaPoseeHabilitacion;
-            DROP TABLE IF EXISTS empleados.GuiaActividad;
+            DROP TABLE IF EXISTS empleados.GuiaEstaEnActividad;
             DROP TABLE IF EXISTS empleados.GuardaparqueAsignado;
 
+            
             DROP TABLE IF EXISTS empleados.Guia;
             DROP TABLE IF EXISTS empleados.Guardaparque;
 
-            --DROP TABLE IF EXISTS empleados.Habilitacion;
             DROP TABLE IF EXISTS empleados.Titulo;
             DROP TABLE IF EXISTS empleados.Especialidad;
 
@@ -262,7 +257,7 @@ BEGIN
 
         SET @mensaje_error = ERROR_MESSAGE();
 
-        RAISERROR(@mensaje_error, 16, 1);
+        THROW 50102,@mensaje_error,1;
         RETURN;
     END CATCH;
 END;

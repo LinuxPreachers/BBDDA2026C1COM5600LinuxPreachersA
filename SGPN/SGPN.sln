@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# SQL Server Management Studio Version 21
-VisualStudioVersion = 17.14.36212.18
+# SQL Server Management Studio Version 22
+VisualStudioVersion = 18.7.11903.348
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{4F2E2C19-372F-40D8-9FA7-9D2138C6997A}") = "SGPN", "SGPN.ssmssqlproj", "{CE4A56E1-1995-9F01-1989-9941B5F28028}"
 EndProject
@@ -15,6 +15,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Parques", "Parques", "{C0BE
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Empleados", "Empleados", "{9571DDE5-8EDF-4007-B9A9-703393C3718B}"
 	ProjectSection(SolutionItems) = preProject
+		Modulos\Empleados\ABM.sql = Modulos\Empleados\ABM.sql
 		Modulos\Empleados\Tablas.sql = Modulos\Empleados\Tablas.sql
 	EndProjectSection
 EndProject
@@ -22,7 +23,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Actividades", "Actividades"
 	ProjectSection(SolutionItems) = preProject
 		Modulos\Actividades\ABM.sql = Modulos\Actividades\ABM.sql
 		Modulos\Actividades\Tablas.sql = Modulos\Actividades\Tablas.sql
-		Modulos\Actividades\Testing_FaltanTests.sql = Modulos\Actividades\Testing_FaltanTests.sql
+		Modulos\Actividades\Testing.sql = Modulos\Actividades\Testing.sql
 	EndProjectSection
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Reservas", "Reservas", "{AF293F3A-72EA-43CC-9594-4C385FA1A6E6}"
@@ -53,7 +54,7 @@ Global
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
 		{CE4A56E1-1995-9F01-1989-9941B5F28028}.Default|Default.ActiveCfg = Default
-		{F8BFA7B0-AF66-40FB-9496-BB52372D4929}.Default|Default.ActiveCfg = Default
+		{EF1647BD-90F7-4C04-AE75-7F32053301CD}.Default|Default.ActiveCfg = Default
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
