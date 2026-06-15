@@ -1,16 +1,29 @@
 # BBDDA2026C1COM5600LinuxPreachersA
 
-### Entrega 5: Creación de Tablas y SP asociados.
+## Códigos de error por módulo
 
-Para cada modulo, se debera crear los siguientes scripts:
-- Creado de Tablas (Encerradas en un SP de forma que solo ejecutarlo cree todas las tablas del modulo)
-- CRUD de Tablas (Un SP para cada acción)
-- Testing (Llamados a los SP del CRUD con valores invalidos y chequeo de que devuelva error)
+| Código | Módulo      |
+| :----- | :---------- |
+| 50.000 | Actividades |
+| 50.100 | Empleados   |
+| 50.200 | Parques     |
+| 50.300 | Reservas    |
+| 50.400 | Concesiones |
+| 50.500 | Pagos       |
+| 51.000 | Reportes    |
 
-Modulos:
-- Parques
-- Entradas
-- Actividades
-- Empleados
-- Concesiones
-- Pagos
+> A cada módulo se le asignan 100 códigos de error a partir del código base indicado en la tabla.
+
+---
+
+## Estado de las entregas
+
+| Entrega                              | Estado              |
+| :----------------------------------- | :-----------------  |
+| **E3** - DER                         | ✅ Completada       |
+| **E4** - Instalación y Configuración | ✅ Completada       |
+| **E5** - Base de Datos               | 🟢 Casi finalizada  |
+| **E6** - Importación                 | 🚧 En desarrollo    |
+| **E7** - Reportes                    | 🟢 Casi finalizada  |
+| **E8** - Seguridad y Respaldo        | ⏳ Pendiente        |
+| **E9** - BI + Aplicación sencilla    | ⏳ Pendiente        |
