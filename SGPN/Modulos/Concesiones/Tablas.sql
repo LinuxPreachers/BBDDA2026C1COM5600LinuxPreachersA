@@ -8,7 +8,8 @@
  * Script: Creación de tablas módulo concesiones
 */
 
-USE LinuxPreachers
+USE LinuxPreachers;
+GO
 -- Schema
 IF NOT EXISTS ( SELECT 1 FROM sys.schemas WHERE name = 'concesiones' )
 BEGIN 
@@ -74,6 +75,7 @@ BEGIN
         periodo DATE NOT NULL, --Se guarda como date, luego se puede llevar a otro formato en vista o consulta
         monto DECIMAL(15,2) NOT NULL,
         fecha_pago DATE NULL,
+        fecha_lim_pago DATE NOT NULL,
         id_concesion INT NOT NULL,
         id_forma_pago INT NULL,
 

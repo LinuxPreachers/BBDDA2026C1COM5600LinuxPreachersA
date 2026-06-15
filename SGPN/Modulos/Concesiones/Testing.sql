@@ -185,6 +185,7 @@ BEGIN TRY
         @periodo = '2026-01-01',
         @monto = 1500.50,
         @fecha_pago = '2026-01-10',
+        @fecha_lim_pago = '2026-01-5' ,
         @id_concesion = @id_conc,
         @id_forma_pago = @id_fp;
 
@@ -211,6 +212,7 @@ BEGIN TRY
         @periodo = '2026-02-01',
         @monto = 2000.00,
         @fecha_pago = '2026-02-12',
+        @fecha_lim_pago = '2026-02-14' ,
         @id_concesion = @id_conc,
         @id_forma_pago = @id_fp;
 
@@ -445,6 +447,7 @@ BEGIN TRY
         @periodo = '2026-01-01',
         @monto = -500.00,       -- Monto negativo
         @fecha_pago = '2026-01-10',
+        @fecha_lim_pago = '2026-01-15' ,
         @id_concesion = -1,     
         @id_forma_pago = -1;    
 
@@ -466,6 +469,7 @@ BEGIN TRY
         @periodo = '2026-01-01',
         @monto = -100.00,       -- Monto negativo
         @fecha_pago = '2026-01-10',
+        @fecha_lim_pago = '2026-01-15' ,
         @id_concesion = -1,     
         @id_forma_pago = -1;    
 
@@ -524,7 +528,7 @@ PRINT '';
 PRINT '>>> TEST 1:  sp_generar_concesion_y_canon exitoso';
 
 BEGIN TRY
-    DECLARE @id_emp INT, @id_parque INT, @id_fp INT;
+    DECLARE @id_emp INT, @id_parque INT;
     DECLARE @desc VARCHAR(255) = 'Concesion de prueba';
     DECLARE @fecha_ini DATE = '2026-01-01';
     DECLARE @fecha_fin DATE = '2026-12-31';
@@ -532,7 +536,6 @@ BEGIN TRY
 
     SELECT TOP 1 @id_emp = id FROM concesiones.EmpresaConcesionaria ORDER BY id DESC;
     SELECT TOP 1 @id_parque = id FROM parques.Parque ORDER BY id DESC;
-    SELECT TOP 1 @id_fp = id FROM pagos.FormaPago WHERE estado = 1 ORDER BY id DESC;
 
     EXEC concesiones.sp_generar_concesion_y_canon
         @descripcion = @desc,
@@ -541,7 +544,6 @@ BEGIN TRY
         @id_empresa_concesionaria = @id_emp,
         @id_parque = @id_parque,
         @monto_canon = @monto,
-        @id_forma_pago = @id_fp,
         @cantidad_dias_vencimiento = 15;
 
     -- Verificar concesión creada
@@ -568,11 +570,10 @@ PRINT '';
 PRINT '>>> TEST 2: @cantidad_dias_vencimiento = 0 (rollback esperado)';
 
 BEGIN TRY
-    DECLARE @id_emp2 INT, @id_parque2 INT, @id_fp2 INT;
+    DECLARE @id_emp2 INT, @id_parque2 INT;
 
     SELECT TOP 1 @id_emp2 = id FROM concesiones.EmpresaConcesionaria ORDER BY id DESC;
     SELECT TOP 1 @id_parque2 = id FROM parques.Parque ORDER BY id DESC;
-    SELECT TOP 1 @id_fp2 = id FROM pagos.FormaPago WHERE estado = 1 ORDER BY id DESC;
 
     -- Contar concesiones antes
     DECLARE @antes_conc INT, @antes_canon INT;
@@ -587,7 +588,6 @@ BEGIN TRY
         @id_empresa_concesionaria = @id_emp2,
         @id_parque = @id_parque2,
         @monto_canon = 1000.00,
-        @id_forma_pago = @id_fp2,
         @cantidad_dias_vencimiento = 0;
 
     PRINT 'RESULTADO: ERROR (Debió lanzar excepción)';
@@ -611,11 +611,10 @@ PRINT '';
 PRINT '>>> TEST 3:  @fecha_inicio > @fecha_fin (rollback total)';
 
 BEGIN TRY
-    DECLARE @id_emp3 INT, @id_parque3 INT, @id_fp3 INT,@antes_conc INT,@antes_canon INT;
+    DECLARE @id_emp3 INT, @id_parque3 INT,@antes_conc INT,@antes_canon INT;
 
     SELECT TOP 1 @id_emp3 = id FROM concesiones.EmpresaConcesionaria ORDER BY id DESC;
     SELECT TOP 1 @id_parque3 = id FROM parques.Parque ORDER BY id DESC;
-    SELECT TOP 1 @id_fp3 = id FROM pagos.FormaPago WHERE estado = 1 ORDER BY id DESC;
 
     SELECT @antes_conc = COUNT(*) FROM concesiones.Concesion;
     SELECT @antes_canon = COUNT(*) FROM concesiones.Canon;
@@ -627,7 +626,6 @@ BEGIN TRY
         @id_empresa_concesionaria = @id_emp3,
         @id_parque = @id_parque3,
         @monto_canon = 1000.00,
-        @id_forma_pago = @id_fp3,
         @cantidad_dias_vencimiento = 15;
 
     PRINT 'RESULTADO: ERROR (Debió lanzar excepción)';

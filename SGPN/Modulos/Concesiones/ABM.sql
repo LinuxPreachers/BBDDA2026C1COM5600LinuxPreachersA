@@ -291,6 +291,7 @@ CREATE OR ALTER PROCEDURE concesiones.sp_crear_canon
         @periodo DATE,
         @monto DECIMAL(15,2),
         @fecha_pago DATE ,
+        @fecha_lim_pago DATE,
         @id_concesion INT,
         @id_forma_pago INT
 AS
@@ -311,8 +312,8 @@ BEGIN
         IF LEN(@errores) > 0
             THROW 50431, @errores, 1;
 
-        INSERT INTO concesiones.Canon(periodo,monto,fecha_pago,id_concesion,id_forma_pago)
-        VALUES (@periodo,@monto,@fecha_pago,@id_concesion,@id_forma_pago);
+        INSERT INTO concesiones.Canon(periodo,monto,fecha_pago,fecha_lim_pago,id_concesion,id_forma_pago)
+        VALUES (@periodo,@monto,@fecha_pago,@fecha_lim_pago,@id_concesion,@id_forma_pago);
     END TRY
     BEGIN CATCH
         THROW;
@@ -326,6 +327,7 @@ CREATE OR ALTER PROCEDURE concesiones.sp_modificar_canon
         @periodo DATE,
         @monto DECIMAL(15,2),
         @fecha_pago DATE ,
+        @fecha_lim_pago DATE,
         @id_concesion INT,
         @id_forma_pago INT
 AS
@@ -347,7 +349,7 @@ BEGIN
             THROW 50431, @errores, 1;
 
         UPDATE concesiones.Canon
-        SET periodo = @periodo, monto = @monto, fecha_pago = @fecha_pago, id_concesion = @id_concesion, id_forma_pago = @id_forma_pago
+        SET periodo = @periodo, monto = @monto, fecha_pago = @fecha_pago, fecha_lim_pago = @fecha_lim_pago, id_concesion = @id_concesion, id_forma_pago = @id_forma_pago
         WHERE id = @id;
     END TRY
     BEGIN CATCH
@@ -373,19 +375,18 @@ CREATE OR ALTER PROCEDURE concesiones.sp_generar_concesion_y_canon
     @id_empresa_concesionaria INT,
     @id_parque INT,
     @monto_canon DECIMAL(15,2),
-    @id_forma_pago INT,
     @cantidad_dias_vencimiento INT
 AS
 BEGIN
     SET NOCOUNT ON;
     BEGIN TRY
-        -- Validación exclusiva del high-level (no la hacen los low-level SPs)
+       
         IF @cantidad_dias_vencimiento IS NULL OR @cantidad_dias_vencimiento <= 0
             THROW 51000, '@cantidad_dias_vencimiento debe ser un entero positivo.', 1;
 
         BEGIN TRANSACTION;
 
-        -- 1. Crear concesión (low-level SP valida fechas, empresa, parque)
+        -- 1. Crear concesión
         EXEC concesiones.sp_crear_concesion
             @descripcion = @descripcion,
             @fecha_inicio = @fecha_inicio,
@@ -393,7 +394,7 @@ BEGIN
             @id_empresa_concesionaria = @id_empresa_concesionaria,
             @id_parque = @id_parque;
 
-        -- Obtener el ID de la concesión recién creada buscando por campos coincidentes
+        
         DECLARE @id_concesion INT;
         SELECT TOP 1 @id_concesion = id
         FROM concesiones.Concesion
@@ -410,14 +411,13 @@ BEGIN
 
         WHILE @periodo_actual <= @periodo_limite
         BEGIN
-            DECLARE @fecha_pago_calculada DATE = DATEADD(day, @cantidad_dias_vencimiento, @periodo_actual);
+            DECLARE @fecha_lim_pago DATE = DATEADD(day, @cantidad_dias_vencimiento, @periodo_actual);
 
             EXEC concesiones.sp_crear_canon
                 @periodo = @periodo_actual,
                 @monto = @monto_canon,
-                @fecha_pago = @fecha_pago_calculada,
-                @id_concesion = @id_concesion,
-                @id_forma_pago = @id_forma_pago;
+                @fecha_lim_pago = @fecha_lim_pago,
+                @id_concesion = @id_concesion;
 
             SET @periodo_actual = DATEADD(month, 1, @periodo_actual);
         END;
