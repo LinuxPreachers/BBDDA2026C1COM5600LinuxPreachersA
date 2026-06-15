@@ -263,6 +263,7 @@ BEGIN
 END;
 GO
 
+/*
 -- Ejecucion
 EXEC empleados.sp_crear_modulo_empleados;
 SELECT * FROM sys.tables;
@@ -272,3 +273,4 @@ GO
 EXEC empleados.sp_eliminar_modulo_empleados;
 SELECT * FROM sys.tables;
 GO
+*/
