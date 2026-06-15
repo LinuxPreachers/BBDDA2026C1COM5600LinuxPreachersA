@@ -29,24 +29,33 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Actividades", "Actividades"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Reservas", "Reservas", "{AF293F3A-72EA-43CC-9594-4C385FA1A6E6}"
 	ProjectSection(SolutionItems) = preProject
+		Modulos\Reservas\ABM.sql = Modulos\Reservas\ABM.sql
 		Modulos\Reservas\Tablas.sql = Modulos\Reservas\Tablas.sql
+		Modulos\Reservas\Testing.sql = Modulos\Reservas\Testing.sql
 	EndProjectSection
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Pagos", "Pagos", "{65E62FC6-315D-4B10-A896-1BA2E07CFDEE}"
 	ProjectSection(SolutionItems) = preProject
 		Modulos\Pagos\ABM.sql = Modulos\Pagos\ABM.sql
 		Modulos\Pagos\Tablas.sql = Modulos\Pagos\Tablas.sql
+		Modulos\Pagos\Testing.sql = Modulos\Pagos\Testing.sql
 	EndProjectSection
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Concesiones", "Concesiones", "{1CAE7C1D-5E06-4080-8C03-3CCEEEAD61D2}"
 	ProjectSection(SolutionItems) = preProject
 		Modulos\Concesiones\ABM.sql = Modulos\Concesiones\ABM.sql
 		Modulos\Concesiones\Tablas.sql = Modulos\Concesiones\Tablas.sql
+		Modulos\Concesiones\Testing.sql = Modulos\Concesiones\Testing.sql
 	EndProjectSection
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Elementos de la solución", "Elementos de la solución", "{D107F4C8-89CC-BEA8-D3D7-CA6B7733353D}"
 	ProjectSection(SolutionItems) = preProject
 		Reinicio.sql = Reinicio.sql
+	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Reportes", "Reportes", "{22D3ED59-CF35-416C-BE02-EAB23912772A}"
+	ProjectSection(SolutionItems) = preProject
+		Reportes.sql = Reportes.sql
 	EndProjectSection
 EndProject
 Global
@@ -55,7 +64,7 @@ Global
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
 		{CE4A56E1-1995-9F01-1989-9941B5F28028}.Default|Default.ActiveCfg = Default
-		{4014CF1D-2E7D-4188-8F9A-ADA6A072A4DC}.Default|Default.ActiveCfg = Default
+		{562401A0-4A37-46A3-8DD1-DAF6546C24DF}.Default|Default.ActiveCfg = Default
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

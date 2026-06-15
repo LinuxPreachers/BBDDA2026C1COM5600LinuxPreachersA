@@ -24,6 +24,10 @@ AS
 BEGIN
     SET NOCOUNT ON;
 
+    ----------------------------------------
+    -- Tablas principales
+    ----------------------------------------
+
     CREATE TABLE reservas.Reserva (
         id INT IDENTITY(1,1) NOT NULL,
         fecha_y_hora DATETIME NOT NULL DEFAULT GETDATE(),
@@ -32,46 +36,12 @@ BEGIN
     );
 
     CREATE TABLE reservas.EstadoItem (
-        id INT IDENTITY(1,1) NOT NULL,
+        id TINYINT IDENTITY(1,1) NOT NULL,
         nombre VARCHAR(10) NOT NULL,
         descripcion VARCHAR(255) NULL,
 
         CONSTRAINT PK_EstadoItem PRIMARY KEY (id),
         CONSTRAINT UQ_EstadoItem_Nombre UNIQUE (nombre)
-    );
-
-    CREATE TABLE reservas.ItemReserva (
-        id INT IDENTITY(1,1) NOT NULL,
-        precio DECIMAL(10,2) NOT NULL,
-        id_estado INT NOT NULL,
-        id_reserva INT NOT NULL,
-
-        CONSTRAINT PK_ItemReserva PRIMARY KEY (id),
-
-        CONSTRAINT FK_ItemReserva_Estado
-            FOREIGN KEY (id_estado)
-            REFERENCES reservas.EstadoItem(id),
-
-        CONSTRAINT FK_ItemReserva_Reserva
-            FOREIGN KEY (id_reserva)
-            REFERENCES reservas.Reserva(id),
-
-        CONSTRAINT CK_ItemReserva_Precio CHECK (precio >= 0)
-    );
-
-    CREATE TABLE reservas.Reembolso (
-        id INT IDENTITY(1,1) NOT NULL,
-        fecha_y_hora DATETIME NOT NULL DEFAULT GETDATE(),
-
-        cvu_cuenta_destino CHAR(22) NOT NULL,
-
-        CONSTRAINT PK_Reembolso PRIMARY KEY (id),
-
-        CONSTRAINT CK_Reembolso_CVU
-            CHECK (
-                LEN(cvu_cuenta_destino) = 22
-                AND cvu_cuenta_destino NOT LIKE '%[^0-9]%'
-            )
     );
 
     CREATE TABLE reservas.MotivoCancelacion (
@@ -84,23 +54,60 @@ BEGIN
     );
 
     CREATE TABLE reservas.Cancelacion (
-        id_item_reserva INT NOT NULL,
+        id INT IDENTITY(1,1) NOT NULL,
+        fecha_y_hora DATETIME NOT NULL DEFAULT GETDATE(),
         id_motivo INT NOT NULL,
-        id_reembolso INT NOT NULL,
 
-        CONSTRAINT PK_Cancelacion PRIMARY KEY (id_item_reserva, id_motivo),
-
-        CONSTRAINT FK_Cancelacion_ItemReserva
-            FOREIGN KEY (id_item_reserva)
-            REFERENCES reservas.ItemReserva(id),
+        CONSTRAINT PK_Cancelacion PRIMARY KEY (id),
 
         CONSTRAINT FK_Cancelacion_Motivo
             FOREIGN KEY (id_motivo)
             REFERENCES reservas.MotivoCancelacion(id),
+    );
 
-        CONSTRAINT FK_Cancelacion_Reembolso
-            FOREIGN KEY (id_reembolso)
-            REFERENCES reservas.Reembolso(id),
+    CREATE TABLE reservas.ItemReserva (
+        id INT IDENTITY(1,1) NOT NULL,
+        precio DECIMAL(10,2) NOT NULL,
+        id_estado TINYINT NOT NULL,
+        id_reserva INT NOT NULL,
+        id_cancelacion INT,
+
+        CONSTRAINT PK_ItemReserva PRIMARY KEY (id),
+
+        CONSTRAINT FK_ItemReserva_Estado
+            FOREIGN KEY (id_estado)
+            REFERENCES reservas.EstadoItem(id),
+
+        CONSTRAINT FK_ItemReserva_Reserva
+            FOREIGN KEY (id_reserva)
+            REFERENCES reservas.Reserva(id),
+   
+        CONSTRAINT FK_ItemReserva_Cancelacion
+            FOREIGN KEY (id_cancelacion)
+            REFERENCES reservas.Cancelacion(id),
+
+        CONSTRAINT CK_ItemReserva_Precio CHECK (precio >= 0)
+    );
+
+    CREATE TABLE reservas.Reembolso (
+        id INT IDENTITY(1,1) NOT NULL,
+        fecha_y_hora DATETIME NOT NULL DEFAULT GETDATE(),
+        cvu_cuenta_destino CHAR(22) NOT NULL,
+        id_cancelacion INT NOT NULL,
+        
+        CONSTRAINT PK_Reembolso PRIMARY KEY (id),
+
+        CONSTRAINT FK_Reembolso_Cancelacion
+            FOREIGN KEY (id_cancelacion)
+            REFERENCES reservas.Cancelacion(id),
+
+        CONSTRAINT UQ_Reembolso_Cancelacion UNIQUE (id_cancelacion),
+
+        CONSTRAINT CK_Reembolso_CVU
+            CHECK (
+                LEN(cvu_cuenta_destino) = 22
+                AND cvu_cuenta_destino NOT LIKE '%[^0-9]%'
+            )
     );
 
     CREATE TABLE reservas.Entrada (
@@ -126,7 +133,7 @@ BEGIN
 
     CREATE TABLE reservas.Participacion (
         id_item_reserva INT NOT NULL,
-        fecha DATE NOT NULL,
+        fecha_realizacion DATE NOT NULL,
         id_horario INT NOT NULL,
 
         CONSTRAINT PK_Participacion
@@ -139,6 +146,29 @@ BEGIN
         CONSTRAINT FK_Participacion_Horario
             FOREIGN KEY (id_horario)
             REFERENCES actividades.Horario(id)
+    );
+
+    ----------------------------------------
+    -- Tablas variables como parámetros
+    ----------------------------------------
+
+    CREATE TYPE reservas.TVP_Entradas AS TABLE (
+        fila TINYINT IDENTITY(1,1) NOT NULL,
+        id_parque INT NOT NULL,
+        id_tipo_visitante INT NOT NULL,
+        fecha_acceso DATE NOT NULL CHECK (fecha_acceso >= CAST(GETDATE() AS DATE)),
+        cantidad TINYINT NOT NULL CHECK (cantidad > 0)
+    );
+
+    CREATE TYPE reservas.TVP_Participaciones AS TABLE (
+        fila TINYINT IDENTITY(1,1) NOT NULL,
+        id_horario INT NOT NULL,
+        fecha_realizacion DATE NOT NULL CHECK (fecha_realizacion >= CAST(GETDATE() AS DATE)),
+        cantidad TINYINT NOT NULL CHECK (cantidad > 0)
+    );
+
+    CREATE TYPE reservas.TVP_ItemsReserva AS TABLE (
+        id_item_reserva INT PRIMARY KEY
     );
 
 END;
@@ -171,13 +201,21 @@ BEGIN
             'Participacion'
       );
 
+    INSERT INTO @tablas_existentes (nombre)
+    SELECT t.name
+    FROM sys.table_types t
+    INNER JOIN sys.schemas s
+        ON s.schema_id = t.schema_id
+    WHERE s.name = 'reservas'
+      AND t.name IN (
+            'TVP_Entradas',
+            'TVP_Participaciones',
+            'TVP_ItemsReserva'
+      );
+
     IF EXISTS (SELECT 1 FROM @tablas_existentes)
-    BEGIN
-        RAISERROR(
-            'No se puede crear el modulo: ya existe al menos una tabla del modulo reservas en el esquema reservas.',
-            16,
-            1
-        );
+    BEGIN;
+        THROW 50300, 'No se puede crear el modulo: ya existe al menos una tabla del modulo reservas en el esquema reservas.', 1
         RETURN;
     END;
 
@@ -193,14 +231,19 @@ BEGIN
     BEGIN TRY
         BEGIN TRANSACTION;
 
+            DROP TYPE IF EXISTS reservas.TVP_Entradas;
+            DROP TYPE IF EXISTS reservas.TVP_Participaciones;
+            DROP TYPE IF EXISTS reservas.TVP_ItemsReserva;
+
             DROP TABLE IF EXISTS reservas.Participacion;
             DROP TABLE IF EXISTS reservas.Entrada;
-            DROP TABLE IF EXISTS reservas.Cancelacion;
 
             DROP TABLE IF EXISTS reservas.Reembolso;
-            DROP TABLE IF EXISTS reservas.MotivoCancelacion;
 
             DROP TABLE IF EXISTS reservas.ItemReserva;
+
+            DROP TABLE IF EXISTS reservas.Cancelacion;
+            DROP TABLE IF EXISTS reservas.MotivoCancelacion;
 
             DROP TABLE IF EXISTS reservas.EstadoItem;
             DROP TABLE IF EXISTS reservas.Reserva;
@@ -212,21 +255,16 @@ BEGIN
         IF @@TRANCOUNT > 0
             ROLLBACK TRANSACTION;
 
-        DECLARE @mensaje_error VARCHAR(4000);
-
-        SET @mensaje_error = ERROR_MESSAGE();
-
-        RAISERROR(@mensaje_error, 16, 1);
-
-        RETURN;
+        THROW;
     END CATCH;
 END;
 GO
 
--- Ejecucion (Comentado para evitar ejecución accidental si copiás el script de corrido)
+-- Ejecucion (Comentado para evitar ejecución accidental si ejecutás el script de corrido)
 /*
 EXEC reservas.sp_crear_modulo_reservas;
 select * from sys.tables
+select * from sys.table_types
 GO
 
 -- Autodestruccion (Comentado para evitar ejecución accidental)

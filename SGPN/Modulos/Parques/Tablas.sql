@@ -32,7 +32,7 @@ BEGIN
     );
 
     CREATE TABLE parques.Provincia (
-        id INT IDENTITY(1,1) NOT NULL,
+        id INT IDENTITY(1,1) NOT NULL, -- Usar Tinyint
         nombre VARCHAR(100) NOT NULL,
         id_region INT NOT NULL,
 
@@ -73,7 +73,7 @@ BEGIN
             REFERENCES parques.TipoParque(id),
 
         CONSTRAINT CK_Parque_Superficie
-            CHECK (superficie_km2 IS NULL OR superficie_km2 >= 0),
+            CHECK (superficie_km2 IS NULL OR superficie_km2 > 0),
 
         CONSTRAINT CK_Parque_Latitud
             CHECK (latitud IS NULL OR latitud BETWEEN -90 AND 90),
