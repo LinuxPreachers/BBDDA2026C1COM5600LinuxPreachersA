@@ -290,10 +290,10 @@ GO
 CREATE OR ALTER PROCEDURE concesiones.sp_crear_canon
         @periodo DATE,
         @monto DECIMAL(15,2),
-        @fecha_pago DATE ,
+        @fecha_pago DATE = NULL, --parametro opcional
         @fecha_lim_pago DATE,
         @id_concesion INT,
-        @id_forma_pago INT
+        @id_forma_pago INT = NULL-- parametro opcional al crear
 AS
 BEGIN
     SET NOCOUNT ON;
@@ -326,10 +326,10 @@ CREATE OR ALTER PROCEDURE concesiones.sp_modificar_canon
         @id INT,
         @periodo DATE,
         @monto DECIMAL(15,2),
-        @fecha_pago DATE ,
+        @fecha_pago DATE = NULL, --parametro opcional
         @fecha_lim_pago DATE,
         @id_concesion INT,
-        @id_forma_pago INT
+        @id_forma_pago INT = NULL-- parametro opcional al crear
 AS
 BEGIN
     SET NOCOUNT ON;
