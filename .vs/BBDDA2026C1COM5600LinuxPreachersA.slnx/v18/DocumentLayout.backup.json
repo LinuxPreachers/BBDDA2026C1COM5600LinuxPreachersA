@@ -3,16 +3,12 @@
   "WorkspaceRootPath": "C:\\Users\\Usuario\\Documents\\GitHub\\BBDDA2026C1COM5600LinuxPreachersA\\",
   "Documents": [
     {
-      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|C:\\Users\\Usuario\\Documents\\GitHub\\BBDDA2026C1COM5600LinuxPreachersA\\SGPN\\Modulos\\Actividades\\Testing.sql||{B5A506EB-11BE-4782-9A18-21265C2CA0B4}",
-      "RelativeMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|solutionrelative:SGPN\\Modulos\\Actividades\\Testing.sql||{B5A506EB-11BE-4782-9A18-21265C2CA0B4}"
+      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|C:\\Users\\Usuario\\Documents\\GitHub\\BBDDA2026C1COM5600LinuxPreachersA\\SGPN\\Modulos\\Empleados\\Tablas.sql||{B5A506EB-11BE-4782-9A18-21265C2CA0B4}",
+      "RelativeMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|solutionrelative:SGPN\\Modulos\\Empleados\\Tablas.sql||{B5A506EB-11BE-4782-9A18-21265C2CA0B4}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|C:\\Users\\Usuario\\Documents\\GitHub\\BBDDA2026C1COM5600LinuxPreachersA\\SGPN\\Modulos\\Actividades\\Tablas.sql||{B5A506EB-11BE-4782-9A18-21265C2CA0B4}",
-      "RelativeMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|solutionrelative:SGPN\\Modulos\\Actividades\\Tablas.sql||{B5A506EB-11BE-4782-9A18-21265C2CA0B4}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|C:\\Users\\Usuario\\Documents\\GitHub\\BBDDA2026C1COM5600LinuxPreachersA\\SGPN\\Modulos\\Actividades\\ABM.sql||{B5A506EB-11BE-4782-9A18-21265C2CA0B4}",
-      "RelativeMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|solutionrelative:SGPN\\Modulos\\Actividades\\ABM.sql||{B5A506EB-11BE-4782-9A18-21265C2CA0B4}"
+      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|C:\\Users\\Usuario\\Documents\\GitHub\\BBDDA2026C1COM5600LinuxPreachersA\\SGPN\\Modulos\\Empleados\\ABM.sql||{B5A506EB-11BE-4782-9A18-21265C2CA0B4}",
+      "RelativeMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|solutionrelative:SGPN\\Modulos\\Empleados\\ABM.sql||{B5A506EB-11BE-4782-9A18-21265C2CA0B4}"
     }
   ],
   "DocumentGroupContainers": [
@@ -22,7 +18,7 @@
       "DocumentGroups": [
         {
           "DockedWidth": 200,
-          "SelectedChildIndex": 2,
+          "SelectedChildIndex": 3,
           "Children": [
             {
               "$type": "Bookmark",
@@ -34,39 +30,27 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 0,
-              "Title": "Testing.sql - luis.LinuxPreachers (sa (95))",
-              "DocumentMoniker": "C:\\Users\\Usuario\\Documents\\GitHub\\BBDDA2026C1COM5600LinuxPreachersA\\SGPN\\Modulos\\Actividades\\Testing.sql",
-              "RelativeDocumentMoniker": "SGPN\\Modulos\\Actividades\\Testing.sql",
-              "ToolTip": "C:\\Users\\Usuario\\Documents\\GitHub\\BBDDA2026C1COM5600LinuxPreachersA\\SGPN\\Modulos\\Actividades\\Testing.sql - luis.LinuxPreachers (sa (95))",
-              "RelativeToolTip": "SGPN\\Modulos\\Actividades\\Testing.sql - luis.LinuxPreachers (sa (95))",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000826|",
-              "WhenOpened": "2026-06-13T18:00:15.294Z",
-              "EditorCaption": " - luis.LinuxPreachers (sa (95))"
-            },
-            {
-              "$type": "Document",
               "DocumentIndex": 1,
-              "Title": "Tablas.sql - luis.LinuxPreachers (sa (92))",
-              "DocumentMoniker": "C:\\Users\\Usuario\\Documents\\GitHub\\BBDDA2026C1COM5600LinuxPreachersA\\SGPN\\Modulos\\Actividades\\Tablas.sql",
-              "RelativeDocumentMoniker": "SGPN\\Modulos\\Actividades\\Tablas.sql",
-              "ToolTip": "C:\\Users\\Usuario\\Documents\\GitHub\\BBDDA2026C1COM5600LinuxPreachersA\\SGPN\\Modulos\\Actividades\\Tablas.sql - luis.LinuxPreachers (sa (92))",
-              "RelativeToolTip": "SGPN\\Modulos\\Actividades\\Tablas.sql - luis.LinuxPreachers (sa (92))",
+              "Title": "ABM.sql - luis.LinuxPreachers (sa (75))",
+              "DocumentMoniker": "C:\\Users\\Usuario\\Documents\\GitHub\\BBDDA2026C1COM5600LinuxPreachersA\\SGPN\\Modulos\\Empleados\\ABM.sql",
+              "RelativeDocumentMoniker": "SGPN\\Modulos\\Empleados\\ABM.sql",
+              "ToolTip": "C:\\Users\\Usuario\\Documents\\GitHub\\BBDDA2026C1COM5600LinuxPreachersA\\SGPN\\Modulos\\Empleados\\ABM.sql - luis.LinuxPreachers (sa (75))",
+              "RelativeToolTip": "SGPN\\Modulos\\Empleados\\ABM.sql - luis.LinuxPreachers (sa (75))",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000826|",
-              "WhenOpened": "2026-06-12T22:44:10.384Z",
-              "EditorCaption": " - luis.LinuxPreachers (sa (92))"
+              "WhenOpened": "2026-06-17T19:05:04.08Z",
+              "EditorCaption": " - luis.LinuxPreachers (sa (75))"
             },
             {
               "$type": "Document",
-              "DocumentIndex": 2,
-              "Title": "ABM.sql - luis.LinuxPreachers (sa (91))",
-              "DocumentMoniker": "C:\\Users\\Usuario\\Documents\\GitHub\\BBDDA2026C1COM5600LinuxPreachersA\\SGPN\\Modulos\\Actividades\\ABM.sql",
-              "RelativeDocumentMoniker": "SGPN\\Modulos\\Actividades\\ABM.sql",
-              "ToolTip": "C:\\Users\\Usuario\\Documents\\GitHub\\BBDDA2026C1COM5600LinuxPreachersA\\SGPN\\Modulos\\Actividades\\ABM.sql - luis.LinuxPreachers (sa (91))",
-              "RelativeToolTip": "SGPN\\Modulos\\Actividades\\ABM.sql - luis.LinuxPreachers (sa (91))",
+              "DocumentIndex": 0,
+              "Title": "Tablas.sql - luis.LinuxPreachers (sa (52))",
+              "DocumentMoniker": "C:\\Users\\Usuario\\Documents\\GitHub\\BBDDA2026C1COM5600LinuxPreachersA\\SGPN\\Modulos\\Empleados\\Tablas.sql",
+              "RelativeDocumentMoniker": "SGPN\\Modulos\\Empleados\\Tablas.sql",
+              "ToolTip": "C:\\Users\\Usuario\\Documents\\GitHub\\BBDDA2026C1COM5600LinuxPreachersA\\SGPN\\Modulos\\Empleados\\Tablas.sql - luis.LinuxPreachers (sa (52))",
+              "RelativeToolTip": "SGPN\\Modulos\\Empleados\\Tablas.sql - luis.LinuxPreachers (sa (52))",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000826|",
-              "WhenOpened": "2026-06-12T22:44:08.414Z",
-              "EditorCaption": " - luis.LinuxPreachers (sa (91))"
+              "WhenOpened": "2026-06-17T19:04:57.965Z",
+              "EditorCaption": " - luis.LinuxPreachers (sa (52))"
             }
           ]
         }

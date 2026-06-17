@@ -66,7 +66,7 @@ BEGIN
     );
 
     CREATE TABLE empleados.Guia (
-        nro_registro INT NOT NULL,
+        nro_registro VARCHAR(30) NOT NULL,
         id_empleado INT NOT NULL,
         id_especialidad INT NOT NULL,
         id_titulo INT,
@@ -83,7 +83,35 @@ BEGIN
 
         CONSTRAINT FK_Guia_Titulo
             FOREIGN KEY (id_titulo)
-            REFERENCES empleados.Titulo(id)
+            REFERENCES empleados.Titulo(id),
+
+        CONSTRAINT CK_Guia_Nro_Registro CHECK(  
+        
+        nro_registro LIKE '[A-Z][A-Z]-[0-9][0-9][0-9][0-9]-%'
+        AND nro_registro LIKE '%[A-Z]'
+        AND (
+
+            (
+                SUBSTRING (nro_registro, 9,len(nro_registro)) LIKE '[0-9][0-9][0-9][0-9][0-9][0-9]-%'
+                AND 
+                SUBSTRING(nro_registro,16,len(nro_registro)) NOT LIKE '%[^A-Z -]%' -- cualquier entrada que no sea una letra, un espacio o un guion no es valido
+            )
+            OR
+            (
+                SUBSTRING(nro_registro,9,len(nro_registro)) LIKE '[0-9][0-9][0-9][0-9][0-9][0-9][0-9]-%'
+                AND
+                SUBSTRING(nro_registro,17,len(nro_registro)) NOT LIKE '%[^A-Z -]'
+            )
+            OR
+            (
+                SUBSTRING(nro_registro,9,len(nro_registro)) LIKE '[0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9]-%'
+                AND
+                SUBSTRING(nro_registro,18,len(nro_registro)) NOT LIKE '%[^A-Z -]%'
+            )
+            
+          )
+          )
+        
     );
 
     CREATE TABLE empleados.Guardaparque (
