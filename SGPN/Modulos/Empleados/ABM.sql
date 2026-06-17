@@ -523,6 +523,10 @@ BEGIN
 END;
 GO
 
+-- ---------------------------------------------
+-- 6. ABM: GuardaparqueAsignado
+-- ---------------------------------------------
+
 CREATE OR ALTER PROCEDURE empleados.sp_asignar_guardaparque
     @id_empleado INT,
     @id_parque INT,
