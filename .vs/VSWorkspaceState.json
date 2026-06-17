@@ -4,12 +4,11 @@
     "\\SGPN",
     "\\SGPN\\Modulos",
     "\\SGPN\\Modulos\\Actividades",
-    "\\SGPN\\Modulos\\Concesiones",
     "\\SGPN\\Modulos\\Empleados",
     "\\SGPN\\Modulos\\Pagos",
     "\\SGPN\\Modulos\\Parques",
     "\\SGPN\\Modulos\\Reservas"
   ],
-  "SelectedNode": "\\SGPN\\Modulos\\Empleados\\ABM.sql",
+  "SelectedNode": "\\SGPN\\Modulos\\Actividades\\Testing.sql",
   "PreviewInSolutionExplorer": false
 }

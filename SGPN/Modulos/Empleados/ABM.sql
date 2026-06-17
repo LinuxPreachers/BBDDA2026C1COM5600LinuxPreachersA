@@ -1,3 +1,13 @@
+/*
+ * Universidad: UNLaM
+ * Materia: Bases de datos aplicadas
+ * Comisión: 5600
+ * Grupo: 02
+ * Integrantes: Conforti, Jaime, Laurelli, Porras
+ * Fecha:
+ * Script: Creación de tablas módulo empleados
+*/
+
 USE LinuxPreachers;
 GO
 
@@ -324,7 +334,7 @@ GO
 
 -- Alta
 CREATE OR ALTER PROCEDURE empleados.sp_crear_guia
-    @nro_registro INT,
+    @nro_registro VARCHAR(30),
     @id_empleado INT,
     @id_especialidad INT,
     @id_titulo INT = NULL
@@ -361,7 +371,7 @@ GO
 -- Modificación
 CREATE OR ALTER PROCEDURE empleados.sp_modificar_guia
     @id_empleado INT,
-    @nro_registro INT,
+    @nro_registro VARCHAR(30),
     @id_especialidad INT,
     @id_titulo INT = NULL
 AS
@@ -433,7 +443,7 @@ GO
 -- Alta
 CREATE OR ALTER PROCEDURE empleados.sp_crear_guardaparque
     @nro_matricula INT,
-    @id_empleado INT
+    @id_empleado INT NOT NULL
 AS
 BEGIN
     SET NOCOUNT ON;
