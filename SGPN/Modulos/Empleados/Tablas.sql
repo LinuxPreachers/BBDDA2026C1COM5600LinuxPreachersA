@@ -85,33 +85,11 @@ BEGIN
             FOREIGN KEY (id_titulo)
             REFERENCES empleados.Titulo(id),
 
-        CONSTRAINT CK_Guia_Nro_Registro CHECK(  
-        
-        nro_registro LIKE '[A-Z][A-Z]-[0-9][0-9][0-9][0-9]-%'
-        AND nro_registro LIKE '%[A-Z]'
-        AND (
-
-            (
-                SUBSTRING (nro_registro, 9,len(nro_registro)) LIKE '[0-9][0-9][0-9][0-9][0-9][0-9]-%'
-                AND 
-                SUBSTRING(nro_registro,16,len(nro_registro)) NOT LIKE '%[^A-Z -]%' -- cualquier entrada que no sea una letra, un espacio o un guion no es valido
-            )
-            OR
-            (
-                SUBSTRING(nro_registro,9,len(nro_registro)) LIKE '[0-9][0-9][0-9][0-9][0-9][0-9][0-9]-%'
-                AND
-                SUBSTRING(nro_registro,17,len(nro_registro)) NOT LIKE '%[^A-Z -]'
-            )
-            OR
-            (
-                SUBSTRING(nro_registro,9,len(nro_registro)) LIKE '[0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9]-%'
-                AND
-                SUBSTRING(nro_registro,18,len(nro_registro)) NOT LIKE '%[^A-Z -]%'
-            )
-            
-          )
-          )
-        
+        CONSTRAINT CK_Guia_Nro_Registro CHECK (  
+            nro_registro LIKE 'RL-[0-9][0-9][0-9][0-9]-%-%'
+            AND LEN(nro_registro) - LEN(REPLACE(nro_registro, '-', '')) = 3
+            AND nro_registro NOT LIKE '%[^A-Z0-9-]%'
+        )
     );
 
     CREATE TABLE empleados.Guardaparque (
@@ -189,6 +167,18 @@ BEGIN
             REFERENCES actividades.Habilitacion(id)
     );
 
+    CREATE TABLE empleados.ImportacionErrorLog (
+        id INT IDENTITY(1,1) PRIMARY KEY,
+        fecha_error DATETIME DEFAULT GETDATE(),
+        fila_origen INT,
+        apellido VARCHAR(100),
+        nombre VARCHAR(100),
+        tipo_doc CHAR(3),
+        numero CHAR(10),
+        n_registro VARCHAR(30),
+        categoria VARCHAR(100),
+        mensaje_error VARCHAR(255)
+    );
 END;
 GO
 
@@ -217,7 +207,8 @@ BEGIN
             'Guardaparque',
             'GuardaparqueAsignado',
             'GuiaEstaEnActividad',
-            'GuiaPoseeHabilitacion'
+            'GuiaPoseeHabilitacion',
+            'ImportacionErrorLog'
       );
 
     IF EXISTS (SELECT 1 FROM @tablas_existentes)
@@ -260,6 +251,7 @@ AS
 BEGIN
     BEGIN TRY
         BEGIN TRANSACTION;
+            DROP TABLE IF EXISTS empleados.ImportacionErrorLog;
 
             DROP TABLE IF EXISTS empleados.GuiaPoseeHabilitacion;
             DROP TABLE IF EXISTS empleados.GuiaEstaEnActividad;

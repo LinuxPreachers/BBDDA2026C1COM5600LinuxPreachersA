@@ -10,6 +10,8 @@ EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Parques", "Parques", "{C0BE212A-2DC4-4F1D-A5FF-DDB3A8A4B624}"
 	ProjectSection(SolutionItems) = preProject
 		Modulos\Parques\ABM.sql = Modulos\Parques\ABM.sql
+		Modulos\Parques\Generar_provincias_regiones_tipos_parque.sql = Modulos\Parques\Generar_provincias_regiones_tipos_parque.sql
+		Modulos\Parques\Importacion.sql = Modulos\Parques\Importacion.sql
 		Modulos\Parques\Tablas.sql = Modulos\Parques\Tablas.sql
 		Modulos\Parques\Testing.sql = Modulos\Parques\Testing.sql
 	EndProjectSection
@@ -17,6 +19,8 @@ EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Empleados", "Empleados", "{9571DDE5-8EDF-4007-B9A9-703393C3718B}"
 	ProjectSection(SolutionItems) = preProject
 		Modulos\Empleados\ABM.sql = Modulos\Empleados\ABM.sql
+		Modulos\Empleados\Generar_datos.sql = Modulos\Empleados\Generar_datos.sql
+		Modulos\Empleados\Importacion.sql = Modulos\Empleados\Importacion.sql
 		Modulos\Empleados\Tablas.sql = Modulos\Empleados\Tablas.sql
 	EndProjectSection
 EndProject
@@ -64,7 +68,7 @@ Global
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
 		{CE4A56E1-1995-9F01-1989-9941B5F28028}.Default|Default.ActiveCfg = Default
-		{562401A0-4A37-46A3-8DD1-DAF6546C24DF}.Default|Default.ActiveCfg = Default
+		{1A946D10-E7E9-4B92-9871-865D3935A851}.Default|Default.ActiveCfg = Default
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
