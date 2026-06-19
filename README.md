@@ -2,15 +2,15 @@
 
 ## Estado de las entregas
 
-| Entrega                              | Estado              |
-| :----------------------------------- | :-----------------  |
-| **E3** - DER                         | ✅ Completada       |
-| **E4** - Instalación y Configuración | ✅ Completada       |
-| **E5** - Base de Datos               | ✅ Completada       |
-| **E6** - Importación                 | 🚧 En desarrollo    |
-| **E7** - Reportes                    | ✅ Completada       |
-| **E8** - Seguridad y Respaldo        | ⏳ Pendiente        |
-| **E9** - BI + Aplicación sencilla    | ⏳ Pendiente        |
+| Entrega                              | Estado                  |
+| :----------------------------------- | :---------------------- |
+| **E3** - DER                         | ✅ Completada          |
+| **E4** - Instalación y Configuración | ✅ Completada          |
+| **E5** - Base de Datos               | ✅ Completada          |
+| **E6** - Importación                 | 🚧 En desarrollo (2/3) |
+| **E7** - Reportes                    | ✅ Completada          |
+| **E8** - Seguridad y Respaldo        | ⏳ Pendiente           |
+| **E9** - BI + Aplicación sencilla    | ⏳ Pendiente           |
 
 ---
 
