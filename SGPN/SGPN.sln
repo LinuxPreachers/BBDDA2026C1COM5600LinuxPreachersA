@@ -60,6 +60,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Elementos de la solución",
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Reportes", "Reportes", "{22D3ED59-CF35-416C-BE02-EAB23912772A}"
 	ProjectSection(SolutionItems) = preProject
+		APIs.sql = APIs.sql
 		Reportes.sql = Reportes.sql
 	EndProjectSection
 EndProject
@@ -69,7 +70,7 @@ Global
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
 		{CE4A56E1-1995-9F01-1989-9941B5F28028}.Default|Default.ActiveCfg = Default
-		{AF94802C-F2E5-4633-BA0C-5EC31E8B22E0}.Default|Default.ActiveCfg = Default
+		{5F6FA022-C4D2-48E9-A7A2-286484085C8C}.Default|Default.ActiveCfg = Default
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
