@@ -9,8 +9,16 @@
 */
 
 USE master;
+GO
 
-DROP DATABASE LinuxPreachers;
+IF EXISTS (SELECT 1 FROM sys.databases WHERE name = 'LinuxPreachers')
+BEGIN
+	ALTER DATABASE LinuxPreachers 
+	SET SINGLE_USER 
+	WITH ROLLBACK IMMEDIATE;
+	
+	DROP DATABASE LinuxPreachers;
+END;
 GO
 
 CREATE DATABASE LinuxPreachers;
@@ -32,4 +40,21 @@ GO
 CREATE SCHEMA concesiones;
 GO
 
--- Pendiente: Ejecutar scripts de creación
+:r "D:\Facultad\TP-BDA\BBDDA2026C1COM5600LinuxPreachersA\SGPN\Modulos\Parques\Tablas.sql"
+:r "D:\Facultad\TP-BDA\BBDDA2026C1COM5600LinuxPreachersA\SGPN\Modulos\Actividades\Tablas.sql"
+:r "D:\Facultad\TP-BDA\BBDDA2026C1COM5600LinuxPreachersA\SGPN\Modulos\Empleados\Tablas.sql"
+:r "D:\Facultad\TP-BDA\BBDDA2026C1COM5600LinuxPreachersA\SGPN\Modulos\Reservas\Tablas.sql"
+:r "D:\Facultad\TP-BDA\BBDDA2026C1COM5600LinuxPreachersA\SGPN\Modulos\Pagos\Tablas.sql"
+:r "D:\Facultad\TP-BDA\BBDDA2026C1COM5600LinuxPreachersA\SGPN\Modulos\Concesiones\Tablas.sql"
+
+EXEC parques.sp_crear_modulo_parques;
+EXEC actividades.sp_crear_modulo_actividades;
+EXEC empleados.sp_crear_modulo_empleados;
+EXEC reservas.sp_crear_modulo_reservas;
+EXEC pagos.sp_crear_modulo_pagos;
+EXEC concesiones.sp_crear_modulo_concesiones;
+
+SELECT * 
+FROM INFORMATION_SCHEMA.TABLES
+ORDER BY TABLE_SCHEMA
+GO
