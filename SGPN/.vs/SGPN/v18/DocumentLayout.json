@@ -1,7 +1,24 @@
 {
   "Version": 1,
-  "WorkspaceRootPath": "C:\\Repositorios\\TP Parques Nacionales\\BBDDA2026C1COM5600LinuxPreachersA\\SGPN\\",
-  "Documents": [],
+  "WorkspaceRootPath": "C:\\Users\\Usuario\\Documents\\GitHub\\BBDDA2026C1COM5600LinuxPreachersA\\SGPN\\",
+  "Documents": [
+    {
+      "AbsoluteMoniker": "D:0:0:{9571DDE5-8EDF-4007-B9A9-703393C3718B}|Empleados{9571DDE5-8EDF-4007-B9A9-703393C3718B}|C:\\Users\\Usuario\\Documents\\GitHub\\BBDDA2026C1COM5600LinuxPreachersA\\SGPN\\Modulos\\Empleados\\Importacion.sql||{B5A506EB-11BE-4782-9A18-21265C2CA0B4}",
+      "RelativeMoniker": "D:0:0:{9571DDE5-8EDF-4007-B9A9-703393C3718B}|Empleados{9571DDE5-8EDF-4007-B9A9-703393C3718B}|solutionrelative:Modulos\\Empleados\\Importacion.sql||{B5A506EB-11BE-4782-9A18-21265C2CA0B4}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{1CAE7C1D-5E06-4080-8C03-3CCEEEAD61D2}|Concesiones{1CAE7C1D-5E06-4080-8C03-3CCEEEAD61D2}|C:\\Users\\Usuario\\Documents\\GitHub\\BBDDA2026C1COM5600LinuxPreachersA\\SGPN\\Modulos\\Concesiones\\Importacion.sql||{B5A506EB-11BE-4782-9A18-21265C2CA0B4}",
+      "RelativeMoniker": "D:0:0:{1CAE7C1D-5E06-4080-8C03-3CCEEEAD61D2}|Concesiones{1CAE7C1D-5E06-4080-8C03-3CCEEEAD61D2}|solutionrelative:Modulos\\Concesiones\\Importacion.sql||{B5A506EB-11BE-4782-9A18-21265C2CA0B4}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{9571DDE5-8EDF-4007-B9A9-703393C3718B}|Empleados{9571DDE5-8EDF-4007-B9A9-703393C3718B}|C:\\Users\\Usuario\\Documents\\GitHub\\BBDDA2026C1COM5600LinuxPreachersA\\SGPN\\Modulos\\Empleados\\Testing.sql||{B5A506EB-11BE-4782-9A18-21265C2CA0B4}",
+      "RelativeMoniker": "D:0:0:{9571DDE5-8EDF-4007-B9A9-703393C3718B}|Empleados{9571DDE5-8EDF-4007-B9A9-703393C3718B}|solutionrelative:Modulos\\Empleados\\Testing.sql||{B5A506EB-11BE-4782-9A18-21265C2CA0B4}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{1CAE7C1D-5E06-4080-8C03-3CCEEEAD61D2}|Concesiones{1CAE7C1D-5E06-4080-8C03-3CCEEEAD61D2}|C:\\Users\\Usuario\\Documents\\GitHub\\BBDDA2026C1COM5600LinuxPreachersA\\SGPN\\Modulos\\Concesiones\\ABM.sql||{B5A506EB-11BE-4782-9A18-21265C2CA0B4}",
+      "RelativeMoniker": "D:0:0:{1CAE7C1D-5E06-4080-8C03-3CCEEEAD61D2}|Concesiones{1CAE7C1D-5E06-4080-8C03-3CCEEEAD61D2}|solutionrelative:Modulos\\Concesiones\\ABM.sql||{B5A506EB-11BE-4782-9A18-21265C2CA0B4}"
+    }
+  ],
   "DocumentGroupContainers": [
     {
       "Orientation": 0,
@@ -9,11 +26,63 @@
       "DocumentGroups": [
         {
           "DockedWidth": 157,
-          "SelectedChildIndex": -1,
+          "SelectedChildIndex": 2,
           "Children": [
             {
               "$type": "Bookmark",
+              "Name": "ST:0:0:{cce594b6-0c39-4442-ba28-10c64ac7e89f}"
+            },
+            {
+              "$type": "Bookmark",
               "Name": "ST:1:0:{f3a1c5d6-8e9b-4c2a-b5f7-3d6e8a9c1b4f}"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 0,
+              "Title": "Importacion.sql - luis.LinuxPreachers (sa (51))",
+              "DocumentMoniker": "C:\\Users\\Usuario\\Documents\\GitHub\\BBDDA2026C1COM5600LinuxPreachersA\\SGPN\\Modulos\\Empleados\\Importacion.sql",
+              "RelativeDocumentMoniker": "Modulos\\Empleados\\Importacion.sql",
+              "ToolTip": "C:\\Users\\Usuario\\Documents\\GitHub\\BBDDA2026C1COM5600LinuxPreachersA\\SGPN\\Modulos\\Empleados\\Importacion.sql - luis.LinuxPreachers (sa (51))",
+              "RelativeToolTip": "Modulos\\Empleados\\Importacion.sql - luis.LinuxPreachers (sa (51))",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000826|",
+              "WhenOpened": "2026-06-19T03:26:04.87Z",
+              "EditorCaption": " - luis.LinuxPreachers (sa (51))"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 2,
+              "Title": "Testing.sql - luis.LinuxPreachers (sa (84))",
+              "DocumentMoniker": "C:\\Users\\Usuario\\Documents\\GitHub\\BBDDA2026C1COM5600LinuxPreachersA\\SGPN\\Modulos\\Empleados\\Testing.sql",
+              "RelativeDocumentMoniker": "Modulos\\Empleados\\Testing.sql",
+              "ToolTip": "C:\\Users\\Usuario\\Documents\\GitHub\\BBDDA2026C1COM5600LinuxPreachersA\\SGPN\\Modulos\\Empleados\\Testing.sql - luis.LinuxPreachers (sa (84))",
+              "RelativeToolTip": "Modulos\\Empleados\\Testing.sql - luis.LinuxPreachers (sa (84))",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000826|",
+              "WhenOpened": "2026-06-19T03:21:17.269Z",
+              "EditorCaption": " - luis.LinuxPreachers (sa (84))"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 3,
+              "Title": "ABM.sql - luis.LinuxPreachers (sa (84))",
+              "DocumentMoniker": "C:\\Users\\Usuario\\Documents\\GitHub\\BBDDA2026C1COM5600LinuxPreachersA\\SGPN\\Modulos\\Concesiones\\ABM.sql",
+              "RelativeDocumentMoniker": "Modulos\\Concesiones\\ABM.sql",
+              "ToolTip": "C:\\Users\\Usuario\\Documents\\GitHub\\BBDDA2026C1COM5600LinuxPreachersA\\SGPN\\Modulos\\Concesiones\\ABM.sql - luis.LinuxPreachers (sa (84))",
+              "RelativeToolTip": "Modulos\\Concesiones\\ABM.sql - luis.LinuxPreachers (sa (84))",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000826|",
+              "WhenOpened": "2026-06-19T02:00:54.986Z",
+              "EditorCaption": " - luis.LinuxPreachers (sa (84))"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 1,
+              "Title": "Importacion.sql - luis.LinuxPreachers (sa (87))",
+              "DocumentMoniker": "C:\\Users\\Usuario\\Documents\\GitHub\\BBDDA2026C1COM5600LinuxPreachersA\\SGPN\\Modulos\\Concesiones\\Importacion.sql",
+              "RelativeDocumentMoniker": "Modulos\\Concesiones\\Importacion.sql",
+              "ToolTip": "C:\\Users\\Usuario\\Documents\\GitHub\\BBDDA2026C1COM5600LinuxPreachersA\\SGPN\\Modulos\\Concesiones\\Importacion.sql - luis.LinuxPreachers (sa (87))",
+              "RelativeToolTip": "Modulos\\Concesiones\\Importacion.sql - luis.LinuxPreachers (sa (87))",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000826|",
+              "WhenOpened": "2026-06-19T01:38:19.769Z",
+              "EditorCaption": " - luis.LinuxPreachers (sa (87))"
             }
           ]
         }

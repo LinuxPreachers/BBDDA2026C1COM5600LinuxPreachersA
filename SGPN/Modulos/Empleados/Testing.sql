@@ -5,7 +5,7 @@
  * Grupo: 02
  * Integrantes: Conforti, Jaime, Laurelli, Porras
  * Fecha:
- * Script: Creación de tablas módulo empleados
+ * Script: Testing de sps ABM para tablas del módulo empleados
 */
 
 USE LinuxPreachers;

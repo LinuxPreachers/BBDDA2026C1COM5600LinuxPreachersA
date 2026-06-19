@@ -4,11 +4,12 @@
     "\\SGPN",
     "\\SGPN\\Modulos",
     "\\SGPN\\Modulos\\Actividades",
+    "\\SGPN\\Modulos\\Concesiones",
     "\\SGPN\\Modulos\\Empleados",
     "\\SGPN\\Modulos\\Pagos",
     "\\SGPN\\Modulos\\Parques",
     "\\SGPN\\Modulos\\Reservas"
   ],
-  "SelectedNode": "\\SGPN\\Modulos\\Empleados",
+  "SelectedNode": "\\SGPN\\Modulos\\Empleados\\Importacion.sql",
   "PreviewInSolutionExplorer": false
 }
