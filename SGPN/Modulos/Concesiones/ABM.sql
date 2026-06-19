@@ -98,33 +98,8 @@ BEGIN
 END;
 GO
 
--- Baja
-CREATE OR ALTER PROCEDURE concesiones.sp_eliminar_empresa_concesionaria
-    @id INT
-AS
-BEGIN
-    SET NOCOUNT ON;
-    BEGIN TRY
-        DECLARE @errores VARCHAR(4000) = '';
+-- Por logica de negocio no se permiten eliminar Empresas.
 
-        IF NOT EXISTS (SELECT 1 FROM concesiones.EmpresaConcesionaria WHERE id = @id)
-            SET @errores = @errores + 'La Empresa con el ID provisto no existe. ';
-
-        IF EXISTS (SELECT 1 FROM concesiones.Concesion WHERE id_empresa_concesionaria = @id)
-            SET @errores = @errores + 'La Empresa con el ID provisto tiene concesiones. ';
-
-        IF LEN(@errores) > 0
-            THROW 50420, @errores, 1;
-
-        UPDATE concesiones.EmpresaConcesionaria 
-        SET activo=0 
-        WHERE id = @id
-    END TRY
-    BEGIN CATCH
-        THROW;
-    END CATCH;
-END;
-GO
 -- ---------------------------------------------
 -- 2. ABM: ACTIVIDAD EMPRESARIAL
 -- ---------------------------------------------

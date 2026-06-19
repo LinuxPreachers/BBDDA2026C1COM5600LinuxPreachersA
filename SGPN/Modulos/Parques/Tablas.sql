@@ -34,7 +34,7 @@ BEGIN
     CREATE TABLE parques.Provincia (
         id TINYINT IDENTITY(1,1) NOT NULL,
         nombre VARCHAR(100) NOT NULL,
-        id_region INT NOT NULL,
+        id_region TINYINT NOT NULL,
 
         CONSTRAINT PK_Provincia PRIMARY KEY (id),
 
@@ -64,7 +64,7 @@ BEGIN
         superficie_km2 DECIMAL(10,2) NULL,
         latitud DECIMAL(9,6) NULL,
         longitud DECIMAL(9,6) NULL,
-        id_tipo_parque INT NOT NULL,
+        id_tipo_parque TINYINT NOT NULL,
 
         CONSTRAINT PK_Parque PRIMARY KEY (id),
 
@@ -88,7 +88,7 @@ BEGIN
         periodo_inicio DATETIME NOT NULL,
         periodo_fin DATETIME NOT NULL,
         cantidad INT NOT NULL,
-        id_region INT NOT NULL,
+        id_region TINYINT NOT NULL,
 
         CONSTRAINT PK_EstadisticaVisitantes PRIMARY KEY (id),
 

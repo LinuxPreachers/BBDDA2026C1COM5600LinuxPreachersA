@@ -38,7 +38,6 @@ BEGIN
         cuit BIGINT NOT NULL UNIQUE,
         razon_social VARCHAR(100) NOT NULL,
         id_actividad_empresarial SMALLINT NOT NULL,
-        activo BIT DEFAULT 1,
 
         CONSTRAINT PK_EmpresaConcesionaria PRIMARY KEY (id),
 
@@ -47,7 +46,7 @@ BEGIN
             REFERENCES concesiones.ActividadEmpresarial(id),
 
         CONSTRAINT CK_Cuit_Longitud
-            CHECK (cuit < 99999999999 AND cuit >10000000000) -- Investigar digito verificador
+            CHECK (cuit < 99999999999 AND cuit >10000000000) 
 
     );
 
@@ -95,7 +94,7 @@ BEGIN
 END;
 GO
 
--- SP Wrapper con verificaciones
+
 CREATE OR ALTER PROCEDURE concesiones.sp_crear_modulo_concesiones
 AS
 BEGIN

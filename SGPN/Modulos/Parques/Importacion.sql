@@ -83,7 +83,7 @@ BEGIN
 
     -- Variables para el control del bucle WHILE
     DECLARE @id_actual INT = 1;
-    DECLARE @id_max INT = (SELECT MAX(Id) FROM #ImportacionParques);
+    DECLARE @id_max INT;
 
     -- Variables por registro
     DECLARE @fila_prov VARCHAR(255);
@@ -101,7 +101,7 @@ BEGIN
     DECLARE @id_tipo_parque INT;
 
 
-
+    SET @id_max = (SELECT MAX(Id) FROM #ImportacionParques);
 
     -- Bucle WHILE de procesamiento fila por fila
     WHILE @id_actual <= @id_max
@@ -180,7 +180,9 @@ BEGIN
                 SET 
                     superficie_km2 = @sup_km2,
                     latitud = @lat_dec ,
-                    longitud = @long_dec
+                    longitud = @long_dec,
+                    @id_tipo_parque = @id_tipo_parque
+
                 WHERE id = @id_parque_operativo;
 
                 IF (@id_prov NOT IN (SELECT id_provincia FROM parques.ProvinciaParque WHERE id_parque = @id_parque_operativo) )
