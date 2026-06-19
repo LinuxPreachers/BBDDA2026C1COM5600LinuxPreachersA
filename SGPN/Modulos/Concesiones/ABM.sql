@@ -116,7 +116,9 @@ BEGIN
         IF LEN(@errores) > 0
             THROW 50420, @errores, 1;
 
-        DELETE FROM concesiones.EmpresaConcesionaria WHERE id = @id;
+        UPDATE concesiones.EmpresaConcesionaria 
+        SET activo=0 
+        WHERE id = @id
     END TRY
     BEGIN CATCH
         THROW;

@@ -38,6 +38,7 @@ BEGIN
         cuit BIGINT NOT NULL UNIQUE,
         razon_social VARCHAR(100) NOT NULL,
         id_actividad_empresarial SMALLINT NOT NULL,
+        activo BIT DEFAULT 1,
 
         CONSTRAINT PK_EmpresaConcesionaria PRIMARY KEY (id),
 

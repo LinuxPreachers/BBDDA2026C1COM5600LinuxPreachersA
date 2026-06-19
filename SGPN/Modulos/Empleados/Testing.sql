@@ -12,6 +12,21 @@ USE LinuxPreachers;
 GO
 
 
+RAISERROR(N'Este script no esta pensado para que lo ejecutes "de una" con F5. Selecciona y ejecuta el Test 1 a 1', 16, 1) WITH LOG;
+SET NOEXEC ON; -- Esto bloquea las ejecuciones para esta conexion en particular
+GO
+
+
+
+/* 
+ * Si usted intentó ejecutrar este script de manera no secuencial, debera ejecutar el siguiente comando:
+*/
+--===============================================
+SET NOEXEC OFF;
+--===============================================
+
+
+
 -- ==============================================================================
 -- 1. TESTING: TipoDocumento
 -- ==============================================================================
