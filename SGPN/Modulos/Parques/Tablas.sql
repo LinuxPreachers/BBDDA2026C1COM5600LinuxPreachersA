@@ -1,11 +1,11 @@
 /*
  * Universidad: UNLaM
  * Materia: Bases de datos aplicadas
- * Comisión: 5600
+ * ComisiÃ³n: 5600
  * Grupo: 02
  * Integrantes: Conforti, Jaime, Laurelli, Porras
  * Fecha:
- * Script: Creación de tablas módulo parques
+ * Script: CreaciÃ³n de tablas mÃ³dulo parques
 */
 
 USE LinuxPreachers;
@@ -25,14 +25,14 @@ BEGIN
     SET NOCOUNT ON;
 
     CREATE TABLE parques.Region (
-        id INT IDENTITY(1,1) NOT NULL,
+        id TINYINT IDENTITY(1,1) NOT NULL,
         nombre VARCHAR(100) NOT NULL,
 
         CONSTRAINT PK_Region PRIMARY KEY (id)
     );
 
     CREATE TABLE parques.Provincia (
-        id INT IDENTITY(1,1) NOT NULL, -- Usar Tinyint
+        id TINYINT IDENTITY(1,1) NOT NULL,
         nombre VARCHAR(100) NOT NULL,
         id_region INT NOT NULL,
 
@@ -44,7 +44,7 @@ BEGIN
     );
 
     CREATE TABLE parques.TipoVisitante (
-        id INT IDENTITY(1,1) NOT NULL,
+        id TINYINT IDENTITY(1,1) NOT NULL,
         nombre VARCHAR(100) NOT NULL,
         descripcion VARCHAR(255) NULL,
 
@@ -52,7 +52,7 @@ BEGIN
     );
 
     CREATE TABLE parques.TipoParque (
-        id INT IDENTITY(1,1) NOT NULL,
+        id TINYINT IDENTITY(1,1) NOT NULL,
         descripcion VARCHAR(255) NOT NULL,
 
         CONSTRAINT PK_TipoParque PRIMARY KEY (id)
@@ -101,7 +101,7 @@ BEGIN
     );
 
     CREATE TABLE parques.ProvinciaParque (
-        id_provincia INT NOT NULL,
+        id_provincia TINYINT NOT NULL,
         id_parque INT NOT NULL,
         direccion VARCHAR(255) NULL,
 
@@ -119,7 +119,7 @@ BEGIN
 
     CREATE TABLE parques.ParqueTipoVisitante (
         id_parque INT NOT NULL,
-        id_tipo_visitante INT NOT NULL,
+        id_tipo_visitante TINYINT NOT NULL,
         precio DECIMAL(10,2) NOT NULL,
 
         CONSTRAINT PK_ParqueTipoVisitante
