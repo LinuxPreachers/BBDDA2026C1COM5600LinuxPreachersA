@@ -217,6 +217,30 @@ BEGIN
 END;
 GO
 
+-- Baja (por nombre)
+CREATE OR ALTER PROCEDURE reservas.sp_eliminar_motivo_cancelacion_por_nombre
+    @nombre VARCHAR(10)
+AS
+BEGIN
+    SET NOCOUNT ON;
+
+    DECLARE @id_motivo TINYINT;
+
+    IF @nombre IS NULL OR LTRIM(RTRIM(@nombre)) = ''
+        THROW 50307, 'El nombre ingresado para el motivo de cancelación no es válido.', 1;
+
+    SELECT @id_motivo = id
+    FROM reservas.MotivoCancelacion
+    WHERE nombre = @nombre;
+
+    IF @id_motivo IS NULL
+        THROW 50308, 'El motivo de cancelación con el nombre provisto no existe.', 1;
+
+    EXEC reservas.sp_eliminar_motivo_cancelacion
+        @id = @id_motivo;
+END;
+GO
+
 --------------------------------------------------------------------------------------
 -- Logica de negocio: Reservas, entradas, participaciones, cancelaciones y reembolsos
 --------------------------------------------------------------------------------------

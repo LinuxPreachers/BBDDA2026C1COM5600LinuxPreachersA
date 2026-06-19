@@ -22,6 +22,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Empleados", "Empleados", "{
 		Modulos\Empleados\Generar_datos.sql = Modulos\Empleados\Generar_datos.sql
 		Modulos\Empleados\Importacion.sql = Modulos\Empleados\Importacion.sql
 		Modulos\Empleados\Tablas.sql = Modulos\Empleados\Tablas.sql
+		Modulos\Empleados\Testing.sql = Modulos\Empleados\Testing.sql
 	EndProjectSection
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Actividades", "Actividades", "{4DF9D534-4687-48EE-B7CF-4556869A802A}"
@@ -68,7 +69,7 @@ Global
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
 		{CE4A56E1-1995-9F01-1989-9941B5F28028}.Default|Default.ActiveCfg = Default
-		{1A946D10-E7E9-4B92-9871-865D3935A851}.Default|Default.ActiveCfg = Default
+		{AF94802C-F2E5-4633-BA0C-5EC31E8B22E0}.Default|Default.ActiveCfg = Default
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
