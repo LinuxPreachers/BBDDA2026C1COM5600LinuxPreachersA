@@ -36,7 +36,7 @@ GO
 
 -- Modificación
 CREATE OR ALTER PROCEDURE empleados.sp_modificar_tipo_documento
-    @id INT,
+    @id TINYINT,
     @nombre VARCHAR(100)
 AS
 BEGIN
@@ -60,7 +60,7 @@ GO
 
 -- Baja
 CREATE OR ALTER PROCEDURE empleados.sp_eliminar_tipo_documento
-    @id INT
+    @id TINYINT
 AS
 BEGIN
     SET NOCOUNT ON;
@@ -88,7 +88,7 @@ CREATE OR ALTER PROCEDURE empleados.sp_crear_empleado
     @nombre VARCHAR(100),
     @apellido VARCHAR(100),
     @nro_doc INT,
-    @id_tipo_documento INT
+    @id_tipo_documento TINYINT
 AS
 BEGIN
     SET NOCOUNT ON;
@@ -125,7 +125,7 @@ CREATE OR ALTER PROCEDURE empleados.sp_modificar_empleado
     @nombre VARCHAR(100),
     @apellido VARCHAR(100),
     @nro_doc INT,
-    @id_tipo_documento INT
+    @id_tipo_documento TINYINT
 AS
 BEGIN
     SET NOCOUNT ON;
@@ -208,7 +208,7 @@ GO
 
 -- Modificación
 CREATE OR ALTER PROCEDURE empleados.sp_modificar_especialidad
-    @id INT,
+    @id SMALLINT,
     @nombre VARCHAR(100),
     @descripcion VARCHAR(255) = NULL
 AS
@@ -234,7 +234,7 @@ GO
 
 -- Baja
 CREATE OR ALTER PROCEDURE empleados.sp_eliminar_especialidad
-    @id INT
+    @id SMALLINT
 AS
 BEGIN
     SET NOCOUNT ON;
@@ -282,7 +282,7 @@ GO
 
 -- Modificación
 CREATE OR ALTER PROCEDURE empleados.sp_modificar_titulo
-    @id INT,
+    @id SMALLINT,
     @nombre VARCHAR(100),
     @institucion VARCHAR(100)
 AS
@@ -311,7 +311,7 @@ GO
 
 -- Baja
 CREATE OR ALTER PROCEDURE empleados.sp_eliminar_titulo
-    @id INT
+    @id SMALLINT
 AS
 BEGIN
     SET NOCOUNT ON;
@@ -336,8 +336,8 @@ GO
 CREATE OR ALTER PROCEDURE empleados.sp_crear_guia
     @nro_registro VARCHAR(30),
     @id_empleado INT,
-    @id_especialidad INT,
-    @id_titulo INT = NULL
+    @id_especialidad SMALLINT,
+    @id_titulo SMALLINT = NULL
 AS
 BEGIN
     SET NOCOUNT ON;
@@ -372,8 +372,8 @@ GO
 CREATE OR ALTER PROCEDURE empleados.sp_modificar_guia
     @id_empleado INT,
     @nro_registro VARCHAR(30),
-    @id_especialidad INT,
-    @id_titulo INT = NULL
+    @id_especialidad SMALLINT,
+    @id_titulo SMALLINT = NULL
 AS
 BEGIN
     SET NOCOUNT ON;
@@ -443,7 +443,7 @@ GO
 -- Alta
 CREATE OR ALTER PROCEDURE empleados.sp_crear_guardaparque
     @nro_matricula INT,
-    @id_empleado INT NOT NULL
+    @id_empleado INT 
 AS
 BEGIN
     SET NOCOUNT ON;

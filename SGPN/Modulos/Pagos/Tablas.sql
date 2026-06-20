@@ -25,7 +25,7 @@ BEGIN
     SET NOCOUNT ON;
 
     CREATE TABLE pagos.FormaPago(
-        id SMALLINT IDENTITY (1,1),
+        id TINYINT IDENTITY (1,1),
         nombre VARCHAR(100) NOT NULL,
         estado BIT DEFAULT 1 NOT NULL,
 
@@ -35,8 +35,8 @@ BEGIN
     CREATE TABLE pagos.Pago(
         id INT IDENTITY (1,1),
         fecha_y_hora DATETIME NOT NULL DEFAULT GETDATE(),
-        id_reserva INT NOT NULL, -- REVISAR CON DER OPCIONALIDAD ( si es un pago de canon, id_reserva sera NULL)
-        id_forma_pago SMALLINT NOT NULL,
+        id_reserva INT NOT NULL,
+        id_forma_pago TINYINT NOT NULL,
         importe DECIMAL(15,2) NOT NULL,
 
         CONSTRAINT PK_Pago PRIMARY KEY (id),

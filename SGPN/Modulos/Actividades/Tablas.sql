@@ -25,14 +25,14 @@ BEGIN
     SET NOCOUNT ON;
 
     CREATE TABLE actividades.TipoActividad (
-        id INT IDENTITY(1,1) NOT NULL,
+        id SMALLINT IDENTITY(1,1) NOT NULL,
         nombre VARCHAR(100) NOT NULL,
 
         CONSTRAINT PK_TipoActividad PRIMARY KEY (id)
     );
 
     CREATE TABLE actividades.Habilitacion (
-        id INT IDENTITY(1,1) NOT NULL,
+        id int IDENTITY(1,1) NOT NULL,
         nombre VARCHAR(100) NOT NULL,
         descripcion VARCHAR(255) NULL,
 
@@ -47,7 +47,7 @@ BEGIN
         duracion_minutos INT NOT NULL,
         precio DECIMAL(20,4) NOT NULL,
         id_parque INT NOT NULL,
-        id_tipo_actividad INT NOT NULL,
+        id_tipo_actividad SMALLINT NOT NULL,
 
         CONSTRAINT PK_Actividad PRIMARY KEY (id),
 

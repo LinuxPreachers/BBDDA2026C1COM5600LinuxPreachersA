@@ -270,7 +270,7 @@ CREATE OR ALTER PROCEDURE concesiones.sp_crear_canon
         @fecha_pago DATE = NULL, --parametro opcional
         @fecha_lim_pago DATE,
         @id_concesion INT,
-        @id_forma_pago INT = NULL-- parametro opcional al crear
+        @id_forma_pago TINYINT = NULL-- parametro opcional al crear
 AS
 BEGIN
     SET NOCOUNT ON;
@@ -306,7 +306,7 @@ CREATE OR ALTER PROCEDURE concesiones.sp_modificar_canon
         @fecha_pago DATE = NULL, --parametro opcional
         @fecha_lim_pago DATE,
         @id_concesion INT,
-        @id_forma_pago INT = NULL-- parametro opcional al crear
+        @id_forma_pago TINYINT = NULL-- parametro opcional al crear
 AS
 BEGIN
     SET NOCOUNT ON;

@@ -37,7 +37,7 @@ GO
 
 -- Modificación
 CREATE OR ALTER PROCEDURE actividades.sp_modificar_tipo_actividad
-    @id INT,
+    @id SMALLINT,
     @nombre VARCHAR(100)
 AS
 BEGIN
@@ -66,7 +66,7 @@ GO
 
 -- Baja
 CREATE OR ALTER PROCEDURE actividades.sp_eliminar_tipo_actividad
-    @id INT
+    @id SMALLINT
 AS
 BEGIN
     DECLARE @msj_error VARCHAR (200) = ' ';
@@ -193,7 +193,7 @@ CREATE OR ALTER PROCEDURE actividades.sp_crear_actividad
     @duracion_minutos INT,
     @precio DECIMAL(18,2),
     @id_parque INT,
-    @id_tipo_actividad INT
+    @id_tipo_actividad SMALLINT
 AS
 BEGIN
     SET NOCOUNT ON;
@@ -246,7 +246,7 @@ CREATE OR ALTER PROCEDURE actividades.sp_modificar_actividad
     @duracion_minutos INT,
     @precio DECIMAL(18,2),
     @id_parque INT,
-    @id_tipo_actividad INT
+    @id_tipo_actividad SMALLINT
 AS
 BEGIN
     SET NOCOUNT ON;

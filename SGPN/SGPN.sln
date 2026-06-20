@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # SQL Server Management Studio Version 22
-VisualStudioVersion = 18.7.11911.148 stable
+VisualStudioVersion = 18.7.11911.148
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{4F2E2C19-372F-40D8-9FA7-9D2138C6997A}") = "SGPN", "SGPN.ssmssqlproj", "{CE4A56E1-1995-9F01-1989-9941B5F28028}"
 EndProject
@@ -49,12 +49,15 @@ EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Concesiones", "Concesiones", "{1CAE7C1D-5E06-4080-8C03-3CCEEEAD61D2}"
 	ProjectSection(SolutionItems) = preProject
 		Modulos\Concesiones\ABM.sql = Modulos\Concesiones\ABM.sql
+		Modulos\Concesiones\Importacion.sql = Modulos\Concesiones\Importacion.sql
 		Modulos\Concesiones\Tablas.sql = Modulos\Concesiones\Tablas.sql
 		Modulos\Concesiones\Testing.sql = Modulos\Concesiones\Testing.sql
+		Modulos\Concesiones\Testing_alternativa.sql = Modulos\Concesiones\Testing_alternativa.sql
 	EndProjectSection
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Elementos de la solución", "Elementos de la solución", "{D107F4C8-89CC-BEA8-D3D7-CA6B7733353D}"
 	ProjectSection(SolutionItems) = preProject
+		Cifrado.sql = Cifrado.sql
 		Reinicio.sql = Reinicio.sql
 	EndProjectSection
 EndProject
@@ -70,7 +73,7 @@ Global
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
 		{CE4A56E1-1995-9F01-1989-9941B5F28028}.Default|Default.ActiveCfg = Default
-		{90D783B6-60D4-4607-AE2D-F33D717B959D}.Default|Default.ActiveCfg = Default
+		{E40B3137-DD66-4026-A642-EA19C5653C45}.Default|Default.ActiveCfg = Default
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

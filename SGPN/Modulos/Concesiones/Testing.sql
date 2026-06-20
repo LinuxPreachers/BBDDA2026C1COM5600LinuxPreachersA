@@ -57,7 +57,7 @@ GO
 --------------------------------------------------------------------------------
 PRINT '>>> 1.2: Modificación Exitosa de ActividadEmpresarial';
 BEGIN TRY
-    DECLARE @id_act INT;
+    DECLARE @id_act SMALLINT;
     SELECT TOP 1 @id_act = id FROM concesiones.ActividadEmpresarial ORDER BY id DESC;
 
     EXEC concesiones.sp_modificar_actividad_empresarial @id = @id_act, @nombre = 'Fast Food Modificado', @descripcion = 'Updated description';
@@ -75,7 +75,7 @@ GO
 --------------------------------------------------------------------------------
 PRINT '>>> 1.3: Alta Exitosa de EmpresaConcesionaria';
 BEGIN TRY
-    DECLARE @id_act INT;
+    DECLARE @id_act SMALLINT;
     SELECT TOP 1 @id_act = id FROM concesiones.ActividadEmpresarial ORDER BY id DESC;
 
     EXEC concesiones.sp_crear_empresa_concesionaria
@@ -98,7 +98,7 @@ GO
 --------------------------------------------------------------------------------
 PRINT '>>> 1.4: Modificación Exitosa de EmpresaConcesionaria';
 BEGIN TRY
-    DECLARE @id_emp INT, @id_act INT, @cuit_random BIGINT;
+    DECLARE @id_emp INT, @id_act SMALLINT, @cuit_random BIGINT;
 
     SELECT TOP 1 @id_emp = id FROM concesiones.EmpresaConcesionaria ORDER BY id DESC;
     SELECT TOP 1 @id_act = id FROM concesiones.ActividadEmpresarial ORDER BY id DESC;
@@ -177,7 +177,7 @@ GO
 --------------------------------------------------------------------------------
 PRINT '>>> 1.7: Alta Exitosa de Canon';
 BEGIN TRY
-    DECLARE @id_conc INT, @id_fp INT;
+    DECLARE @id_conc INT, @id_fp TINYINT;
     SELECT TOP 1 @id_conc = id FROM concesiones.Concesion ORDER BY id DESC;
     SELECT TOP 1 @id_fp = id FROM pagos.FormaPago WHERE estado = 1 ORDER BY id DESC;
 
@@ -202,7 +202,7 @@ GO
 --------------------------------------------------------------------------------
 PRINT '>>> 1.8: Modificación Exitosa de Canon';
 BEGIN TRY
-    DECLARE @id_can INT, @id_conc INT, @id_fp INT;
+    DECLARE @id_can INT, @id_conc INT, @id_fp TINYINT;
     SELECT TOP 1 @id_can = id FROM concesiones.Canon ORDER BY id DESC;
     SELECT TOP 1 @id_conc = id FROM concesiones.Concesion ORDER BY id DESC;
     SELECT TOP 1 @id_fp = id FROM pagos.FormaPago WHERE estado = 1 ORDER BY id DESC;
@@ -232,7 +232,7 @@ BEGIN TRY
     -- Creamos una actividad temporal para dar de baja sin romper dependencias
     EXEC concesiones.sp_crear_actividad_empresarial @nombre = 'Actividad Temporal Baja', @descripcion = 'Baja';
     
-    DECLARE @id_actividad_baja INT;
+    DECLARE @id_actividad_baja SMALLINT;
     SELECT TOP 1 @id_actividad_baja = id FROM concesiones.ActividadEmpresarial ORDER BY id DESC;
 
     EXEC concesiones.sp_eliminar_actividad_empresarial @id = @id_actividad_baja;
@@ -291,7 +291,7 @@ BEGIN CATCH
 END CATCH;
 
 BEGIN TRY
-    DECLARE @id_act INT;
+    DECLARE @id_act SMALLINT;
     SELECT TOP 1 @id_act = id FROM concesiones.ActividadEmpresarial ORDER BY id DESC;
 
     PRINT '  -- Probando ID con Empresas Asociadas:';
@@ -464,7 +464,7 @@ EXEC concesiones.sp_crear_actividad_empresarial
     @descripcion = 'Servicios gastronomicos';
 
 -- EmpresaConcesionaria
-DECLARE @id_act INT, @cuit_rand BIGINT
+DECLARE @id_act SMALLINT, @cuit_rand BIGINT
 SELECT TOP 1 @id_act = id FROM concesiones.ActividadEmpresarial ORDER BY id DESC;
 
 SET @cuit_rand = 20100000000 + @id_act;

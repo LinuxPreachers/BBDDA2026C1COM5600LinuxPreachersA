@@ -51,7 +51,7 @@ GO
 --------------------------------------------------------------------------------
 PRINT '>>> 1.2: Modificación Exitosa de FormaPago';
 BEGIN TRY
-    DECLARE @id_fp SMALLINT;
+    DECLARE @id_fp TINYINT;
     SELECT TOP 1 @id_fp = id FROM pagos.FormaPago ORDER BY id DESC;
 
     EXEC pagos.sp_modificar_forma_pago @id = @id_fp, @nombre = 'Efectivo Modificado';
@@ -99,7 +99,7 @@ GO
 --------------------------------------------------------------------------------
 PRINT '>>> 1.5: Alta Exitosa de Pago';
 BEGIN TRY
-    DECLARE @id_fp SMALLINT;
+    DECLARE @id_fp TINYINT;
     DECLARE @id_re INT;
 
     SELECT TOP 1 @id_fp = id FROM pagos.FormaPago WHERE estado = 1;
@@ -149,7 +149,7 @@ PRINT '>>> 1.7: Baja Exitosa de FormaPago (Borrado Lógico)';
 BEGIN TRY
     EXEC pagos.sp_crear_forma_pago @nombre = 'Temporal Baja';
     
-    DECLARE @id_fp SMALLINT;
+    DECLARE @id_fp TINYINT;
     SELECT TOP 1 @id_fp = id FROM pagos.FormaPago ORDER BY id DESC;
 
     EXEC pagos.sp_eliminar_forma_pago @id = @id_fp;

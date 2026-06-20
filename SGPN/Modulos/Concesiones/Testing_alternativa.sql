@@ -28,7 +28,7 @@ EXEC concesiones.sp_crear_actividad_empresarial
     @descripcion = 'Servicios gastronomicos';
 
 -- EmpresaConcesionaria
-DECLARE @id_act INT;
+DECLARE @id_act SMALLINT;
 SELECT TOP 1 @id_act = id FROM concesiones.ActividadEmpresarial ORDER BY id DESC;
 
 EXEC concesiones.sp_crear_empresa_concesionaria
@@ -62,7 +62,7 @@ PRINT '';
 PRINT '>>> TEST 1:  sp_generar_concesion_y_canon exitoso';
 
 BEGIN TRY
-    DECLARE @id_emp INT, @id_parque INT, @id_fp INT;
+    DECLARE @id_emp INT, @id_parque INT, @id_fp TINYINT;
     DECLARE @desc VARCHAR(255) = 'Concesion de prueba';
     DECLARE @fecha_ini DATE = '2026-01-01';
     DECLARE @fecha_fin DATE = '2026-12-31';
@@ -108,7 +108,7 @@ PRINT '';
 PRINT '>>> TEST 2: @cantidad_dias_vencimiento = 0 (rollback esperado)';
 
 BEGIN TRY
-    DECLARE @id_emp2 INT, @id_parque2 INT, @id_fp2 INT;
+    DECLARE @id_emp2 INT, @id_parque2 INT, @id_fp2 TINYINT;
 
     SELECT TOP 1 @id_emp2 = id FROM concesiones.EmpresaConcesionaria ORDER BY id DESC;
     SELECT TOP 1 @id_parque2 = id FROM parques.Parque ORDER BY id DESC;
@@ -153,7 +153,7 @@ PRINT '';
 PRINT '>>> TEST 3:  @fecha_inicio > @fecha_fin (rollback total)';
 
 BEGIN TRY
-    DECLARE @id_emp3 INT, @id_parque3 INT, @id_fp3 INT,@antes_conc INT,@antes_canon INT;
+    DECLARE @id_emp3 INT, @id_parque3 INT, @id_fp3 TINYINT,@antes_conc INT,@antes_canon INT;
 
     SELECT TOP 1 @id_emp3 = id FROM concesiones.EmpresaConcesionaria ORDER BY id DESC;
     SELECT TOP 1 @id_parque3 = id FROM parques.Parque ORDER BY id DESC;

@@ -25,7 +25,7 @@ BEGIN
     SET NOCOUNT ON;
 
     CREATE TABLE empleados.TipoDocumento (
-        id INT IDENTITY(1,1) NOT NULL,
+        id TINYINT IDENTITY(1,1) NOT NULL,
         nombre VARCHAR(100) NOT NULL,
 
         CONSTRAINT PK_TipoDocumento PRIMARY KEY (id)
@@ -36,7 +36,7 @@ BEGIN
         nombre VARCHAR(100) NOT NULL,
         apellido VARCHAR(100) NOT NULL,
         nro_doc INT NOT NULL,
-        id_tipo_documento INT NOT NULL,
+        id_tipo_documento TINYINT NOT NULL,
         activo BIT NOT NULL DEFAULT 1,
 
         CONSTRAINT PK_Empleado PRIMARY KEY (id),
@@ -50,7 +50,7 @@ BEGIN
     );
 
     CREATE TABLE empleados.Especialidad (
-        id INT IDENTITY(1,1) NOT NULL,
+        id SMALLINT IDENTITY(1,1) NOT NULL,
         nombre VARCHAR(100) NOT NULL,
         descripcion VARCHAR(255) NULL,
 
@@ -58,7 +58,7 @@ BEGIN
     );
 
     CREATE TABLE empleados.Titulo (
-        id INT IDENTITY(1,1) NOT NULL,
+        id SMALLINT IDENTITY(1,1) NOT NULL,
         nombre VARCHAR(100) NOT NULL,
         institucion VARCHAR(100) NOT NULL,
 
@@ -68,8 +68,8 @@ BEGIN
     CREATE TABLE empleados.Guia (
         nro_registro VARCHAR(30) NOT NULL,
         id_empleado INT NOT NULL,
-        id_especialidad INT NOT NULL,
-        id_titulo INT,
+        id_especialidad SMALLINT NOT NULL,
+        id_titulo SMALLINT,
 
         CONSTRAINT PK_Guia PRIMARY KEY (id_empleado),
 

@@ -77,7 +77,7 @@ BEGIN
         fecha_pago DATE NULL,
         fecha_lim_pago DATE NOT NULL,
         id_concesion INT NOT NULL,
-        id_forma_pago INT NULL,
+        id_forma_pago TINYINT NULL,
 
         CONSTRAINT PK_Canon PRIMARY KEY (id),
 

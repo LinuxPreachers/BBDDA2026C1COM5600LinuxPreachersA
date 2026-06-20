@@ -64,7 +64,7 @@ END CATCH;
 GO
 
 -- 1.3 MODIFICACIÓN EXITOSA
-DECLARE @id_tipo_doc_mod INT = (SELECT MAX(id) FROM empleados.TipoDocumento);
+DECLARE @id_tipo_doc_mod TINYINT = (SELECT MAX(id) FROM empleados.TipoDocumento);
 
 BEGIN TRY
 
@@ -105,7 +105,7 @@ BEGIN TRY
 
     EXEC empleados.sp_crear_tipo_documento @nombre = 'A Borrar'; -- creamos un tipo doc para eliminarlo
 
-    DECLARE @id_borrar INT = (SELECT MAX(id) FROM empleados.TipoDocumento); 
+    DECLARE @id_borrar TINYINT = (SELECT MAX(id) FROM empleados.TipoDocumento); 
 
     EXEC empleados.sp_eliminar_tipo_documento @id = @id_borrar;
 
@@ -119,7 +119,7 @@ GO
 
 --1.6 BAJA FALLIDA
 
-DECLARE @id_tipo_doc_baja INT = (SELECT MAX(id) FROM empleados.TipoDocumento) + 1;
+DECLARE @id_tipo_doc_baja TINYINT = (SELECT MAX(id) FROM empleados.TipoDocumento) + 1;
 BEGIN TRY
 
     PRINT '1.6 BAJA FALLIDA TIPO DOCUMENTO: id inexistente';
@@ -138,7 +138,7 @@ GO
 -- ==============================================================================
 
 -- 2.1 ALTA EXITOSA
-DECLARE @id_tipo_doc_emp INT = (SELECT MAX(id) FROM empleados.TipoDocumento);
+DECLARE @id_tipo_doc_emp TINYINT = (SELECT MAX(id) FROM empleados.TipoDocumento);
 DECLARE @doc_random INT = CAST(RAND()*10000000 AS INT);
 
 BEGIN TRY
@@ -156,7 +156,7 @@ END CATCH;
 GO
 
 -- 2.2 ALTA FALLIDA (Documento Duplicado)
-DECLARE @id_tipo_doc_emp INT = (SELECT MAX(id) FROM empleados.TipoDocumento);
+DECLARE @id_tipo_doc_emp TINYINT = (SELECT MAX(id) FROM empleados.TipoDocumento);
 DECLARE @doc_existente INT = (SELECT TOP 1 nro_doc FROM empleados.Empleado WHERE id_tipo_documento = @id_tipo_doc_emp);
 
 BEGIN TRY
@@ -176,7 +176,7 @@ GO
 -- 2.3 MODIFICACIÓN EXITOSA
 DECLARE @id_emp_mod INT = (SELECT MAX(id) FROM empleados.Empleado);
 DECLARE @doc_actual INT = (SELECT nro_doc FROM empleados.Empleado WHERE id = @id_emp_mod);
-DECLARE @id_tipo_doc_emp INT = (SELECT id_tipo_documento FROM empleados.Empleado WHERE id = @id_emp_mod);
+DECLARE @id_tipo_doc_emp TINYINT = (SELECT id_tipo_documento FROM empleados.Empleado WHERE id = @id_emp_mod);
 
 BEGIN TRY
 
@@ -194,7 +194,7 @@ GO
 
 -- 2.4 MODIFICACIÓN FALLIDA (Nombre Vacio)
 DECLARE @id_emp_mod INT = (SELECT MAX(id) FROM empleados.Empleado);
-DECLARE @id_tipo_doc_emp INT = (SELECT id_tipo_documento FROM empleados.Empleado WHERE id = @id_emp_mod);
+DECLARE @id_tipo_doc_emp TINYINT = (SELECT id_tipo_documento FROM empleados.Empleado WHERE id = @id_emp_mod);
 
 BEGIN TRY
 
@@ -267,7 +267,7 @@ GO
 -- 3.3 MODIFICACIÓN EXITOSA
 
 
-DECLARE @id_esp_mod_exitosa INT = (SELECT MAX(id) FROM empleados.Especialidad);
+DECLARE @id_esp_mod_exitosa SMALLINT = (SELECT MAX(id) FROM empleados.Especialidad);
 
 BEGIN TRY
     PRINT 'PRUEBA 3.3: Modificación Exitosa Especialidad';
@@ -290,7 +290,7 @@ GO
 
 -- 3.4 MODIFICACIÓN FALLIDA (Nombre Inválido / Vacío)
 
-DECLARE @id_esp_mod_fallida INT = (SELECT MAX(id) FROM empleados.Especialidad);
+DECLARE @id_esp_mod_fallida SMALLINT = (SELECT MAX(id) FROM empleados.Especialidad);
 
 BEGIN TRY
 
@@ -338,7 +338,7 @@ BEGIN TRY
     -- las otras especialidades están vinculadas a guías), insertamos una temporal y la borramos.
     EXEC empleados.sp_crear_especialidad @nombre = 'Especialidad A Borrar Temporal';
 
-    DECLARE @id_esp_baja_exitosa INT = (SELECT MAX(id) FROM empleados.Especialidad);
+    DECLARE @id_esp_baja_exitosa SMALLINT = (SELECT MAX(id) FROM empleados.Especialidad);
 
 
     EXEC empleados.sp_eliminar_especialidad @id = @id_esp_baja_exitosa;
@@ -374,7 +374,7 @@ GO
 
 
 -- Buscamos el ID de una especialidad que sabemos que está en uso por la tabla Guía
-DECLARE @id_esp_ocupada INT = (SELECT TOP 1 id_especialidad FROM empleados.Guia);
+DECLARE @id_esp_ocupada SMALLINT = (SELECT TOP 1 id_especialidad FROM empleados.Guia);
 
 BEGIN TRY
 
@@ -437,14 +437,14 @@ GO
 -- ==============================================================================
 
 -- Preparamos un empleado activo para ser Guía
-DECLARE @id_tipo INT = (SELECT MAX(id) FROM empleados.TipoDocumento);
+DECLARE @id_tipo TINYINT = (SELECT MAX(id) FROM empleados.TipoDocumento);
 DECLARE @doc INT = CAST(RAND()*100000 AS INT);
 EXEC empleados.sp_crear_empleado @nombre = 'Guia', @apellido = 'Test', @nro_doc = @doc, @id_tipo_documento = @id_tipo;
 DECLARE @id_empleado_guia INT = (SELECT MAX(id) FROM empleados.Empleado);
 
 -- 5.1 ALTA EXITOSA
-DECLARE @id_esp INT = (SELECT MAX(id) FROM empleados.Especialidad);
-DECLARE @id_tit INT = (SELECT MAX(id) FROM empleados.Titulo);
+DECLARE @id_esp SMALLINT = (SELECT MAX(id) FROM empleados.Especialidad);
+DECLARE @id_tit SMALLINT = (SELECT MAX(id) FROM empleados.Titulo);
 
 BEGIN TRY
 
@@ -463,7 +463,7 @@ GO
 
 -- 5.2 ALTA FALLIDA (Ya es guía)
 DECLARE @id_empleado_guia INT = (SELECT MAX(id_empleado) FROM empleados.Guia);
-DECLARE @id_esp INT = (SELECT MAX(id) FROM empleados.Especialidad);
+DECLARE @id_esp SMALLINT = (SELECT MAX(id) FROM empleados.Especialidad);
 BEGIN TRY
 
     PRINT '5.2 ALTA FALLIDA GUIA (Empleado ya es guia)';
@@ -480,7 +480,7 @@ GO
 
 -- 5.3 MODIFICACION EXITOSA
 DECLARE @id_empleado_guia INT = (SELECT MAX(id_empleado) FROM empleados.Guia);
-DECLARE @id_esp INT = (SELECT MAX(id) FROM empleados.Especialidad);
+DECLARE @id_esp SMALLINT = (SELECT MAX(id) FROM empleados.Especialidad);
 BEGIN TRY
 
     PRINT '5.3 MODIFICACION EXITOSA GUIA';
@@ -500,7 +500,7 @@ GO
 -- ==============================================================================
 
 -- Preparamos un empleado activo
-DECLARE @id_tipo INT = (SELECT MAX(id) FROM empleados.TipoDocumento);
+DECLARE @id_tipo TINYINT = (SELECT MAX(id) FROM empleados.TipoDocumento);
 DECLARE @doc INT = CAST(RAND()*100000 AS INT);
 EXEC empleados.sp_crear_empleado @nombre = 'Guarda', @apellido = 'Parque', @nro_doc = @doc, @id_tipo_documento = @id_tipo;
 DECLARE @id_emp_guarda INT = (SELECT MAX(id) FROM empleados.Empleado);

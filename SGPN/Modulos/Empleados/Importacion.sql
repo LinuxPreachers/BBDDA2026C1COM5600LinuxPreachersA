@@ -63,8 +63,8 @@ BEGIN
     DECLARE @n_registro VARCHAR(30);
     DECLARE @categoria VARCHAR(100);
 
-    DECLARE @id_tipo_documento INT;
-    DECLARE @id_especialidad INT;
+    DECLARE @id_tipo_documento TINYINT;
+    DECLARE @id_especialidad SMALLINT;
     DECLARE @id_empleado INT;
     DECLARE @numero_doc INT;
 

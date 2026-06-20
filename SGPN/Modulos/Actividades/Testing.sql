@@ -59,7 +59,7 @@ GO
 
 -- 1.3 MODIFICACIÓN EXITOSA
 
-DECLARE @id_tipo_modificar INT = (SELECT MAX(id) FROM actividades.TipoActividad);
+DECLARE @id_tipo_modificar SMALLINT = (SELECT MAX(id) FROM actividades.TipoActividad);
 
 BEGIN TRY
 
@@ -83,7 +83,7 @@ GO
 
 -- 1.4 MODIFICACION FALLIDA
 
-DECLARE @id_tipo_actividad INT = (SELECT MAX(id) FROM actividades.TipoActividad) +1; -- PONEMOS UN ID INVALIDO
+DECLARE @id_tipo_actividad SMALLINT = (SELECT MAX(id) FROM actividades.TipoActividad) +1; -- PONEMOS UN ID INVALIDO
 
 BEGIN TRY
 
@@ -110,7 +110,7 @@ GO
 --Tomamos el id insertado en el testing 1.1 
 --(se intuye que no tiene actividades asociadas)
 
-DECLARE @id_tipo_actividad_baja INT = (SELECT MAX(id) FROM actividades.TipoActividad );
+DECLARE @id_tipo_actividad_baja SMALLINT = (SELECT MAX(id) FROM actividades.TipoActividad );
 
 BEGIN TRY
 
@@ -132,7 +132,7 @@ GO
 
 -- 1.6 BAJA FALLIDA (ID INVALIDO)
 
-DECLARE @id_tipo_actividad_baja_fallida INT = (SELECT MAX(id) FROM actividades.TipoActividad) + 1;
+DECLARE @id_tipo_actividad_baja_fallida SMALLINT = (SELECT MAX(id) FROM actividades.TipoActividad) + 1;
 
 BEGIN TRY
 
@@ -154,7 +154,7 @@ END CATCH
 --1.7 BAJA FALLIDA (TIPO ACTIVIDAD CON ACTIVIDAD ASOCIADA)
 
 -- Tomamos el primer id porque se intuye que tiene una actividad asociada
-DECLARE @id_tipo_actividad_baja_ INT = (SELECT MIN(id) FROM actividades.TipoActividad);
+DECLARE @id_tipo_actividad_baja_ SMALLINT = (SELECT MIN(id) FROM actividades.TipoActividad);
 
 BEGIN TRY
 
@@ -360,7 +360,7 @@ END CATCH
 -- 3.1 ALTA EXITOSA
 -- Nota: Requiere que exista al menos un Parque y un TipoActividad en la BD.
 DECLARE @id_parque_test INT = (SELECT TOP 1 id FROM parques.Parque);
-DECLARE @id_tipo_test INT = (SELECT TOP 1 id FROM actividades.TipoActividad);
+DECLARE @id_tipo_test SMALLINT = (SELECT TOP 1 id FROM actividades.TipoActividad);
 DECLARE @nombre_actividad VARCHAR(30) = 'Actividad Test ';
 
 BEGIN TRY
@@ -383,7 +383,7 @@ GO
 
 -- 3.2 ALTA FALLIDA (Validaciones acumuladas: Precio negativo, Cupo 0, Duracion 0)
 DECLARE @id_parque_test INT = (SELECT TOP 1 id FROM parques.Parque);
-DECLARE @id_tipo_test INT = (SELECT TOP 1 id FROM actividades.TipoActividad);
+DECLARE @id_tipo_test SMALLINT = (SELECT TOP 1 id FROM actividades.TipoActividad);
 DECLARE @nombre_test VARCHAR(30) = 'FALLA TEST';
 BEGIN TRY
     PRINT 'ALTA FALLIDA : ATRIBUTOS INVALIDOS';

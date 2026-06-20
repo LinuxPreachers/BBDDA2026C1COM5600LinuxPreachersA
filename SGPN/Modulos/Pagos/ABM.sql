@@ -36,7 +36,7 @@ GO
 
 -- Modificación
 CREATE OR ALTER PROCEDURE pagos.sp_modificar_forma_pago
-    @id SMALLINT,
+    @id TINYINT,
     @nombre VARCHAR(100)
 AS
 BEGIN
@@ -65,7 +65,7 @@ GO
 
 -- Baja
 CREATE OR ALTER PROCEDURE pagos.sp_eliminar_forma_pago
-    @id SMALLINT
+    @id TINYINT
 AS
 BEGIN
     SET NOCOUNT ON;
@@ -161,7 +161,7 @@ GO
 CREATE OR ALTER PROCEDURE pagos.sp_crear_pago
     @fecha_y_hora DATETIME,
     @id_reserva INT,
-    @id_forma_pago SMALLINT,
+    @id_forma_pago TINYINT,
     @importe DECIMAL(15,2)
 AS
 BEGIN
