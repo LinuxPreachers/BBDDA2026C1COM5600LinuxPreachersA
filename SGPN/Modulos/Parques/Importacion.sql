@@ -154,6 +154,9 @@ BEGIN
 
             IF (@fila_sup_ha IS NOT NULL AND @sup_ha_num IS NULL)
                 THROW 50294, 'Formato inválido de superficie en Hectáreas.', 1;
+
+            IF (@sup_ha_num = 0)
+                SET @sup_ha_num = NULL;
             
             -- Conversion HA-KM2: HA / 100.0
             SET @sup_km2 = @sup_ha_num / 100.0;
@@ -257,3 +260,16 @@ BEGIN
     PRINT 'Proceso de importación finalizado. Revisar la tabla parques.ImportacionErrorLog para verificar anomalías parciales.';
 END;
 GO
+
+/* EJECUCION
+
+-- Completar con la ruta a utilizar al ejecutar.
+EXEC parques.sp_importar_parques @ruta = ''
+GO
+
+SELECT * FROM parques.Parque ORDER BY nombre
+SELECT * FROM parques.ProvinciaParque
+SELECT * FROM  parques.ImportacionErrorLog
+GO
+
+*/
