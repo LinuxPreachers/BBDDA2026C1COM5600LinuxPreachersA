@@ -87,7 +87,7 @@ BEGIN
 
        CONSTRAINT FK_Canon_forma_pago
            FOREIGN KEY (id_forma_pago)
-           REFERENCES concesiones.Concesion(id)
+           REFERENCES pagos.FormaPago(id)
 
     );
 

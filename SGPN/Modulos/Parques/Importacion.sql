@@ -8,12 +8,27 @@
  * Script: Importacion masiva de parques
 */
 
-/* Deben ejecutarse por unica vez en la db antes de hacer la importacion
+-- Deben ejecutarse por unica vez en la db antes de hacer la importacion.
 EXEC sp_configure 'show advanced options', 1; 
 RECONFIGURE; 
+GO
 EXEC sp_configure 'Ad Hoc Distributed Queries', 1; 
-RECONFIGURE; 
+RECONFIGURE;
+GO
+
+/* 
+ * IMPORTANTE:
+ *
+ * Si ejecutaste una consulta con el driver OLEDB y no te lo permitió, falta habilitar esta configuración.
+ * Esta permite el correcto uso del driver. Si no esta habilitada, habilitarla y reiniciar el motor.
+ * Si ya habiendo habilitado la configuración y reinciado el motor aún no funciona, matá el proceso dllhost.exe, 
+ * ya que esta reteniendo el archivo que queres leer. Hecho esto, reintentá la lectura.
 */
+EXEC master.dbo.sp_MSset_oledb_prop
+    N'Microsoft.ACE.OLEDB.16.0',
+    N'AllowInProcess',
+    1;
+
 
 USE LinuxPreachers;
 GO
@@ -34,20 +49,20 @@ GO
 
 -- 2. Creación del Stored Procedure de Importación Masiva
 CREATE OR ALTER PROCEDURE parques.sp_importar_parques
+    @ruta VARCHAR(500)
 AS
 BEGIN
     SET NOCOUNT ON;
 
-        -- variables Auxiliares
+    -- Variables Auxiliares
     DECLARE @id_parque_operativo INT;
     DECLARE @sup_ha_num DECIMAL(18,2);
     DECLARE @mensaje_error VARCHAR(4000);
     DECLARE @datos_fila VARCHAR(4000);
-
+    DECLARE @importacion VARCHAR(1000);
 
     -- Limpieza preventiva de la tabla temporal local en la sesión
-    IF OBJECT_ID('tempdb..#ImportacionParques') IS NOT NULL
-        DROP TABLE #ImportacionParques;
+    DROP TABLE IF EXISTS #ImportacionParques;
 
     -- Creación de la tabla temporal estructurada
     CREATE TABLE #ImportacionParques (
@@ -58,28 +73,24 @@ BEGIN
         Latitud VARCHAR(100),
         Longitud VARCHAR(100)
     );
+
     -- Carga estática directa desde la hoja "Sheet1" del Excel filtrando columnas
     BEGIN TRY
-        INSERT INTO #ImportacionParques (Provincia, AreaProtegida, SuperficieHA, Latitud, Longitud)
-        SELECT 
-            [Provincia], 
-            [Área protegida], 
-            [Superficie (HA)], 
-            [Latitud], 
-            [Longitud]
-        FROM OPENROWSET(
-            'Microsoft.ACE.OLEDB.12.0',
-            'Excel 12.0 Xml;Database=C:\Users\USUARIO\Downloads\Áreas protegidas de Argentina - Sistema de Información de Biodiversidad.xlsx;HDR=YES;', 
-            'SELECT [Provincia], [Área protegida], [Superficie (HA)], [Latitud], [Longitud] FROM [Sheet1$]'
-        );
+        SET @importacion = '
+            INSERT INTO #ImportacionParques (Provincia, AreaProtegida, SuperficieHA, Latitud, Longitud)
+            SELECT *
+            FROM OPENROWSET(
+                ''Microsoft.ACE.OLEDB.16.0'',
+                ''Excel 12.0 Xml;Database=' + @ruta + ';HDR=YES;'', 
+                ''SELECT [Provincia], [Área protegida], [Superficie (HA)], [Latitud], [Longitud] FROM [Sheet1$A2:O1000]''
+            );';
+        EXEC (@importacion);
     END TRY
     BEGIN CATCH
          SET @mensaje_error = 'Fallo crítico al conectar con el Excel. Asegúrese de que el archivo no esté abierto exclusivamente y de que los drivers OLEDB estén instalados. Error: ' + ERROR_MESSAGE();
         RAISERROR(@mensaje_error, 16, 1);
         RETURN;
     END CATCH;
-
-
 
     -- Variables para el control del bucle WHILE
     DECLARE @id_actual INT = 1;

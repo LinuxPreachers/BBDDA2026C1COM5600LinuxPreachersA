@@ -3,48 +3,12 @@
   "WorkspaceRootPath": "D:\\Facultad\\TP-BDA\\BBDDA2026C1COM5600LinuxPreachersA\\SGPN\\",
   "Documents": [
     {
-      "AbsoluteMoniker": "D:0:0:{C0BE212A-2DC4-4F1D-A5FF-DDB3A8A4B624}|Parques{C0BE212A-2DC4-4F1D-A5FF-DDB3A8A4B624}|D:\\Facultad\\TP-BDA\\BBDDA2026C1COM5600LinuxPreachersA\\SGPN\\Modulos\\Parques\\Generar_provincias_regiones_tipos_parque.sql||{B5A506EB-11BE-4782-9A18-21265C2CA0B4}",
-      "RelativeMoniker": "D:0:0:{C0BE212A-2DC4-4F1D-A5FF-DDB3A8A4B624}|Parques{C0BE212A-2DC4-4F1D-A5FF-DDB3A8A4B624}|solutionrelative:Modulos\\Parques\\Generar_provincias_regiones_tipos_parque.sql||{B5A506EB-11BE-4782-9A18-21265C2CA0B4}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{AF293F3A-72EA-43CC-9594-4C385FA1A6E6}|Reservas{AF293F3A-72EA-43CC-9594-4C385FA1A6E6}|D:\\Facultad\\TP-BDA\\BBDDA2026C1COM5600LinuxPreachersA\\SGPN\\Modulos\\Reservas\\Testing.sql||{B5A506EB-11BE-4782-9A18-21265C2CA0B4}",
-      "RelativeMoniker": "D:0:0:{AF293F3A-72EA-43CC-9594-4C385FA1A6E6}|Reservas{AF293F3A-72EA-43CC-9594-4C385FA1A6E6}|solutionrelative:Modulos\\Reservas\\Testing.sql||{B5A506EB-11BE-4782-9A18-21265C2CA0B4}"
+      "AbsoluteMoniker": "D:0:0:{D107F4C8-89CC-BEA8-D3D7-CA6B7733353D}|Elementos de la soluci\u00F3n{D107F4C8-89CC-BEA8-D3D7-CA6B7733353D}|D:\\Facultad\\TP-BDA\\BBDDA2026C1COM5600LinuxPreachersA\\SGPN\\Reinicio.sql||{B5A506EB-11BE-4782-9A18-21265C2CA0B4}",
+      "RelativeMoniker": "D:0:0:{D107F4C8-89CC-BEA8-D3D7-CA6B7733353D}|Elementos de la soluci\u00F3n{D107F4C8-89CC-BEA8-D3D7-CA6B7733353D}|solutionrelative:Reinicio.sql||{B5A506EB-11BE-4782-9A18-21265C2CA0B4}"
     },
     {
       "AbsoluteMoniker": "D:0:0:{C0BE212A-2DC4-4F1D-A5FF-DDB3A8A4B624}|Parques{C0BE212A-2DC4-4F1D-A5FF-DDB3A8A4B624}|D:\\Facultad\\TP-BDA\\BBDDA2026C1COM5600LinuxPreachersA\\SGPN\\Modulos\\Parques\\Importacion.sql||{B5A506EB-11BE-4782-9A18-21265C2CA0B4}",
       "RelativeMoniker": "D:0:0:{C0BE212A-2DC4-4F1D-A5FF-DDB3A8A4B624}|Parques{C0BE212A-2DC4-4F1D-A5FF-DDB3A8A4B624}|solutionrelative:Modulos\\Parques\\Importacion.sql||{B5A506EB-11BE-4782-9A18-21265C2CA0B4}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{9571DDE5-8EDF-4007-B9A9-703393C3718B}|Empleados{9571DDE5-8EDF-4007-B9A9-703393C3718B}|D:\\Facultad\\TP-BDA\\BBDDA2026C1COM5600LinuxPreachersA\\SGPN\\Modulos\\Empleados\\Testing.sql||{B5A506EB-11BE-4782-9A18-21265C2CA0B4}",
-      "RelativeMoniker": "D:0:0:{9571DDE5-8EDF-4007-B9A9-703393C3718B}|Empleados{9571DDE5-8EDF-4007-B9A9-703393C3718B}|solutionrelative:Modulos\\Empleados\\Testing.sql||{B5A506EB-11BE-4782-9A18-21265C2CA0B4}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{9571DDE5-8EDF-4007-B9A9-703393C3718B}|Empleados{9571DDE5-8EDF-4007-B9A9-703393C3718B}|D:\\Facultad\\TP-BDA\\BBDDA2026C1COM5600LinuxPreachersA\\SGPN\\Modulos\\Empleados\\Importacion.sql||{B5A506EB-11BE-4782-9A18-21265C2CA0B4}",
-      "RelativeMoniker": "D:0:0:{9571DDE5-8EDF-4007-B9A9-703393C3718B}|Empleados{9571DDE5-8EDF-4007-B9A9-703393C3718B}|solutionrelative:Modulos\\Empleados\\Importacion.sql||{B5A506EB-11BE-4782-9A18-21265C2CA0B4}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{AF293F3A-72EA-43CC-9594-4C385FA1A6E6}|Reservas{AF293F3A-72EA-43CC-9594-4C385FA1A6E6}|D:\\Facultad\\TP-BDA\\BBDDA2026C1COM5600LinuxPreachersA\\SGPN\\Modulos\\Reservas\\ABM.sql||{B5A506EB-11BE-4782-9A18-21265C2CA0B4}",
-      "RelativeMoniker": "D:0:0:{AF293F3A-72EA-43CC-9594-4C385FA1A6E6}|Reservas{AF293F3A-72EA-43CC-9594-4C385FA1A6E6}|solutionrelative:Modulos\\Reservas\\ABM.sql||{B5A506EB-11BE-4782-9A18-21265C2CA0B4}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{9571DDE5-8EDF-4007-B9A9-703393C3718B}|Empleados{9571DDE5-8EDF-4007-B9A9-703393C3718B}|D:\\Facultad\\TP-BDA\\BBDDA2026C1COM5600LinuxPreachersA\\SGPN\\Modulos\\Empleados\\ABM.sql||{B5A506EB-11BE-4782-9A18-21265C2CA0B4}",
-      "RelativeMoniker": "D:0:0:{9571DDE5-8EDF-4007-B9A9-703393C3718B}|Empleados{9571DDE5-8EDF-4007-B9A9-703393C3718B}|solutionrelative:Modulos\\Empleados\\ABM.sql||{B5A506EB-11BE-4782-9A18-21265C2CA0B4}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{22D3ED59-CF35-416C-BE02-EAB23912772A}|Reportes{22D3ED59-CF35-416C-BE02-EAB23912772A}|D:\\Facultad\\TP-BDA\\BBDDA2026C1COM5600LinuxPreachersA\\SGPN\\Reportes.sql||{B5A506EB-11BE-4782-9A18-21265C2CA0B4}",
-      "RelativeMoniker": "D:0:0:{22D3ED59-CF35-416C-BE02-EAB23912772A}|Reportes{22D3ED59-CF35-416C-BE02-EAB23912772A}|solutionrelative:Reportes.sql||{B5A506EB-11BE-4782-9A18-21265C2CA0B4}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{9571DDE5-8EDF-4007-B9A9-703393C3718B}|Empleados{9571DDE5-8EDF-4007-B9A9-703393C3718B}|D:\\Facultad\\TP-BDA\\BBDDA2026C1COM5600LinuxPreachersA\\SGPN\\Modulos\\Empleados\\Generar_datos.sql||{B5A506EB-11BE-4782-9A18-21265C2CA0B4}",
-      "RelativeMoniker": "D:0:0:{9571DDE5-8EDF-4007-B9A9-703393C3718B}|Empleados{9571DDE5-8EDF-4007-B9A9-703393C3718B}|solutionrelative:Modulos\\Empleados\\Generar_datos.sql||{B5A506EB-11BE-4782-9A18-21265C2CA0B4}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{9571DDE5-8EDF-4007-B9A9-703393C3718B}|Empleados{9571DDE5-8EDF-4007-B9A9-703393C3718B}|D:\\Facultad\\TP-BDA\\BBDDA2026C1COM5600LinuxPreachersA\\SGPN\\Modulos\\Empleados\\Tablas.sql||{B5A506EB-11BE-4782-9A18-21265C2CA0B4}",
-      "RelativeMoniker": "D:0:0:{9571DDE5-8EDF-4007-B9A9-703393C3718B}|Empleados{9571DDE5-8EDF-4007-B9A9-703393C3718B}|solutionrelative:Modulos\\Empleados\\Tablas.sql||{B5A506EB-11BE-4782-9A18-21265C2CA0B4}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{C0BE212A-2DC4-4F1D-A5FF-DDB3A8A4B624}|Parques{C0BE212A-2DC4-4F1D-A5FF-DDB3A8A4B624}|D:\\Facultad\\TP-BDA\\BBDDA2026C1COM5600LinuxPreachersA\\SGPN\\Modulos\\Parques\\ABM.sql||{B5A506EB-11BE-4782-9A18-21265C2CA0B4}",
-      "RelativeMoniker": "D:0:0:{C0BE212A-2DC4-4F1D-A5FF-DDB3A8A4B624}|Parques{C0BE212A-2DC4-4F1D-A5FF-DDB3A8A4B624}|solutionrelative:Modulos\\Parques\\ABM.sql||{B5A506EB-11BE-4782-9A18-21265C2CA0B4}"
     }
   ],
   "DocumentGroupContainers": [
@@ -54,139 +18,31 @@
       "DocumentGroups": [
         {
           "DockedWidth": 200,
-          "SelectedChildIndex": 4,
+          "SelectedChildIndex": 1,
           "Children": [
             {
               "$type": "Document",
-              "DocumentIndex": 3,
-              "Title": "Testing.sql - localhost.master (DESKTOP-KOIKGVK\\Luis (80))",
-              "DocumentMoniker": "D:\\Facultad\\TP-BDA\\BBDDA2026C1COM5600LinuxPreachersA\\SGPN\\Modulos\\Empleados\\Testing.sql",
-              "RelativeDocumentMoniker": "Modulos\\Empleados\\Testing.sql",
-              "ToolTip": "D:\\Facultad\\TP-BDA\\BBDDA2026C1COM5600LinuxPreachersA\\SGPN\\Modulos\\Empleados\\Testing.sql - localhost.master (DESKTOP-KOIKGVK\\Luis (80))",
-              "RelativeToolTip": "Modulos\\Empleados\\Testing.sql - localhost.master (DESKTOP-KOIKGVK\\Luis (80))",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000826|",
-              "WhenOpened": "2026-06-19T02:43:35.065Z",
-              "EditorCaption": " - localhost.master (DESKTOP-KOIKGVK\\Luis (80))"
-            },
-            {
-              "$type": "Document",
               "DocumentIndex": 1,
-              "Title": "Testing.sql - localhost.LinuxPreachers (DESKTOP-KOIKGVK\\Luis (73))",
-              "DocumentMoniker": "D:\\Facultad\\TP-BDA\\BBDDA2026C1COM5600LinuxPreachersA\\SGPN\\Modulos\\Reservas\\Testing.sql",
-              "RelativeDocumentMoniker": "Modulos\\Reservas\\Testing.sql",
-              "ToolTip": "D:\\Facultad\\TP-BDA\\BBDDA2026C1COM5600LinuxPreachersA\\SGPN\\Modulos\\Reservas\\Testing.sql - localhost.LinuxPreachers (DESKTOP-KOIKGVK\\Luis (73))",
-              "RelativeToolTip": "Modulos\\Reservas\\Testing.sql - localhost.LinuxPreachers (DESKTOP-KOIKGVK\\Luis (73))",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000826|",
-              "WhenOpened": "2026-06-18T21:47:50.92Z",
-              "EditorCaption": " - localhost.LinuxPreachers (DESKTOP-KOIKGVK\\Luis (73))"
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 2,
-              "Title": "Importacion.sql - localhost.LinuxPreachers (DESKTOP-KOIKGVK\\Luis (62))",
+              "Title": "Importacion.sql - localhost.LinuxPreachers (DESKTOP-KOIKGVK\\Luis (51))",
               "DocumentMoniker": "D:\\Facultad\\TP-BDA\\BBDDA2026C1COM5600LinuxPreachersA\\SGPN\\Modulos\\Parques\\Importacion.sql",
               "RelativeDocumentMoniker": "Modulos\\Parques\\Importacion.sql",
-              "ToolTip": "D:\\Facultad\\TP-BDA\\BBDDA2026C1COM5600LinuxPreachersA\\SGPN\\Modulos\\Parques\\Importacion.sql - localhost.LinuxPreachers (DESKTOP-KOIKGVK\\Luis (62))",
-              "RelativeToolTip": "Modulos\\Parques\\Importacion.sql - localhost.LinuxPreachers (DESKTOP-KOIKGVK\\Luis (62))",
+              "ToolTip": "D:\\Facultad\\TP-BDA\\BBDDA2026C1COM5600LinuxPreachersA\\SGPN\\Modulos\\Parques\\Importacion.sql - localhost.LinuxPreachers (DESKTOP-KOIKGVK\\Luis (51))",
+              "RelativeToolTip": "Modulos\\Parques\\Importacion.sql - localhost.LinuxPreachers (DESKTOP-KOIKGVK\\Luis (51))",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000826|",
-              "WhenOpened": "2026-06-17T19:02:31.223Z",
-              "EditorCaption": " - localhost.LinuxPreachers (DESKTOP-KOIKGVK\\Luis (62))"
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 4,
-              "Title": "Importacion.sql - localhost.master (DESKTOP-KOIKGVK\\Luis (53))",
-              "DocumentMoniker": "D:\\Facultad\\TP-BDA\\BBDDA2026C1COM5600LinuxPreachersA\\SGPN\\Modulos\\Empleados\\Importacion.sql",
-              "RelativeDocumentMoniker": "Modulos\\Empleados\\Importacion.sql",
-              "ToolTip": "D:\\Facultad\\TP-BDA\\BBDDA2026C1COM5600LinuxPreachersA\\SGPN\\Modulos\\Empleados\\Importacion.sql - localhost.master (DESKTOP-KOIKGVK\\Luis (53))",
-              "RelativeToolTip": "Modulos\\Empleados\\Importacion.sql - localhost.master (DESKTOP-KOIKGVK\\Luis (53))",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000826|",
-              "WhenOpened": "2026-06-17T19:01:09.526Z",
-              "EditorCaption": " - localhost.master (DESKTOP-KOIKGVK\\Luis (53))"
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 0,
-              "Title": "Generar_provincias_regiones_tipos_parque.sql - localhost.LinuxPreachers (DESKTOP-KOIKGVK\\Luis (51))",
-              "DocumentMoniker": "D:\\Facultad\\TP-BDA\\BBDDA2026C1COM5600LinuxPreachersA\\SGPN\\Modulos\\Parques\\Generar_provincias_regiones_tipos_parque.sql",
-              "RelativeDocumentMoniker": "Modulos\\Parques\\Generar_provincias_regiones_tipos_parque.sql",
-              "ToolTip": "D:\\Facultad\\TP-BDA\\BBDDA2026C1COM5600LinuxPreachersA\\SGPN\\Modulos\\Parques\\Generar_provincias_regiones_tipos_parque.sql - localhost.LinuxPreachers (DESKTOP-KOIKGVK\\Luis (51))",
-              "RelativeToolTip": "Modulos\\Parques\\Generar_provincias_regiones_tipos_parque.sql - localhost.LinuxPreachers (DESKTOP-KOIKGVK\\Luis (51))",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000826|",
-              "WhenOpened": "2026-06-17T19:07:22.942Z",
+              "WhenOpened": "2026-06-19T20:16:33.725Z",
               "EditorCaption": " - localhost.LinuxPreachers (DESKTOP-KOIKGVK\\Luis (51))"
             },
             {
               "$type": "Document",
-              "DocumentIndex": 5,
-              "Title": "ABM.sql",
-              "DocumentMoniker": "D:\\Facultad\\TP-BDA\\BBDDA2026C1COM5600LinuxPreachersA\\SGPN\\Modulos\\Reservas\\ABM.sql",
-              "RelativeDocumentMoniker": "Modulos\\Reservas\\ABM.sql",
-              "ToolTip": "D:\\Facultad\\TP-BDA\\BBDDA2026C1COM5600LinuxPreachersA\\SGPN\\Modulos\\Reservas\\ABM.sql",
-              "RelativeToolTip": "Modulos\\Reservas\\ABM.sql",
+              "DocumentIndex": 0,
+              "Title": "Reinicio.sql - localhost.master (DESKTOP-KOIKGVK\\Luis (61))",
+              "DocumentMoniker": "D:\\Facultad\\TP-BDA\\BBDDA2026C1COM5600LinuxPreachersA\\SGPN\\Reinicio.sql",
+              "RelativeDocumentMoniker": "Reinicio.sql",
+              "ToolTip": "D:\\Facultad\\TP-BDA\\BBDDA2026C1COM5600LinuxPreachersA\\SGPN\\Reinicio.sql - localhost.master (DESKTOP-KOIKGVK\\Luis (61))",
+              "RelativeToolTip": "Reinicio.sql - localhost.master (DESKTOP-KOIKGVK\\Luis (61))",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000826|",
-              "WhenOpened": "2026-06-18T21:47:14.177Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 6,
-              "Title": "ABM.sql",
-              "DocumentMoniker": "D:\\Facultad\\TP-BDA\\BBDDA2026C1COM5600LinuxPreachersA\\SGPN\\Modulos\\Empleados\\ABM.sql",
-              "RelativeDocumentMoniker": "Modulos\\Empleados\\ABM.sql",
-              "ToolTip": "D:\\Facultad\\TP-BDA\\BBDDA2026C1COM5600LinuxPreachersA\\SGPN\\Modulos\\Empleados\\ABM.sql",
-              "RelativeToolTip": "Modulos\\Empleados\\ABM.sql",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000826|",
-              "WhenOpened": "2026-06-17T19:09:51.034Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 7,
-              "Title": "Reportes.sql",
-              "DocumentMoniker": "D:\\Facultad\\TP-BDA\\BBDDA2026C1COM5600LinuxPreachersA\\SGPN\\Reportes.sql",
-              "RelativeDocumentMoniker": "Reportes.sql",
-              "ToolTip": "D:\\Facultad\\TP-BDA\\BBDDA2026C1COM5600LinuxPreachersA\\SGPN\\Reportes.sql",
-              "RelativeToolTip": "Reportes.sql",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000826|",
-              "WhenOpened": "2026-06-18T05:13:13.283Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 8,
-              "Title": "Generar_datos.sql",
-              "DocumentMoniker": "D:\\Facultad\\TP-BDA\\BBDDA2026C1COM5600LinuxPreachersA\\SGPN\\Modulos\\Empleados\\Generar_datos.sql",
-              "RelativeDocumentMoniker": "Modulos\\Empleados\\Generar_datos.sql",
-              "ToolTip": "D:\\Facultad\\TP-BDA\\BBDDA2026C1COM5600LinuxPreachersA\\SGPN\\Modulos\\Empleados\\Generar_datos.sql",
-              "RelativeToolTip": "Modulos\\Empleados\\Generar_datos.sql",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000826|",
-              "WhenOpened": "2026-06-17T19:01:34.5Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 9,
-              "Title": "Tablas.sql",
-              "DocumentMoniker": "D:\\Facultad\\TP-BDA\\BBDDA2026C1COM5600LinuxPreachersA\\SGPN\\Modulos\\Empleados\\Tablas.sql",
-              "RelativeDocumentMoniker": "Modulos\\Empleados\\Tablas.sql",
-              "ToolTip": "D:\\Facultad\\TP-BDA\\BBDDA2026C1COM5600LinuxPreachersA\\SGPN\\Modulos\\Empleados\\Tablas.sql",
-              "RelativeToolTip": "Modulos\\Empleados\\Tablas.sql",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000826|",
-              "WhenOpened": "2026-06-17T19:01:03.816Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 10,
-              "Title": "ABM.sql",
-              "DocumentMoniker": "D:\\Facultad\\TP-BDA\\BBDDA2026C1COM5600LinuxPreachersA\\SGPN\\Modulos\\Parques\\ABM.sql",
-              "RelativeDocumentMoniker": "Modulos\\Parques\\ABM.sql",
-              "ToolTip": "D:\\Facultad\\TP-BDA\\BBDDA2026C1COM5600LinuxPreachersA\\SGPN\\Modulos\\Parques\\ABM.sql",
-              "RelativeToolTip": "Modulos\\Parques\\ABM.sql",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000826|",
-              "WhenOpened": "2026-06-17T20:34:32.693Z",
-              "EditorCaption": ""
+              "WhenOpened": "2026-06-19T20:07:18.961Z",
+              "EditorCaption": " - localhost.master (DESKTOP-KOIKGVK\\Luis (61))"
             }
           ]
         }
