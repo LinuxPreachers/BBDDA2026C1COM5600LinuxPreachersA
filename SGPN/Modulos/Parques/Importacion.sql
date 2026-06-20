@@ -130,13 +130,13 @@ BEGIN
 
             -- 1. Validar nombre del área protegida
             IF (@fila_area IS NULL OR @fila_area = '')
-                THROW 50001, 'El nombre del área protegida no puede estar vacío.', 1;
+                THROW 50291, 'El nombre del área protegida no puede estar vacío.', 1;
 
             SET @nombre_parque = @fila_area;
 
             -- 2. Normalizar Provincia
             IF (@fila_prov IS NULL OR @fila_prov = '')
-                  THROW 50002, 'Falta la provincia', 1;
+                  THROW 50292, 'Falta la provincia', 1;
             ELSE
             BEGIN
                 -- Buscar el ID de la provincia en tabla
@@ -145,7 +145,7 @@ BEGIN
                 WHERE nombre = @fila_prov;
 
                 IF (@id_prov IS NULL)
-                       THROW 50003, 'La provincia no existe en la tabla de provincias.', 1;
+                       THROW 50293, 'La provincia no existe en la tabla de provincias.', 1;
             END;
 
             -- 3. Conversiones de datos
@@ -153,7 +153,7 @@ BEGIN
             SET @sup_ha_num = TRY_CAST(REPLACE(@fila_sup_ha, ',', '.') AS DECIMAL(18,2));
 
             IF (@fila_sup_ha IS NOT NULL AND @sup_ha_num IS NULL)
-                THROW 50005, 'Formato inválido de superficie en Hectáreas.', 1;
+                THROW 50294, 'Formato inválido de superficie en Hectáreas.', 1;
             
             -- Conversion HA-KM2: HA / 100.0
             SET @sup_km2 = @sup_ha_num / 100.0;
@@ -164,7 +164,7 @@ BEGIN
 
             IF ((@fila_lat IS NOT NULL AND @fila_lat <> '0' AND @lat_dec IS NULL) OR 
                 (@fila_long IS NOT NULL AND @fila_long<> '0' AND @long_dec IS NULL))
-                THROW 50006, 'Formato numérico inválido en coordenadas', 1;
+                THROW 50295, 'Formato numérico inválido en coordenadas', 1;
 
             -- Tipo de parque
 
@@ -175,7 +175,7 @@ BEGIN
             WHERE @nombre_parque LIKE descripcion + '%' ORDER BY LEN(descripcion) DESC;
 
             IF (@id_tipo_parque IS NULL)
-                THROW 50007, 'No se pudo determinar el tipo de parque para el nombre proporcionado.', 1;               
+                THROW 50296, 'No se pudo determinar el tipo de parque para el nombre proporcionado.', 1;               
 
             -- 4. Operación UPSERT
 
