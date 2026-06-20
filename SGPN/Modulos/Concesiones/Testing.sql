@@ -225,36 +225,6 @@ END CATCH;
 GO
 
 --------------------------------------------------------------------------------
--- 1.9 EmpresaConcesionaria: Baja Exitosa (sp_eliminar_empresa_concesionaria)
---------------------------------------------------------------------------------
-PRINT '>>> 1.9: Baja Exitosa de EmpresaConcesionaria';
-BEGIN TRY
-    DECLARE @id_act INT;
-    SELECT TOP 1 @id_act = id FROM concesiones.ActividadEmpresarial ORDER BY id DESC;
-
-    -- Creamos una temporal para dar de baja, de modo de no romper dependencias del happy path anterior
-    EXEC concesiones.sp_crear_empresa_concesionaria
-        @nombre = 'Empresa Temporal Baja',
-        @descripcion = 'Venta de galletas',
-        @cuit = 30500000004,
-        @razon_social = 'Empresa Temporal Razon Social',
-        @id_actividad_empresarial = @id_act;
-
-    DECLARE @id_empresa_baja INT;
-    SELECT TOP 1 @id_empresa_baja = id FROM concesiones.EmpresaConcesionaria ORDER BY id DESC;
-
-    EXEC concesiones.sp_eliminar_empresa_concesionaria @id = @id_empresa_baja;
-    
-    PRINT 'RESULTADO: OK';
-    IF NOT EXISTS (SELECT 1 FROM concesiones.EmpresaConcesionaria WHERE id = @id_empresa_baja)
-        PRINT '  Confirmado: Registro de empresa temporal eliminado.';
-END TRY
-BEGIN CATCH
-    PRINT 'ERROR INESPERADO: ' + ERROR_MESSAGE();
-END CATCH;
-GO
-
---------------------------------------------------------------------------------
 -- 1.10 ActividadEmpresarial: Baja Exitosa (sp_eliminar_actividad_empresarial)
 --------------------------------------------------------------------------------
 PRINT '>>> 1.10: Baja Exitosa de ActividadEmpresarial';

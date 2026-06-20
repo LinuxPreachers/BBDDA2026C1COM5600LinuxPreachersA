@@ -114,7 +114,7 @@ BEGIN
         id_item_reserva INT NOT NULL,
         fecha_acceso DATE NOT NULL,
         id_parque INT NOT NULL,
-        id_tipo_visitante INT NOT NULL,
+        id_tipo_visitante TINYINT NOT NULL,
 
         CONSTRAINT PK_Entrada PRIMARY KEY (id_item_reserva),
 

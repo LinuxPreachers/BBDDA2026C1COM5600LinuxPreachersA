@@ -39,6 +39,9 @@ CREATE SCHEMA pagos;
 GO
 CREATE SCHEMA concesiones;
 GO
+CREATE SCHEMA seguridad;
+GO
+
 
 :r "D:\Facultad\TP-BDA\BBDDA2026C1COM5600LinuxPreachersA\SGPN\Modulos\Parques\Tablas.sql"
 :r "D:\Facultad\TP-BDA\BBDDA2026C1COM5600LinuxPreachersA\SGPN\Modulos\Actividades\Tablas.sql"

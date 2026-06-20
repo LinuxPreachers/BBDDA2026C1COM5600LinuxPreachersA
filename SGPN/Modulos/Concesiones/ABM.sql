@@ -35,7 +35,7 @@ BEGIN
         IF(@razon_social IS NULL OR LTRIM(RTRIM(@razon_social)) = '')
             SET @errores = @errores + 'La razon social ingresada para la Empresa no es válida. ';
 
-        IF(@cuit >= 99999999999 OR @cuit <= 10000000000)
+        IF(LEN(@cuit)!=11)
             SET @errores = @errores + 'CUIT inválido. ';
 
         IF(EXISTS(SELECT 1 FROM concesiones.EmpresaConcesionaria WHERE cuit = @cuit))
@@ -79,7 +79,7 @@ BEGIN
         IF(@razon_social IS NULL OR LTRIM(RTRIM(@razon_social)) = '')
             SET @errores = @errores + 'La razon social ingresada para la Empresa no es válida. ';
 
-        IF(@cuit >= 99999999999 OR @cuit <= 10000000000)
+        IF(LEN(@cuit)!=11)
             SET @errores = @errores + 'CUIT inválido. ';
 
         IF(@id_actividad_empresarial NOT IN(SELECT id FROM concesiones.ActividadEmpresarial))
