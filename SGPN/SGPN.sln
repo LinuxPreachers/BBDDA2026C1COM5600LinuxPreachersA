@@ -28,6 +28,7 @@ EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Actividades", "Actividades", "{4DF9D534-4687-48EE-B7CF-4556869A802A}"
 	ProjectSection(SolutionItems) = preProject
 		Modulos\Actividades\ABM.sql = Modulos\Actividades\ABM.sql
+		Modulos\Actividades\Generar_datos.sql = Modulos\Actividades\Generar_datos.sql
 		Modulos\Actividades\Tablas.sql = Modulos\Actividades\Tablas.sql
 		Modulos\Actividades\Testing.sql = Modulos\Actividades\Testing.sql
 	EndProjectSection
@@ -80,7 +81,7 @@ Global
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
 		{CE4A56E1-1995-9F01-1989-9941B5F28028}.Default|Default.ActiveCfg = Default
-		{ADAEC25B-B24A-4AEF-A4BA-F3C90CDCC556}.Default|Default.ActiveCfg = Default
+		{40308F97-1424-4FE4-A48C-71D0E4FCDA43}.Default|Default.ActiveCfg = Default
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
