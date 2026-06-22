@@ -90,6 +90,13 @@ BEGIN
            REFERENCES pagos.FormaPago(id)
 
     );
+    CREATE TABLE concesiones.ImportacionErrorLog (
+        id INT IDENTITY(1,1) PRIMARY KEY,
+        fila_origen INT NOT NULL,
+        organizacion VARCHAR(100),
+        rubro VARCHAR(100),
+        mensaje_error VARCHAR(400)
+    );
 
 END;
 GO
@@ -115,7 +122,7 @@ BEGIN
             'ActividadEmpresarial',
             'EmpresaConcesionaria',
             'Concesion',
-            'Canon'
+            'Canon','ImportacionErrorLog'
             );
 
     IF EXISTS (SELECT 1 FROM @tablas_existentes)
@@ -166,6 +173,7 @@ BEGIN
             DROP TABLE IF EXISTS concesiones.Concesion;
             DROP TABLE IF EXISTS concesiones.EmpresaConcesionaria;
             DROP TABLE IF EXISTS concesiones.ActividadEmpresarial;
+            DROP TABLE IF EXISTS concesiones.ImportacionErrorLog;
 
 
         COMMIT TRANSACTION;

@@ -3,12 +3,12 @@
   "WorkspaceRootPath": "C:\\Users\\Usuario\\Documents\\GitHub\\BBDDA2026C1COM5600LinuxPreachersA\\SGPN\\",
   "Documents": [
     {
-      "AbsoluteMoniker": "D:0:0:{4DF9D534-4687-48EE-B7CF-4556869A802A}|Actividades{4DF9D534-4687-48EE-B7CF-4556869A802A}|C:\\Users\\Usuario\\Documents\\GitHub\\BBDDA2026C1COM5600LinuxPreachersA\\SGPN\\Modulos\\Actividades\\Generar_datos.sql||{B5A506EB-11BE-4782-9A18-21265C2CA0B4}",
-      "RelativeMoniker": "D:0:0:{4DF9D534-4687-48EE-B7CF-4556869A802A}|Actividades{4DF9D534-4687-48EE-B7CF-4556869A802A}|solutionrelative:Modulos\\Actividades\\Generar_datos.sql||{B5A506EB-11BE-4782-9A18-21265C2CA0B4}"
+      "AbsoluteMoniker": "D:0:0:{1CAE7C1D-5E06-4080-8C03-3CCEEEAD61D2}|Concesiones{1CAE7C1D-5E06-4080-8C03-3CCEEEAD61D2}|C:\\Users\\Usuario\\Documents\\GitHub\\BBDDA2026C1COM5600LinuxPreachersA\\SGPN\\Modulos\\Concesiones\\Importacion.sql||{B5A506EB-11BE-4782-9A18-21265C2CA0B4}",
+      "RelativeMoniker": "D:0:0:{1CAE7C1D-5E06-4080-8C03-3CCEEEAD61D2}|Concesiones{1CAE7C1D-5E06-4080-8C03-3CCEEEAD61D2}|solutionrelative:Modulos\\Concesiones\\Importacion.sql||{B5A506EB-11BE-4782-9A18-21265C2CA0B4}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{4DF9D534-4687-48EE-B7CF-4556869A802A}|Actividades{4DF9D534-4687-48EE-B7CF-4556869A802A}|C:\\Users\\Usuario\\Documents\\GitHub\\BBDDA2026C1COM5600LinuxPreachersA\\SGPN\\Modulos\\Actividades\\ABM.sql||{B5A506EB-11BE-4782-9A18-21265C2CA0B4}",
-      "RelativeMoniker": "D:0:0:{4DF9D534-4687-48EE-B7CF-4556869A802A}|Actividades{4DF9D534-4687-48EE-B7CF-4556869A802A}|solutionrelative:Modulos\\Actividades\\ABM.sql||{B5A506EB-11BE-4782-9A18-21265C2CA0B4}"
+      "AbsoluteMoniker": "D:0:0:{22D3ED59-CF35-416C-BE02-EAB23912772A}|Reportes{22D3ED59-CF35-416C-BE02-EAB23912772A}|C:\\Users\\Usuario\\Documents\\GitHub\\BBDDA2026C1COM5600LinuxPreachersA\\SGPN\\Reportes.sql||{B5A506EB-11BE-4782-9A18-21265C2CA0B4}",
+      "RelativeMoniker": "D:0:0:{22D3ED59-CF35-416C-BE02-EAB23912772A}|Reportes{22D3ED59-CF35-416C-BE02-EAB23912772A}|solutionrelative:Reportes.sql||{B5A506EB-11BE-4782-9A18-21265C2CA0B4}"
     }
   ],
   "DocumentGroupContainers": [
@@ -18,7 +18,7 @@
       "DocumentGroups": [
         {
           "DockedWidth": 157,
-          "SelectedChildIndex": 3,
+          "SelectedChildIndex": 2,
           "Children": [
             {
               "$type": "Bookmark",
@@ -30,27 +30,27 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 1,
-              "Title": "ABM.sql - luis.LinuxPreachers (sa (53))",
-              "DocumentMoniker": "C:\\Users\\Usuario\\Documents\\GitHub\\BBDDA2026C1COM5600LinuxPreachersA\\SGPN\\Modulos\\Actividades\\ABM.sql",
-              "RelativeDocumentMoniker": "Modulos\\Actividades\\ABM.sql",
-              "ToolTip": "C:\\Users\\Usuario\\Documents\\GitHub\\BBDDA2026C1COM5600LinuxPreachersA\\SGPN\\Modulos\\Actividades\\ABM.sql - luis.LinuxPreachers (sa (53))",
-              "RelativeToolTip": "Modulos\\Actividades\\ABM.sql - luis.LinuxPreachers (sa (53))",
+              "DocumentIndex": 0,
+              "Title": "Importacion.sql - luis.LinuxPreachers (sa (68))",
+              "DocumentMoniker": "C:\\Users\\Usuario\\Documents\\GitHub\\BBDDA2026C1COM5600LinuxPreachersA\\SGPN\\Modulos\\Concesiones\\Importacion.sql",
+              "RelativeDocumentMoniker": "Modulos\\Concesiones\\Importacion.sql",
+              "ToolTip": "C:\\Users\\Usuario\\Documents\\GitHub\\BBDDA2026C1COM5600LinuxPreachersA\\SGPN\\Modulos\\Concesiones\\Importacion.sql - luis.LinuxPreachers (sa (68))",
+              "RelativeToolTip": "Modulos\\Concesiones\\Importacion.sql - luis.LinuxPreachers (sa (68))",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000826|",
-              "WhenOpened": "2026-06-21T21:09:49.031Z",
-              "EditorCaption": " - luis.LinuxPreachers (sa (53))"
+              "WhenOpened": "2026-06-22T01:49:19.661Z",
+              "EditorCaption": " - luis.LinuxPreachers (sa (68))"
             },
             {
               "$type": "Document",
-              "DocumentIndex": 0,
-              "Title": "Generar_datos.sql - luis.LinuxPreachers (sa (85))",
-              "DocumentMoniker": "C:\\Users\\Usuario\\Documents\\GitHub\\BBDDA2026C1COM5600LinuxPreachersA\\SGPN\\Modulos\\Actividades\\Generar_datos.sql",
-              "RelativeDocumentMoniker": "Modulos\\Actividades\\Generar_datos.sql",
-              "ToolTip": "C:\\Users\\Usuario\\Documents\\GitHub\\BBDDA2026C1COM5600LinuxPreachersA\\SGPN\\Modulos\\Actividades\\Generar_datos.sql - luis.LinuxPreachers (sa (85))",
-              "RelativeToolTip": "Modulos\\Actividades\\Generar_datos.sql - luis.LinuxPreachers (sa (85))",
+              "DocumentIndex": 1,
+              "Title": "Reportes.sql - luis.LinuxPreachers (sa (77))",
+              "DocumentMoniker": "C:\\Users\\Usuario\\Documents\\GitHub\\BBDDA2026C1COM5600LinuxPreachersA\\SGPN\\Reportes.sql",
+              "RelativeDocumentMoniker": "Reportes.sql",
+              "ToolTip": "C:\\Users\\Usuario\\Documents\\GitHub\\BBDDA2026C1COM5600LinuxPreachersA\\SGPN\\Reportes.sql - luis.LinuxPreachers (sa (77))",
+              "RelativeToolTip": "Reportes.sql - luis.LinuxPreachers (sa (77))",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000826|",
-              "WhenOpened": "2026-06-21T21:07:37.288Z",
-              "EditorCaption": " - luis.LinuxPreachers (sa (85))"
+              "WhenOpened": "2026-06-22T01:47:02.002Z",
+              "EditorCaption": " - luis.LinuxPreachers (sa (77))"
             }
           ]
         }
