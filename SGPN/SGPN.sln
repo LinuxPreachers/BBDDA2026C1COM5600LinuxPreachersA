@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # SQL Server Management Studio Version 22
-VisualStudioVersion = 18.7.11903.348 stable
+VisualStudioVersion = 18.7.11903.348
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{4F2E2C19-372F-40D8-9FA7-9D2138C6997A}") = "SGPN", "SGPN.ssmssqlproj", "{CE4A56E1-1995-9F01-1989-9941B5F28028}"
 EndProject
@@ -28,6 +28,7 @@ EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Actividades", "Actividades", "{4DF9D534-4687-48EE-B7CF-4556869A802A}"
 	ProjectSection(SolutionItems) = preProject
 		Modulos\Actividades\ABM.sql = Modulos\Actividades\ABM.sql
+		Modulos\Actividades\Generar_datos.sql = Modulos\Actividades\Generar_datos.sql
 		Modulos\Actividades\Tablas.sql = Modulos\Actividades\Tablas.sql
 		Modulos\Actividades\Testing.sql = Modulos\Actividades\Testing.sql
 	EndProjectSection
@@ -67,13 +68,20 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Reportes", "Reportes", "{22
 		Reportes.sql = Reportes.sql
 	EndProjectSection
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Roles", "Roles", "{13A1CE25-0BC2-4855-AF18-3B71A221BE69}"
+	ProjectSection(SolutionItems) = preProject
+		Modulos\Roles\ABM.sql = Modulos\Roles\ABM.sql
+		Modulos\Roles\CreacionRoles.sql = Modulos\Roles\CreacionRoles.sql
+		Modulos\Roles\Tablas.sql = Modulos\Roles\Tablas.sql
+	EndProjectSection
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Default|Default = Default|Default
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
 		{CE4A56E1-1995-9F01-1989-9941B5F28028}.Default|Default.ActiveCfg = Default
-		{4EFE47A8-F488-4727-BCC0-4085E1678D28}.Default|Default.ActiveCfg = Default
+		{40308F97-1424-4FE4-A48C-71D0E4FCDA43}.Default|Default.ActiveCfg = Default
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
