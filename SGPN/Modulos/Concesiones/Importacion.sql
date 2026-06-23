@@ -58,7 +58,7 @@ BEGIN
         WITH (
             FIELDTERMINATOR = '','',
             ROWTERMINATOR = ''0x0a'', 
-            CODEPAGE = ''ACP'',
+            CODEPAGE = ''65001'',
             FIRSTROW = 2
         );';
 

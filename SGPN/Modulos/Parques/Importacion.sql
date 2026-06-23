@@ -264,7 +264,7 @@ GO
 /* EJECUCION
 
 -- Completar con la ruta a utilizar al ejecutar.
-EXEC parques.sp_importar_parques @ruta = ''
+EXEC parques.sp_importar_parques @ruta = '\\DESKTOP-KOIKGVK\Users\Carpeta publica\ArchivosImportacion\Áreas protegidas de Argentina - Sistema de Información de Biodiversidad.xlsx'
 GO
 
 SELECT * FROM parques.Parque ORDER BY nombre

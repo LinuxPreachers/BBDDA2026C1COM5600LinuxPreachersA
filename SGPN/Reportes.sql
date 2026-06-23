@@ -142,7 +142,7 @@ BEGIN
 
         SELECT
             a.id_parque AS parque_id,
-            pa.fecha AS fecha,
+            pa.fecha_realizacion AS fecha,
             0 AS cantidad_entradas,
             CAST(0 AS DECIMAL(20,4)) AS ingresos_entradas,
             1 AS cantidad_tours,
