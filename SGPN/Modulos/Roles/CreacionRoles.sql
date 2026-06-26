@@ -139,8 +139,8 @@ EXEC roles.sp_crear_modulo_roles;
 
 -- Le asignamos permiso para ejecutar los sps del schema pagos
 GRANT EXECUTE ON SCHEMA::pagos TO admin_pagos
--- GRANT EXECUTE ON OBJECT::reservas.vw_leer_reservas TO admin_pagos --- FALTA CREARLO
--- Le denegamos el permiso a ejecutar los sps de creacion y eliminacion del modulo
+GRANT SELECT ON OBJECT::reservas.vw_leer_reservas TO admin_pagos 
+--Le denegamos el permiso a ejecutar los sps de creacion y eliminacion del modulo
 DENY EXECUTE ON OBJECT::pagos.sp_crear_tablas_modulo_pagos TO admin_pagos
 DENY EXECUTE ON OBJECT::pagos.sp_crear_modulo_pagos TO admin_pagos
 DENY EXECUTE ON OBJECT::pagos.sp_eliminar_modulo_pagos TO admin_pagos
@@ -151,10 +151,10 @@ DENY EXECUTE ON OBJECT::pagos.sp_eliminar_modulo_pagos TO admin_pagos
 
 -- Le asignamos permiso para ejecutar los sps del schema actividades
 GRANT EXECUTE ON SCHEMA::actividades TO admin_actividades
--- GRANT EXECUTE ON OBJECT::reservas.vw_leer_participaciones TO admin_actividades
--- GRANT EXECUTE ON OBJECT::parques.vw_leer_parques TO admin_actividades
--- GRANT EXECUTE ON OBJECT::empleados.vw_leer_guia_en_actividad TO admin_actividades
--- GRANT EXECUTE ON OBJECT::empleados.vw_leer_guia_posee_habilitacion TO admin_actividades
+GRANT SELECT ON OBJECT::reservas.vw_leer_participaciones TO admin_actividades
+GRANT SELECT ON OBJECT::parques.vw_leer_parques TO admin_actividades
+GRANT SELECT ON OBJECT::empleados.vw_leer_guia_en_actividad TO admin_actividades
+GRANT SELECT ON OBJECT::empleados.vw_leer_guia_posee_habilitacion TO admin_actividades
 
 -- Le denegamos el permiso a ejecutar los sps de creacion y eliminacion del modulo
 DENY EXECUTE ON OBJECT::actividades.sp_crear_tablas_modulo_actividades TO admin_actividades
@@ -168,10 +168,10 @@ DENY EXECUTE ON OBJECT::actividades.sp_eliminar_modulo_actividades TO admin_acti
 
 --Le asignamos permiso para ejecutar los sps del schema parques
 GRANT EXECUTE ON SCHEMA::parques TO admin_parques
--- GRANT EXECUTE ON OBJECT::reservas.vw_leer_entradas TO admin_parques
--- GRANT EXECUTE ON OBJECT::reservas.vw_leer_concesiones TO admin_parques
--- GRANT EXECUTE ON OBJECT::reservas.vw_leer_guardaparques_asignados_a_parque TO admin_parques
--- GRANT EXECUTE ON OBJECT::reservas.vw_leer_actividades TO admin_parques
+GRANT SELECT ON OBJECT::reservas.vw_leer_concesiones TO admin_parques
+GRANT SELECT ON OBJECT::reservas.vw_leer_guardaparques_asignados_a_parque TO admin_parques
+GRANT SELECT ON OBJECT::reservas.vw_leer_entradas TO admin_parques
+GRANT SELECT ON OBJECT::reservas.vw_leer_actividades TO admin_parques
 
 -- Le denegamos el permiso para ejecutar los sps de creacion y eliminacion del modulo
 DENY EXECUTE ON OBJECT::parques.sp_crear_tablas_modulo_parques TO admin_parques
@@ -181,9 +181,9 @@ DENY EXECUTE ON OBJECT::parques.sp_eliminar_modulo_parques TO admin_parques
 -------------------------------------------------- PARA ROL DE Administrador de Empleados--------------------------------------------------
 -- Permisos sobre esquema empleados (puede ver, insertar, eliminar y modificar registros de la tabla mediante procedimientos almacenados pero sin alterar la tabla)
 GRANT EXECUTE ON SCHEMA::empleados TO admin_empleados
--- GRANT EXECUTE ON OBJECT::parques.vw_leer_parques TO admin_empleados
--- GRANT EXECUTE ON OBJECT::actividades.vw_leer_actividades TO admin_empleados
--- GRANT EXECUTE ON OBJECT::actividades.vw_leer_habilitaciones TO admin_empleados
+GRANT SELECT ON OBJECT::parques.vw_leer_parques TO admin_empleados
+GRANT SELECT ON OBJECT::actividades.vw_leer_actividades TO admin_empleados
+GRANT SELECT ON OBJECT::actividades.vw_leer_habilitaciones TO admin_empleados
 
 -- Le denegamos el permiso para ejecutar los sps de creacion y eliminacion del modulo
 DENY EXECUTE ON OBJECT::empleados.sp_crear_tablas_modulo_empleados TO admin_empleados
@@ -196,8 +196,8 @@ DENY EXECUTE ON OBJECT::empleados.sp_eliminar_modulo_empleados TO admin_empleado
 
 
 GRANT EXECUTE ON SCHEMA::concesiones TO admin_concesiones
--- GRANT EXECUTE ON OBJECT::parques.vw_leer_parques TO admin_concesiones
--- GRANT EXECUTE ON OBJECT::pagos.vw_leer_forma_pagos TO admin_concesiones
+GRANT SELECT ON OBJECT::parques.vw_leer_parques TO admin_concesiones
+GRANT SELECT ON OBJECT::pagos.vw_leer_forma_pagos TO admin_concesiones
 
 -- Le denegamos el permiso para ejecutar los sps de creacion y eliminacion del modulo
 DENY EXECUTE ON OBJECT::concesiones.sp_crear_tablas_modulo_concesiones TO admin_concesiones
@@ -210,9 +210,9 @@ DENY EXECUTE ON OBJECT::concesiones.sp_eliminar_modulo_concesiones TO admin_conc
 
 GRANT EXECUTE ON SCHEMA::reservas TO admin_reservas
 GRANT EXECUTE ON OBJECT::pagos.sp_crear_pago TO admin_reservas
--- GRANT EXECUTE ON OBJECT::pagos.vw_leer_pagos TO admin_reservas
--- GRANT EXECUTE ON OBJECT::actividades.vw_leer_horarios TO admin_reservas
--- GRANT EXECUTE ON OBJECT::parques.vw_leer_parques TO admin_reservas
+GRANT SELECT ON OBJECT::pagos.vw_leer_pagos TO admin_reservas
+GRANT SELECT ON OBJECT::actividades.vw_leer_horarios TO admin_reservas
+GRANT SELECT ON OBJECT::parques.vw_leer_parques TO admin_reservas
 
 -- Le denegamos el permiso para ejecutar los sps de creacion y eliminacion del modulo
 DENY EXECUTE ON OBJECT::reservas.sp_crear_tablas_modulo_reservas TO admin_reservas
@@ -223,11 +223,11 @@ DENY EXECUTE ON OBJECT::reservas.sp_eliminar_modulo_reservas TO admin_reservas
 -------------------------------------------------- PARA ROL DE Recursos Humanos (RRHH)--------------------------------------------------
 -- Permisos sobre sps de consultas sobre empleados (puede unicamente ver informacion del esquema empleados)
 
--- GRANT EXECUTE ON OBJECT::empleados.vw_leer_guia TO rrhh
--- GRANT EXECUTE ON OBJECT::empleados.vw_leer_guia_em_actividad TO rrhh
--- GRANT EXECUTE ON OBJECT::empleados.vw_leer_guia_posee_habilitacion TO rrhh
--- GRANT EXECUTE ON OBJECT::empleados.vw_leer_guardaparque TO rrhh
--- GRANT EXECUTE ON OBJECT::empleados.vw_leer_guardaparque_asignado_parque TO rrhh
+GRANT SELECT ON OBJECT::empleados.vw_leer_guia TO rrhh
+GRANT SELECT ON OBJECT::empleados.vw_leer_guia_em_actividad TO rrhh
+GRANT SELECT ON OBJECT::empleados.vw_leer_guia_posee_habilitacion TO rrhh
+GRANT SELECT ON OBJECT::empleados.vw_leer_guardaparque TO rrhh
+GRANT SELECT ON OBJECT::empleados.vw_leer_guardaparque_asignado_parque TO rrhh
 
 
 -------------------------------------------------- PARA ROL DE Usuario Web--------------------------------------------------
@@ -237,23 +237,56 @@ DENY EXECUTE ON OBJECT::reservas.sp_eliminar_modulo_reservas TO admin_reservas
 -------------------------------------------------- PARA ROL DE Auditor de Concesones--------------------------------------------------
 -- Permisos para consultar la informacion del modulo concesiones
 
---GRANT EXECUTE ON OBJECT::concesiones.vw_leer_concesiones TO auditor_concesion
---GRANT EXECUTE ON OBJECT::concesiones.vw_leer_empresa_concesionaria TO auditor_concesion
---GRANT EXECUTE ON OBJECT::concesiones.vw_leer_actividad_empresarial TO auditor_concesion
---GRANT EXECUTE ON OBJECT::concesiones.vw_leer_canon TO auditor_concesion
+GRANT SELECT ON OBJECT::concesiones.vw_leer_concesiones TO auditor_concesion
+GRANT SELECT ON OBJECT::concesiones.vw_leer_empresa_concesionaria TO auditor_concesion
+GRANT SELECT ON OBJECT::concesiones.vw_leer_actividad_empresarial TO auditor_concesion
+GRANT SELECT ON OBJECT::concesiones.vw_leer_canon TO auditor_concesion
 
 -------------------------------------------------- PARA ROL DE Auditor de Finanzas--------------------------------------------------
 -- Permisos para consultar la informacion del modulo reservas y del modulo pagos
 
---GRANT EXECUTE ON OBJECT::reservas.vw_leer_reservas TO auditor_finanzas
---GRANT EXECUTE ON OBJECT::reservas.vw_leer_reembolsos TO auditor_finanzas
---GRANT EXECUTE ON OBJECT::reservas.vw_leer_motivo_cancelacion TO auditor_finanzas
---GRANT EXECUTE ON OBJECT::pagos.vw_leer_pagos TO auditor_finanzas
---GRANT EXECUTE ON OBJECT::pagos_vw_leer_tickets_factura TO auditor_finanzas
+GRANT SELECT ON OBJECT::reservas.vw_leer_reservas TO auditor_finanzas
+GRANT SELECT ON OBJECT::reservas.vw_leer_reembolsos TO auditor_finanzas
+GRANT SELECT ON OBJECT::reservas.vw_leer_motivo_cancelacion TO auditor_finanzas
+GRANT SELECT ON OBJECT::pagos.vw_leer_pagos TO auditor_finanzas
+GRANT SELECT ON OBJECT::pagos_vw_leer_tickets_factura TO auditor_finanzas
 
 
 -------------------------------------------------- PARA ROL DE Director General--------------------------------------------------
--- FALTARIA DEFINIR LAS VISTAS DE LECTURAS Y COMO MANEJAREMOS ESTE ROL
+
+-- Módulo Pagos
+GRANT SELECT ON OBJECT::pagos.vw_leer_forma_pagos TO director_gral;
+GRANT SELECT ON OBJECT::pagos.vw_leer_pagos TO director_gral;
+GRANT SELECT ON OBJECT::pagos.vw_leer_tickets_factura TO director_gral;
+
+-- Módulo Reservas
+GRANT SELECT ON OBJECT::reservas.vw_leer_reservas TO director_gral;
+GRANT SELECT ON OBJECT::reservas.vw_leer_participaciones TO director_gral;
+GRANT SELECT ON OBJECT::reservas.vw_leer_entradas TO director_gral;
+GRANT SELECT ON OBJECT::reservas.vw_leer_motivo_cancelacion TO director_gral;
+GRANT SELECT ON OBJECT::reservas.vw_leer_reembolsos TO director_gral;
+
+-- Módulo Empleados
+GRANT SELECT ON OBJECT::empleados.vw_leer_guia TO director_gral;
+GRANT SELECT ON OBJECT::empleados.vw_leer_guia_en_actividad TO director_gral;
+GRANT SELECT ON OBJECT::empleados.vw_leer_guia_posee_habilitacion TO director_gral;
+GRANT SELECT ON OBJECT::empleados.vw_leer_guardaparque TO director_gral;
+GRANT SELECT ON OBJECT::empleados.vw_leer_guardaparque_asignado_parque TO director_gral;
+
+-- Módulo Parques
+GRANT SELECT ON OBJECT::parques.vw_leer_parques TO director_gral;
+
+-- Módulo Actividades
+GRANT SELECT ON OBJECT::actividades.vw_leer_actividades TO director_gral;
+GRANT SELECT ON OBJECT::actividades.vw_leer_habilitaciones TO director_gral;
+GRANT SELECT ON OBJECT::actividades.vw_leer_horarios TO director_gral;
+
+-- Módulo Concesiones
+GRANT SELECT ON OBJECT::concesiones.vw_leer_actividad_empresarial TO director_gral;
+GRANT SELECT ON OBJECT::concesiones.vw_leer_empresa_concesionaria TO director_gral;
+GRANT SELECT ON OBJECT::concesiones.vw_leer_concesiones TO director_gral;
+GRANT SELECT ON OBJECT::concesiones.vw_leer_canon TO director_gral;
+GO
 
 
 -------------------------------------------------- PARA ROL DE Importacion de Datos--------------------------------------------------

@@ -98,6 +98,15 @@ GO
 -- 2. ABM: Habilitacion
 -- ---------------------------------------------
 
+--Lectura Habilitacion
+CREATE OR ALTER VIEW actividades.vw_leer_habilitaciones AS
+SELECT 
+    id,
+    nombre,
+    descripcion
+FROM actividades.Habilitacion;
+GO
+
 -- Alta
 CREATE OR ALTER PROCEDURE actividades.sp_crear_habilitacion
     @nombre VARCHAR(100),
@@ -183,6 +192,23 @@ GO
 -- ---------------------------------------------
 -- 3. ABM: Actividad
 -- ---------------------------------------------
+
+--Lectura 
+
+CREATE OR ALTER VIEW actividades.vw_leer_actividades AS
+SELECT 
+    a.id,
+    a.nombre,
+    a.descripcion,
+    a.cupo_maximo,
+    a.duracion_minutos,
+    a.precio,
+    a.id_parque,
+    a.id_tipo_actividad,
+    ta.nombre AS tipo_actividad
+FROM actividades.Actividad a
+INNER JOIN actividades.TipoActividad ta ON a.id_tipo_actividad = ta.id;
+GO
 
 -- Alta
 
@@ -341,6 +367,23 @@ GO
 -- ---------------------------------------------
 -- 4. ABM: Horario
 -- ---------------------------------------------
+
+
+--Lectura Horario
+CREATE OR ALTER VIEW actividades.vw_leer_horarios AS
+SELECT 
+    h.id,
+    h.hora_inicio,
+    h.hora_fin,
+    h.dia_semana,
+    h.fecha_vigencia_ini,
+    h.fecha_vigencia_fin,
+    h.visible,
+    h.id_actividad,
+    a.nombre AS actividad
+FROM actividades.Horario h
+INNER JOIN actividades.Actividad a ON h.id_actividad = a.id;
+GO
 
 -- Alta
 CREATE OR ALTER PROCEDURE actividades.sp_crear_horario

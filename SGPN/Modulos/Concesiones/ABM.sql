@@ -15,6 +15,20 @@ GO
 -- 1. ABM: EMPRESA CONCESIONARIA
 -- ---------------------------------------------
 
+--Lectura Empresa Concesionaria
+CREATE OR ALTER VIEW concesiones.vw_leer_empresa_concesionaria AS
+SELECT 
+    e.id,
+    e.nombre,
+    e.descripcion,
+    e.cuit,
+    e.razon_social,
+    e.id_actividad_empresarial,
+    a.nombre AS actividad_empresarial
+FROM concesiones.EmpresaConcesionaria e
+INNER JOIN concesiones.ActividadEmpresarial a ON e.id_actividad_empresarial = a.id;
+GO
+
 -- Alta
 CREATE OR ALTER PROCEDURE concesiones.sp_crear_empresa_concesionaria
 
@@ -104,6 +118,16 @@ GO
 -- 2. ABM: ACTIVIDAD EMPRESARIAL
 -- ---------------------------------------------
 
+--Lectura Actividad Empresarial
+
+CREATE OR ALTER VIEW concesiones.vw_leer_actividad_empresarial AS
+SELECT 
+    id,
+    nombre,
+    descripcion
+FROM concesiones.ActividadEmpresarial;
+GO
+
 -- Alta
 CREATE OR ALTER PROCEDURE concesiones.sp_crear_actividad_empresarial
     @nombre VARCHAR(100),
@@ -183,6 +207,21 @@ GO
 -- 3.  CONCESION
 -- ---------------------------------------------
 
+
+--Lectura concesiones
+CREATE OR ALTER VIEW concesiones.vw_leer_concesiones AS
+SELECT 
+    c.id,
+    c.fecha_inicio,
+    c.fecha_fin,
+    c.id_empresa_concesionaria,
+    e.nombre AS empresa_concesionaria,
+    c.id_parque, 
+    c.descripcion
+FROM concesiones.Concesion c
+INNER JOIN concesiones.EmpresaConcesionaria e ON c.id_empresa_concesionaria = e.id;
+GO
+
 -- Alta
 
 CREATE OR ALTER PROCEDURE concesiones.sp_crear_concesion
@@ -261,6 +300,19 @@ GO
 -- ---------------------------------------------
 -- 4.  CANON
 -- ---------------------------------------------
+
+--Lectura Canon
+CREATE OR ALTER VIEW concesiones.vw_leer_canon AS
+SELECT 
+    ca.id,
+    ca.periodo,
+    ca.monto,
+    ca.fecha_pago,
+    ca.fecha_lim_pago,
+    ca.id_concesion,
+    ca.id_forma_pago
+FROM concesiones.Canon ca;
+GO
 
 -- Alta
 

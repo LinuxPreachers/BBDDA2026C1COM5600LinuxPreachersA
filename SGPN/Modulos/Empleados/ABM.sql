@@ -332,6 +332,27 @@ GO
 -- 5. ABM: Guia
 -- ---------------------------------------------
 
+-- Lectura Guia
+CREATE OR ALTER VIEW empleados.vw_leer_guia AS
+SELECT 
+    e.id AS id_empleado,
+    e.nombre,
+    e.apellido,
+    td.nombre AS tipo_documento,
+    e.nro_doc,
+    g.nro_registro,
+    esp.nombre AS especialidad,
+    t.nombre AS titulo,
+    t.institucion,
+    e.activo
+FROM empleados.Guia g
+INNER JOIN empleados.Empleado e ON g.id_empleado = e.id
+INNER JOIN empleados.TipoDocumento td ON e.id_tipo_documento = td.id
+INNER JOIN empleados.Especialidad esp ON g.id_especialidad = esp.id
+LEFT JOIN empleados.Titulo t ON g.id_titulo = t.id; -- LEFT JOIN porque el título acepta NULL
+GO
+
+
 -- Alta
 CREATE OR ALTER PROCEDURE empleados.sp_crear_guia
     @nro_registro VARCHAR(30),
@@ -440,6 +461,22 @@ GO
 -- 6. ABM: Guardaparque
 -- ---------------------------------------------
 
+-- Lectura Guardaparque
+
+CREATE OR ALTER VIEW empleados.vw_leer_guardaparque AS
+SELECT 
+    e.id AS id_empleado,
+    e.nombre,
+    e.apellido,
+    td.nombre AS tipo_documento,
+    e.nro_doc,
+    gp.nro_matricula,
+    e.activo
+FROM empleados.Guardaparque gp
+INNER JOIN empleados.Empleado e ON gp.id_empleado = e.id
+INNER JOIN empleados.TipoDocumento td ON e.id_tipo_documento = td.id;
+GO
+
 -- Alta
 CREATE OR ALTER PROCEDURE empleados.sp_crear_guardaparque
     @nro_matricula INT,
@@ -526,6 +563,24 @@ GO
 -- ---------------------------------------------
 -- 6. ABM: GuardaparqueAsignado
 -- ---------------------------------------------
+
+--Lectura Guardaparque asignado
+
+CREATE OR ALTER VIEW empleados.vw_leer_guardaparque_asignado_parque AS
+SELECT 
+    gpa.id,
+    gpa.id_empleado,
+    e.nombre,
+    e.apellido,
+    gp.nro_matricula,
+    gpa.id_parque, -- Queda el ID hasta tener el módulo Parques
+    gpa.fecha_ingreso,
+    gpa.fecha_egreso,
+    gpa.motivo_egreso
+FROM empleados.GuardaparqueAsignado gpa
+INNER JOIN empleados.Guardaparque gp ON gpa.id_empleado = gp.id_empleado
+INNER JOIN empleados.Empleado e ON gp.id_empleado = e.id;
+GO
 
 CREATE OR ALTER PROCEDURE empleados.sp_asignar_guardaparque
     @id_empleado INT,
@@ -622,6 +677,22 @@ GO
 -- 8. GuiaPoseeHabilitacion
 -- -----------------------------------------------------------
 
+-- Lectura Guia posee Habilitacion
+CREATE OR ALTER VIEW empleados.vw_leer_guia_posee_habilitacion AS
+SELECT 
+    gph.id,
+    gph.id_empleado,
+    e.nombre,
+    e.apellido,
+    g.nro_registro,
+    gph.id_habilitacion, -- Queda el ID hasta tener el módulo Actividades
+    gph.fecha_inicio,
+    gph.fecha_fin
+FROM empleados.GuiaPoseeHabilitacion gph
+INNER JOIN empleados.Guia g ON gph.id_empleado = g.id_empleado
+INNER JOIN empleados.Empleado e ON g.id_empleado = e.id;
+GO
+
 -- Alta 
 CREATE OR ALTER PROCEDURE empleados.sp_asignar_habilitacion_guia
     @id_empleado INT,
@@ -712,6 +783,22 @@ GO
 -- -----------------------------------------------------------
 -- 3.  GuiaEstaEnActividad 
 -- -----------------------------------------------------------
+
+-- Lectura Guia esta en actividad
+CREATE OR ALTER VIEW empleados.vw_leer_guia_en_actividad AS
+SELECT 
+    gea.id,
+    gea.id_empleado,
+    e.nombre,
+    e.apellido,
+    g.nro_registro,
+    gea.id_actividad, -- Queda el ID hasta tener el módulo Actividades
+    gea.fecha_inicio,
+    gea.fecha_fin
+FROM empleados.GuiaEstaEnActividad gea
+INNER JOIN empleados.Guia g ON gea.id_empleado = g.id_empleado
+INNER JOIN empleados.Empleado e ON g.id_empleado = e.id;
+GO
 
 -- Alta (Asignar Guía a Actividad)
 CREATE OR ALTER PROCEDURE empleados.sp_asignar_actividad_guia
