@@ -8,9 +8,10 @@
  * Script: ABM para los roles (Alta, Baja y Modificacion)
 */
 
+USE LinuxPreachers;
+GO
 
 -- CREACION DE ROL
-
 CREATE OR ALTER PROCEDURE roles.sp_crear_rol
 	@nombre VARCHAR(50),
 	@descripcion VARCHAR(200) NULL
@@ -33,9 +34,9 @@ BEGIN
 		THROW;
 	END CATCH
 END
+GO
 
 -- MODIFICACION DE ROL
-
 CREATE OR ALTER PROCEDURE roles.sp_modificar_rol
 	@id INT,
 	@nombre VARCHAR(50),
@@ -59,8 +60,9 @@ BEGIN
 		THROW;
 	END CATCH
 END
+GO
 
-
+-- ELIMINACION DE ROL
 CREATE OR ALTER PROCEDURE roles.sp_eliminar_rol
 	@id INT
 AS 
@@ -75,3 +77,4 @@ BEGIN
 		THROW;
 	END CATCH
 END
+GO

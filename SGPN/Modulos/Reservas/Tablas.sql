@@ -215,8 +215,7 @@ BEGIN
 
     IF EXISTS (SELECT 1 FROM @tablas_existentes)
     BEGIN;
-        THROW 50300, 'No se puede crear el modulo: ya existe al menos una tabla del modulo reservas en el esquema reservas.', 1
-        RETURN;
+        THROW 50300, 'No se puede crear el modulo: ya existe al menos una tabla del modulo reservas en el esquema reservas.', 1;
     END;
 
     EXEC reservas.sp_crear_tablas_modulo_reservas;

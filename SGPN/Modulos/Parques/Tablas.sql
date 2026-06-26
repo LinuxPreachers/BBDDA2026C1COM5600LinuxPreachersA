@@ -169,9 +169,8 @@ BEGIN
     );
 
     IF EXISTS (SELECT 1 FROM @tablas_existentes)
-    BEGIN
-        --THROW 50001, 'No se puede crear el modulo: ya existe al menos una tabla del modulo en el esquema parques.', 1;
-        RAISERROR('No se puede crear el modulo: ya existe al menos una tabla del modulo en el esquema parques.',16,1);
+    BEGIN;
+        THROW 50000,'No se puede crear el modulo: ya existe al menos una tabla del modulo en el esquema parques.', 1;
     END;
 
     EXEC parques.crear_tablas_modulo_parques;

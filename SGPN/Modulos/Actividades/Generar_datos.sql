@@ -11,7 +11,7 @@ USE LinuxPreachers;
 GO
 
 -----------------------------------
--- 1. TipoActivida
+-- 1. TipoActividad
 -----------------------------------
 BEGIN TRANSACTION;
 BEGIN TRY

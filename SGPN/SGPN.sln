@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# SQL Server Management Studio Version 22
-VisualStudioVersion = 18.7.11903.348
+# SQL Server Management Studio Version 21
+VisualStudioVersion = 17.14.36212.18 d17.14
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{4F2E2C19-372F-40D8-9FA7-9D2138C6997A}") = "SGPN", "SGPN.ssmssqlproj", "{CE4A56E1-1995-9F01-1989-9941B5F28028}"
 EndProject
@@ -82,7 +82,7 @@ Global
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
 		{CE4A56E1-1995-9F01-1989-9941B5F28028}.Default|Default.ActiveCfg = Default
-		{B545151D-035E-4B49-9F7E-6448BD2DB4FC}.Default|Default.ActiveCfg = Default
+		{9CD41D44-2777-4CFB-B434-75288637F35D}.Default|Default.ActiveCfg = Default
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -94,6 +94,7 @@ Global
 		{AF293F3A-72EA-43CC-9594-4C385FA1A6E6} = {02EA681E-C7D8-13C7-8484-4AC65E1B71E8}
 		{65E62FC6-315D-4B10-A896-1BA2E07CFDEE} = {02EA681E-C7D8-13C7-8484-4AC65E1B71E8}
 		{1CAE7C1D-5E06-4080-8C03-3CCEEEAD61D2} = {02EA681E-C7D8-13C7-8484-4AC65E1B71E8}
+		{13A1CE25-0BC2-4855-AF18-3B71A221BE69} = {02EA681E-C7D8-13C7-8484-4AC65E1B71E8}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {E619910C-FC77-40FF-AB49-EE7E89591B2D}

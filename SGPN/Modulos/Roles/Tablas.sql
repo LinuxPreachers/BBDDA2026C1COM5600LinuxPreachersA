@@ -8,7 +8,8 @@
  * Script: Creación de SP para crear el schema y la tabla donde se almacenaran los diferentes roles
 */
 
-
+USE LinuxPreachers;
+GO
 
 -- Validamos si el esquema 'roles' NO existe
 IF SCHEMA_ID('roles') IS NULL
@@ -22,7 +23,6 @@ BEGIN
     PRINT 'El schema "roles" ya existía, se omitió la creación.';
 END
 GO
-
 
 CREATE OR ALTER PROCEDURE roles.sp_crear_tabla_rol
 AS
@@ -41,14 +41,15 @@ BEGIN
         THROW;
     END CATCH 
 END 
+GO
 
 CREATE OR ALTER PROCEDURE roles.sp_eliminar_tabla_rol
 AS
 BEGIN 
-        DROP TABLE  IF EXISTS roles.Rol; 
+    DROP TABLE  IF EXISTS roles.Rol; 
 END
+GO
 
+EXEC roles.sp_crear_tabla_rol;
 
-EXEC roles.sp_crear_tabla_rol
-
-EXEC roles.sp_eliminar_tabla_rol
+--EXEC roles.sp_eliminar_tabla_rol

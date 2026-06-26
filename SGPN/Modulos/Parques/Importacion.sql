@@ -29,6 +29,10 @@ EXEC master.dbo.sp_MSset_oledb_prop
     N'AllowInProcess',
     1;
 
+EXEC master.dbo.sp_MSset_oledb_prop
+    N'Microsoft.ACE.OLEDB.16.0',
+    N'DynamicParameters',
+    1;
 
 USE LinuxPreachers;
 GO

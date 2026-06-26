@@ -10,10 +10,7 @@
 USE LinuxPreachers;
 GO
 
-
-
--- 2. SP para la importacion
-
+-- SP para la importacion
 CREATE OR ALTER PROCEDURE concesiones.sp_importar_directorio_empresas
     @ruta VARCHAR(500),
     @id_parque INT
@@ -227,5 +224,7 @@ BEGIN
 END;
 GO
 
-
-
+-- Descomentar al ejecutar.
+--EXEC concesiones.sp_importar_directorio_empresas
+--    @ruta = '\\DESKTOP-KOIKGVK\Users\Carpeta publica\ArchivosImportacion\registro-organizaciones-distinguidas-sact.csv',
+--    @id_parque = 1;

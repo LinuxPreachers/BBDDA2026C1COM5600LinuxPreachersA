@@ -8,44 +8,130 @@
  * Script: Creación de Roles definidos en la documentacion
 */
 
+USE LinuxPreachers;
+GO
 
+-- Schema
+IF NOT EXISTS (SELECT 1 FROM sys.schemas WHERE name = 'roles')
+BEGIN 
+    EXEC('CREATE SCHEMA roles'); 
+END;
+GO
 
-CREATE ROLE admin_pagos
-CREATE ROLE admin_actividades
-CREATE ROLE admin_parques
-CREATE ROLE admin_empleados
-CREATE ROLE rrhh
-CREATE ROLE admin_concesiones
-CREATE ROLE admin_reservas
-CREATE ROLE user_web 
-CREATE ROLE auditor_concesion
-CREATE ROLE auditor_finanzas
-CREATE ROLE director_gral
-CREATE ROLE importador_datos
+-- Este SP Asume que no existe ningún rol
+CREATE OR ALTER PROCEDURE roles.sp_crear_roles AS
+BEGIN
+    SET NOCOUNT ON;
 
+    BEGIN TRY
+        CREATE ROLE admin_pagos;
+        CREATE ROLE admin_actividades;
+        CREATE ROLE admin_parques;
+        CREATE ROLE admin_empleados;
+        CREATE ROLE rrhh;
+        CREATE ROLE admin_concesiones;
+        CREATE ROLE admin_reservas;
+        CREATE ROLE user_web;
+        CREATE ROLE auditor_concesion;
+        CREATE ROLE auditor_finanzas;
+        CREATE ROLE director_gral;
+        CREATE ROLE importador_datos;
+    
+        EXEC roles.sp_crear_rol 
+            @nombre='admin_pagos', 
+            @descripcion='Encargado del ABM referido a Pagos';
 
+        EXEC roles.sp_crear_rol 
+            @nombre='admin_actividades', 
+            @descripcion=' Encargado del ABM referido a actividades';
 
---- INSERCION DE ROLES EN LA TABLA roles.Rol
-BEGIN TRY
-SET NOCOUNT ON;
-EXEC roles.sp_crear_rol @nombre='admin_pagos', @descripcion='Encargado del ABM referido a Pagos'
-EXEC roles.sp_crear_rol @nombre='admin_actividades', @descripcion=' Encargado del ABM referido a actividades'
-EXEC roles.sp_crear_rol @nombre='admin_parques', @descripcion='Encargado del ABM referido a parques'
-EXEC roles.sp_crear_rol @nombre='admin_empleados',@descripcion='Encargado del ABM referido a empleados'
-EXEC roles.sp_crear_rol @nombre='admin_concesiones',@descripcion='Encargado del ABM referido a concesiones'
-EXEC roles.sp_crear_rol @nombre='admin_reservas',@descripcion='Encargado del ABM referido a reservas (entradas,participaciones y pagos)'
-EXEC roles.sp_crear_rol @nombre='rrhh',@descripcion='Encargado de consultas referido a empleados'
-EXEC roles.sp_crear_rol @nombre='user_web',@descripcion='Utilizado para ABM de la tabla X' -- X siendo la tabla que elegimos para la entrega 9
-EXEC roles.sp_crear_rol @nombre='auditor_concesion',@descripcion='Utilizado para consultar las actividades del modulo concesiones'
-EXEC roles.sp_crear_rol @nombre='auditor_finanzas',@descripcion='Utilizado para consultar las actividades referida a pagos y reservas'
-EXEC roles.sp_crear_rol @nombre='director_gral',@descripcion='Utilizado para consultar todos los modulos de la base de datos'
-EXEC roles.sp_crear_rol @nombre='importador_datos',@descripcion='Utilizado para ejecutar sps de importacion'
-END TRY
-BEGIN CATCH
-	PRINT 'ERROR INESPERADO: ' + ERROR_MESSAGE();
-END CATCH
+        EXEC roles.sp_crear_rol 
+            @nombre='admin_parques', 
+            @descripcion='Encargado del ABM referido a parques';
 
-SELECT * FROM roles.Rol
+        EXEC roles.sp_crear_rol 
+            @nombre='admin_empleados',
+            @descripcion='Encargado del ABM referido a empleados';
+
+        EXEC roles.sp_crear_rol 
+            @nombre='admin_concesiones',
+            @descripcion='Encargado del ABM referido a concesiones';
+
+        EXEC roles.sp_crear_rol 
+            @nombre='admin_reservas',
+            @descripcion='Encargado del ABM referido a reservas (entradas,participaciones y pagos)';
+
+        EXEC roles.sp_crear_rol 
+            @nombre='rrhh',
+            @descripcion='Encargado de consultas referido a empleados';
+
+        EXEC roles.sp_crear_rol 
+            @nombre='user_web',
+            @descripcion='Utilizado para ABM de la tabla X'; -- X siendo la tabla que elegimos para la entrega 9
+
+        EXEC roles.sp_crear_rol 
+            @nombre='auditor_concesion',
+            @descripcion='Utilizado para consultar las actividades del modulo concesiones';
+
+        EXEC roles.sp_crear_rol 
+            @nombre='auditor_finanzas', 
+            @descripcion='Utilizado para consultar las actividades referida a pagos y reservas';
+
+        EXEC roles.sp_crear_rol 
+            @nombre='director_gral',
+            @descripcion='Utilizado para consultar todos los modulos de la base de datos';
+
+        EXEC roles.sp_crear_rol 
+            @nombre='importador_datos',
+            @descripcion='Utilizado para ejecutar sps de importacion';
+
+    END TRY
+    BEGIN CATCH
+	    PRINT 'ERROR INESPERADO: ' + ERROR_MESSAGE();
+    END CATCH;
+
+    SELECT * FROM roles.Rol;
+END;
+GO
+
+-- SP Wrapper con verificaciones
+CREATE OR ALTER PROCEDURE roles.sp_crear_modulo_roles AS
+BEGIN
+
+    DECLARE @roles_existentes TABLE (
+        nombre VARCHAR(128)
+    );
+
+    INSERT INTO @roles_existentes (nombre)
+    SELECT name
+    FROM sys.database_principals
+    WHERE type = 'R'
+        AND name IN (
+            'admin_pagos',
+            'admin_actividades',
+            'admin_parques',
+            'admin_empleados',
+            'rrhh',
+            'admin_concesiones',
+            'admin_reservas',
+            'user_web',
+            'auditor_concesion',
+            'auditor_finanzas',
+            'director_gral',
+            'importador_datos'
+    );
+
+    IF EXISTS (SELECT 1 FROM @roles_existentes)
+    BEGIN;
+        THROW 60000, 'No se puede crear el modulo: ya existe al menos un rol.', 1;
+    END;
+
+    EXEC roles.sp_crear_modulo_roles;
+END;
+GO
+
+EXEC roles.sp_crear_modulo_roles;
+
 
 
 -------------------------------------------------- PARA ROL DE Administrador de Pagos--------------------------------------------------

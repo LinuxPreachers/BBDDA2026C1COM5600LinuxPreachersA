@@ -247,11 +247,14 @@ BEGIN
 END;
 GO
 
--- Completar con la ruta a utilizar al ejecutar.
-EXEC empleados.sp_importar_guias @ruta = ''
-GO
+-- Descomentar al ejecutar.
+--EXEC empleados.sp_importar_guias 
+--    @ruta = '\\DESKTOP-KOIKGVK\Users\Carpeta publica\ArchivosImportacion\registro-de-guias-de-turismo.csv'
+--GO
 
+/*
 SELECT * FROM empleados.Empleado
 SELECT * FROM empleados.Guia
 SELECT * FROM empleados.ImportacionErrorLog
 GO
+*/
