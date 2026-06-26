@@ -438,25 +438,21 @@ GO
 -- Parque
 -----------------------------------------------
 
-CREATE OR ALTER PROCEDURE parques.sp_leer_parque
-    @id INT = NULL,
-    @id_tipo_parque INT = NULL
-AS
-BEGIN
-    
-    SELECT
-        id,
-        nombre,
-        superficie_km2,
-        latitud,
-        longitud,
-        id_tipo_parque
-    FROM parques.Parque
-    WHERE (@id IS NULL OR id = @id)
-        AND (@id_tipo_parque IS NULL OR id_tipo_parque = @id_tipo_parque)
-    ORDER BY id;
-END;
+
+--Lectura Parque
+CREATE OR ALTER VIEW parques.vw_leer_parques AS
+SELECT 
+    p.id,
+    p.nombre,
+    p.superficie_km2,
+    p.latitud,
+    p.longitud,
+    p.id_tipo_parque,
+    tp.descripcion AS tipo_parque
+FROM parques.Parque p
+INNER JOIN parques.TipoParque tp ON p.id_tipo_parque = tp.id;
 GO
+
 
 CREATE OR ALTER PROCEDURE parques.sp_crear_parque
     @nombre VARCHAR(100),

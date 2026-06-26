@@ -11,9 +11,23 @@
 USE LinuxPreachers;
 GO
 
+
+
+
+
 -- ---------------------------------------------
 -- 1. ABM: FormaPago
 -- ---------------------------------------------
+
+--Lectura
+
+CREATE OR ALTER VIEW pagos.vw_leer_forma_pagos AS
+SELECT 
+    id, 
+    nombre, 
+    estado 
+FROM pagos.FormaPago;
+GO
 
 -- Alta
 CREATE OR ALTER PROCEDURE pagos.sp_crear_forma_pago
@@ -156,6 +170,21 @@ GO
 -- 3.  Pago
 -- ---------------------------------------------
 
+--Lectura
+
+CREATE OR ALTER VIEW pagos.vw_leer_pagos AS
+SELECT 
+    p.id, 
+    p.fecha_y_hora, 
+    p.id_reserva, 
+    p.id_forma_pago, 
+    fp.nombre AS forma_pago,
+    p.importe 
+FROM pagos.Pago p
+INNER JOIN pagos.FormaPago fp ON p.id_forma_pago = fp.id;
+GO
+
+
 -- Alta
 
 CREATE OR ALTER PROCEDURE pagos.sp_crear_pago
@@ -198,6 +227,20 @@ GO
 -- ---------------------------------------------
 -- 4.  TicketFactura
 -- ---------------------------------------------
+
+
+-- Lectura
+
+CREATE OR ALTER VIEW pagos.vw_leer_tickets_factura AS
+SELECT 
+    tf.id, 
+    tf.fecha_y_hora, 
+    tf.id_punto_venta, 
+    pv.nombre AS punto_venta,
+    tf.id_pago 
+FROM pagos.TicketFactura tf
+INNER JOIN pagos.PuntoVenta pv ON tf.id_punto_venta = pv.id;
+GO
 
 -- Alta
 

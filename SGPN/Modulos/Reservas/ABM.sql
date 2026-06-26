@@ -11,6 +11,8 @@
 USE LinuxPreachers;
 GO
 
+
+
 ---------------------------------------------------------
 -- ABM: EstadoItem
 ---------------------------------------------------------
@@ -240,6 +242,73 @@ BEGIN
         @id = @id_motivo;
 END;
 GO
+
+
+--Lectura Reservas
+
+CREATE OR ALTER VIEW reservas.vw_leer_reservas AS
+SELECT 
+    id, 
+    fecha_y_hora 
+FROM reservas.Reserva;
+GO
+
+-- Lectura Participacion
+
+CREATE OR ALTER VIEW reservas.vw_leer_participaciones AS
+SELECT 
+    p.id_item_reserva, 
+    p.fecha_realizacion, 
+    p.id_horario,
+    ir.precio,
+    ir.id_reserva,
+    ir.id_estado,
+    e.nombre AS estado
+FROM reservas.Participacion p
+INNER JOIN reservas.ItemReserva ir ON p.id_item_reserva = ir.id
+INNER JOIN reservas.EstadoItem e ON ir.id_estado = e.id;
+GO
+
+-- Lectura Entradas
+CREATE OR ALTER VIEW reservas.vw_leer_entradas AS
+SELECT 
+    en.id_item_reserva, 
+    en.fecha_acceso, 
+    en.id_parque, 
+    en.id_tipo_visitante,
+    ir.precio,
+    ir.id_reserva,
+    ir.id_estado,
+    e.nombre AS estado
+FROM reservas.Entrada en
+INNER JOIN reservas.ItemReserva ir ON en.id_item_reserva = ir.id
+INNER JOIN reservas.EstadoItem e ON ir.id_estado = e.id;
+GO
+
+--Lectura Motivo Cancelacion
+
+CREATE OR ALTER VIEW reservas.vw_leer_motivo_cancelacion AS
+SELECT 
+    id, 
+    nombre, 
+    descripcion 
+FROM reservas.MotivoCancelacion;
+GO
+
+-- Lectura Reembolsos
+
+CREATE OR ALTER VIEW reservas.vw_leer_reembolsos AS
+SELECT 
+    r.id, 
+    r.fecha_y_hora, 
+    r.cvu_cuenta_destino, 
+    r.id_cancelacion,
+    c.id_motivo
+FROM reservas.Reembolso r
+INNER JOIN reservas.Cancelacion c ON r.id_cancelacion = c.id;
+GO
+
+
 
 --------------------------------------------------------------------------------------
 -- Logica de negocio: Reservas, entradas, participaciones, cancelaciones y reembolsos
