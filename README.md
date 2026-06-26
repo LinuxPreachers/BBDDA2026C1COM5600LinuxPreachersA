@@ -18,8 +18,8 @@
 | :----------------------------------- | :----------------------  | ------------------------|
 | **E8** - Cifrado                     | ✅ Completada           | ⏳ Pendiente            |
 | **E8** - Roles                       | ✅ Semi-Completada      | ✅ Completada           |
-| **E8** - Backups                     | 🛠️ En trabajo           | ⏳ Pendiente            |
-| **E9** - BI                          | ✅ Completada           | ⏳ Pendiente            |
+| **E8** - Backups                     | ✅ Completada           | ✅ Completada           |
+| **E9** - BI                          | ✅ Completada           | ✅ Completada           |
 | **E9** - Aplicación sencilla         | 🛠️ En trabajo           | ⏳ Pendiente            |
 
 ---
