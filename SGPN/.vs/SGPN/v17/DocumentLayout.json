@@ -1,25 +1,29 @@
 {
   "Version": 1,
-  "WorkspaceRootPath": "D:\\Facultad\\TP-BDA\\BBDDA2026C1COM5600LinuxPreachersA\\SGPN\\",
+  "WorkspaceRootPath": "D:\\FACU\\01 - MATERIAS\\Archivos\\3641 - BASES DE DATOS APLICADA\\tp\\SGPN\\",
   "Documents": [
     {
-      "AbsoluteMoniker": "D:0:0:{1CAE7C1D-5E06-4080-8C03-3CCEEEAD61D2}|Concesiones{1CAE7C1D-5E06-4080-8C03-3CCEEEAD61D2}|D:\\Facultad\\TP-BDA\\BBDDA2026C1COM5600LinuxPreachersA\\SGPN\\Modulos\\Concesiones\\Tablas.sql||{B5A506EB-11BE-4782-9A18-21265C2CA0B4}",
+      "AbsoluteMoniker": "D:0:0:{22D3ED59-CF35-416C-BE02-EAB23912772A}|Reportes{22D3ED59-CF35-416C-BE02-EAB23912772A}|D:\\FACU\\01 - MATERIAS\\Archivos\\3641 - BASES DE DATOS APLICADA\\tp\\SGPN\\Reportes.sql||{B5A506EB-11BE-4782-9A18-21265C2CA0B4}",
+      "RelativeMoniker": "D:0:0:{22D3ED59-CF35-416C-BE02-EAB23912772A}|Reportes{22D3ED59-CF35-416C-BE02-EAB23912772A}|solutionrelative:Reportes.sql||{B5A506EB-11BE-4782-9A18-21265C2CA0B4}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{1CAE7C1D-5E06-4080-8C03-3CCEEEAD61D2}|Concesiones{1CAE7C1D-5E06-4080-8C03-3CCEEEAD61D2}|D:\\FACU\\01 - MATERIAS\\Archivos\\3641 - BASES DE DATOS APLICADA\\tp\\SGPN\\Modulos\\Concesiones\\Tablas.sql||{B5A506EB-11BE-4782-9A18-21265C2CA0B4}",
       "RelativeMoniker": "D:0:0:{1CAE7C1D-5E06-4080-8C03-3CCEEEAD61D2}|Concesiones{1CAE7C1D-5E06-4080-8C03-3CCEEEAD61D2}|solutionrelative:Modulos\\Concesiones\\Tablas.sql||{B5A506EB-11BE-4782-9A18-21265C2CA0B4}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{D107F4C8-89CC-BEA8-D3D7-CA6B7733353D}|Elementos de la soluci\u00F3n{D107F4C8-89CC-BEA8-D3D7-CA6B7733353D}|D:\\Facultad\\TP-BDA\\BBDDA2026C1COM5600LinuxPreachersA\\SGPN\\Reinicio.sql||{B5A506EB-11BE-4782-9A18-21265C2CA0B4}",
+      "AbsoluteMoniker": "D:0:0:{D107F4C8-89CC-BEA8-D3D7-CA6B7733353D}|Elementos de la soluci\u00F3n{D107F4C8-89CC-BEA8-D3D7-CA6B7733353D}|D:\\FACU\\01 - MATERIAS\\Archivos\\3641 - BASES DE DATOS APLICADA\\tp\\SGPN\\Reinicio.sql||{B5A506EB-11BE-4782-9A18-21265C2CA0B4}",
       "RelativeMoniker": "D:0:0:{D107F4C8-89CC-BEA8-D3D7-CA6B7733353D}|Elementos de la soluci\u00F3n{D107F4C8-89CC-BEA8-D3D7-CA6B7733353D}|solutionrelative:Reinicio.sql||{B5A506EB-11BE-4782-9A18-21265C2CA0B4}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{1CAE7C1D-5E06-4080-8C03-3CCEEEAD61D2}|Concesiones{1CAE7C1D-5E06-4080-8C03-3CCEEEAD61D2}|D:\\Facultad\\TP-BDA\\BBDDA2026C1COM5600LinuxPreachersA\\SGPN\\Modulos\\Concesiones\\Testing_alternativa.sql||{B5A506EB-11BE-4782-9A18-21265C2CA0B4}",
+      "AbsoluteMoniker": "D:0:0:{1CAE7C1D-5E06-4080-8C03-3CCEEEAD61D2}|Concesiones{1CAE7C1D-5E06-4080-8C03-3CCEEEAD61D2}|D:\\FACU\\01 - MATERIAS\\Archivos\\3641 - BASES DE DATOS APLICADA\\tp\\SGPN\\Modulos\\Concesiones\\Testing_alternativa.sql||{B5A506EB-11BE-4782-9A18-21265C2CA0B4}",
       "RelativeMoniker": "D:0:0:{1CAE7C1D-5E06-4080-8C03-3CCEEEAD61D2}|Concesiones{1CAE7C1D-5E06-4080-8C03-3CCEEEAD61D2}|solutionrelative:Modulos\\Concesiones\\Testing_alternativa.sql||{B5A506EB-11BE-4782-9A18-21265C2CA0B4}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{C0BE212A-2DC4-4F1D-A5FF-DDB3A8A4B624}|Parques{C0BE212A-2DC4-4F1D-A5FF-DDB3A8A4B624}|D:\\Facultad\\TP-BDA\\BBDDA2026C1COM5600LinuxPreachersA\\SGPN\\Modulos\\Parques\\Generar_datos.sql||{B5A506EB-11BE-4782-9A18-21265C2CA0B4}",
+      "AbsoluteMoniker": "D:0:0:{C0BE212A-2DC4-4F1D-A5FF-DDB3A8A4B624}|Parques{C0BE212A-2DC4-4F1D-A5FF-DDB3A8A4B624}|D:\\FACU\\01 - MATERIAS\\Archivos\\3641 - BASES DE DATOS APLICADA\\tp\\SGPN\\Modulos\\Parques\\Generar_datos.sql||{B5A506EB-11BE-4782-9A18-21265C2CA0B4}",
       "RelativeMoniker": "D:0:0:{C0BE212A-2DC4-4F1D-A5FF-DDB3A8A4B624}|Parques{C0BE212A-2DC4-4F1D-A5FF-DDB3A8A4B624}|solutionrelative:Modulos\\Parques\\Generar_datos.sql||{B5A506EB-11BE-4782-9A18-21265C2CA0B4}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{C0BE212A-2DC4-4F1D-A5FF-DDB3A8A4B624}|Parques{C0BE212A-2DC4-4F1D-A5FF-DDB3A8A4B624}|D:\\Facultad\\TP-BDA\\BBDDA2026C1COM5600LinuxPreachersA\\SGPN\\Modulos\\Parques\\Importacion.sql||{B5A506EB-11BE-4782-9A18-21265C2CA0B4}",
+      "AbsoluteMoniker": "D:0:0:{C0BE212A-2DC4-4F1D-A5FF-DDB3A8A4B624}|Parques{C0BE212A-2DC4-4F1D-A5FF-DDB3A8A4B624}|D:\\FACU\\01 - MATERIAS\\Archivos\\3641 - BASES DE DATOS APLICADA\\tp\\SGPN\\Modulos\\Parques\\Importacion.sql||{B5A506EB-11BE-4782-9A18-21265C2CA0B4}",
       "RelativeMoniker": "D:0:0:{C0BE212A-2DC4-4F1D-A5FF-DDB3A8A4B624}|Parques{C0BE212A-2DC4-4F1D-A5FF-DDB3A8A4B624}|solutionrelative:Modulos\\Parques\\Importacion.sql||{B5A506EB-11BE-4782-9A18-21265C2CA0B4}"
     }
   ],
@@ -35,62 +39,74 @@
             {
               "$type": "Document",
               "DocumentIndex": 0,
-              "Title": "Tablas.sql - localhost.LinuxPreachers (DESKTOP-KOIKGVK\\Luis (95))",
-              "DocumentMoniker": "D:\\Facultad\\TP-BDA\\BBDDA2026C1COM5600LinuxPreachersA\\SGPN\\Modulos\\Concesiones\\Tablas.sql",
-              "RelativeDocumentMoniker": "Modulos\\Concesiones\\Tablas.sql",
-              "ToolTip": "D:\\Facultad\\TP-BDA\\BBDDA2026C1COM5600LinuxPreachersA\\SGPN\\Modulos\\Concesiones\\Tablas.sql - localhost.LinuxPreachers (DESKTOP-KOIKGVK\\Luis (95))",
-              "RelativeToolTip": "Modulos\\Concesiones\\Tablas.sql - localhost.LinuxPreachers (DESKTOP-KOIKGVK\\Luis (95))",
+              "Title": "Reportes.sql - luis.LinuxPreachers (sa (82))",
+              "DocumentMoniker": "D:\\FACU\\01 - MATERIAS\\Archivos\\3641 - BASES DE DATOS APLICADA\\tp\\SGPN\\Reportes.sql",
+              "RelativeDocumentMoniker": "Reportes.sql",
+              "ToolTip": "D:\\FACU\\01 - MATERIAS\\Archivos\\3641 - BASES DE DATOS APLICADA\\tp\\SGPN\\Reportes.sql - luis.LinuxPreachers (sa (82))",
+              "RelativeToolTip": "Reportes.sql - luis.LinuxPreachers (sa (82))",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000826|",
-              "WhenOpened": "2026-06-20T03:29:14.983Z",
-              "EditorCaption": " - localhost.LinuxPreachers (DESKTOP-KOIKGVK\\Luis (95))"
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 2,
-              "Title": "Testing_alternativa.sql - localhost.LinuxPreachers (DESKTOP-KOIKGVK\\Luis (77))",
-              "DocumentMoniker": "D:\\Facultad\\TP-BDA\\BBDDA2026C1COM5600LinuxPreachersA\\SGPN\\Modulos\\Concesiones\\Testing_alternativa.sql",
-              "RelativeDocumentMoniker": "Modulos\\Concesiones\\Testing_alternativa.sql",
-              "ToolTip": "D:\\Facultad\\TP-BDA\\BBDDA2026C1COM5600LinuxPreachersA\\SGPN\\Modulos\\Concesiones\\Testing_alternativa.sql - localhost.LinuxPreachers (DESKTOP-KOIKGVK\\Luis (77))",
-              "RelativeToolTip": "Modulos\\Concesiones\\Testing_alternativa.sql - localhost.LinuxPreachers (DESKTOP-KOIKGVK\\Luis (77))",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000826|",
-              "WhenOpened": "2026-06-20T03:28:57.125Z",
-              "EditorCaption": " - localhost.LinuxPreachers (DESKTOP-KOIKGVK\\Luis (77))"
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 3,
-              "Title": "Generar_datos.sql - localhost.LinuxPreachers (DESKTOP-KOIKGVK\\Luis (53))",
-              "DocumentMoniker": "D:\\Facultad\\TP-BDA\\BBDDA2026C1COM5600LinuxPreachersA\\SGPN\\Modulos\\Parques\\Generar_datos.sql",
-              "RelativeDocumentMoniker": "Modulos\\Parques\\Generar_datos.sql",
-              "ToolTip": "D:\\Facultad\\TP-BDA\\BBDDA2026C1COM5600LinuxPreachersA\\SGPN\\Modulos\\Parques\\Generar_datos.sql - localhost.LinuxPreachers (DESKTOP-KOIKGVK\\Luis (53))",
-              "RelativeToolTip": "Modulos\\Parques\\Generar_datos.sql - localhost.LinuxPreachers (DESKTOP-KOIKGVK\\Luis (53))",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000826|",
-              "WhenOpened": "2026-06-20T03:27:18.084Z",
-              "EditorCaption": " - localhost.LinuxPreachers (DESKTOP-KOIKGVK\\Luis (53))"
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 4,
-              "Title": "Importacion.sql - localhost.master (DESKTOP-KOIKGVK\\Luis (56))",
-              "DocumentMoniker": "D:\\Facultad\\TP-BDA\\BBDDA2026C1COM5600LinuxPreachersA\\SGPN\\Modulos\\Parques\\Importacion.sql",
-              "RelativeDocumentMoniker": "Modulos\\Parques\\Importacion.sql",
-              "ToolTip": "D:\\Facultad\\TP-BDA\\BBDDA2026C1COM5600LinuxPreachersA\\SGPN\\Modulos\\Parques\\Importacion.sql - localhost.master (DESKTOP-KOIKGVK\\Luis (56))",
-              "RelativeToolTip": "Modulos\\Parques\\Importacion.sql - localhost.master (DESKTOP-KOIKGVK\\Luis (56))",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000826|",
-              "WhenOpened": "2026-06-19T20:16:33.725Z",
-              "EditorCaption": " - localhost.master (DESKTOP-KOIKGVK\\Luis (56))"
+              "WhenOpened": "2026-06-26T11:02:44.82Z",
+              "EditorCaption": " - luis.LinuxPreachers (sa (82))"
             },
             {
               "$type": "Document",
               "DocumentIndex": 1,
-              "Title": "Reinicio.sql - localhost.LinuxPreachers (DESKTOP-KOIKGVK\\Luis (51))",
-              "DocumentMoniker": "D:\\Facultad\\TP-BDA\\BBDDA2026C1COM5600LinuxPreachersA\\SGPN\\Reinicio.sql",
+              "Title": "Tablas.sql - luis.LinuxPreachers (sa (91))",
+              "DocumentMoniker": "D:\\FACU\\01 - MATERIAS\\Archivos\\3641 - BASES DE DATOS APLICADA\\tp\\SGPN\\Modulos\\Concesiones\\Tablas.sql",
+              "RelativeDocumentMoniker": "Modulos\\Concesiones\\Tablas.sql",
+              "ToolTip": "D:\\FACU\\01 - MATERIAS\\Archivos\\3641 - BASES DE DATOS APLICADA\\tp\\SGPN\\Modulos\\Concesiones\\Tablas.sql - luis.LinuxPreachers (sa (91))",
+              "RelativeToolTip": "Modulos\\Concesiones\\Tablas.sql - luis.LinuxPreachers (sa (91))",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000826|",
+              "WhenOpened": "2026-06-20T03:29:14.983Z",
+              "EditorCaption": " - luis.LinuxPreachers (sa (91))"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 3,
+              "Title": "Testing_alternativa.sql",
+              "DocumentMoniker": "D:\\FACU\\01 - MATERIAS\\Archivos\\3641 - BASES DE DATOS APLICADA\\tp\\SGPN\\Modulos\\Concesiones\\Testing_alternativa.sql",
+              "RelativeDocumentMoniker": "Modulos\\Concesiones\\Testing_alternativa.sql",
+              "ToolTip": "D:\\FACU\\01 - MATERIAS\\Archivos\\3641 - BASES DE DATOS APLICADA\\tp\\SGPN\\Modulos\\Concesiones\\Testing_alternativa.sql",
+              "RelativeToolTip": "Modulos\\Concesiones\\Testing_alternativa.sql",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000826|",
+              "WhenOpened": "2026-06-20T03:28:57.125Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 4,
+              "Title": "Generar_datos.sql",
+              "DocumentMoniker": "D:\\FACU\\01 - MATERIAS\\Archivos\\3641 - BASES DE DATOS APLICADA\\tp\\SGPN\\Modulos\\Parques\\Generar_datos.sql",
+              "RelativeDocumentMoniker": "Modulos\\Parques\\Generar_datos.sql",
+              "ToolTip": "D:\\FACU\\01 - MATERIAS\\Archivos\\3641 - BASES DE DATOS APLICADA\\tp\\SGPN\\Modulos\\Parques\\Generar_datos.sql",
+              "RelativeToolTip": "Modulos\\Parques\\Generar_datos.sql",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000826|",
+              "WhenOpened": "2026-06-20T03:27:18.084Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 5,
+              "Title": "Importacion.sql",
+              "DocumentMoniker": "D:\\FACU\\01 - MATERIAS\\Archivos\\3641 - BASES DE DATOS APLICADA\\tp\\SGPN\\Modulos\\Parques\\Importacion.sql",
+              "RelativeDocumentMoniker": "Modulos\\Parques\\Importacion.sql",
+              "ToolTip": "D:\\FACU\\01 - MATERIAS\\Archivos\\3641 - BASES DE DATOS APLICADA\\tp\\SGPN\\Modulos\\Parques\\Importacion.sql",
+              "RelativeToolTip": "Modulos\\Parques\\Importacion.sql",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000826|",
+              "WhenOpened": "2026-06-19T20:16:33.725Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 2,
+              "Title": "Reinicio.sql",
+              "DocumentMoniker": "D:\\FACU\\01 - MATERIAS\\Archivos\\3641 - BASES DE DATOS APLICADA\\tp\\SGPN\\Reinicio.sql",
               "RelativeDocumentMoniker": "Reinicio.sql",
-              "ToolTip": "D:\\Facultad\\TP-BDA\\BBDDA2026C1COM5600LinuxPreachersA\\SGPN\\Reinicio.sql - localhost.LinuxPreachers (DESKTOP-KOIKGVK\\Luis (51))",
-              "RelativeToolTip": "Reinicio.sql - localhost.LinuxPreachers (DESKTOP-KOIKGVK\\Luis (51))",
+              "ToolTip": "D:\\FACU\\01 - MATERIAS\\Archivos\\3641 - BASES DE DATOS APLICADA\\tp\\SGPN\\Reinicio.sql",
+              "RelativeToolTip": "Reinicio.sql",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000826|",
               "WhenOpened": "2026-06-19T20:07:18.961Z",
-              "EditorCaption": " - localhost.LinuxPreachers (DESKTOP-KOIKGVK\\Luis (51))"
+              "EditorCaption": ""
             }
           ]
         }
