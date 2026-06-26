@@ -7,8 +7,8 @@
 | **E3** - DER                         | ✅ Completada           | ✅ Completada           |
 | **E4** - Instalación y Configuración | ✅ Completada           | ✅ Completada           |
 | **E5** - Base de Datos               | ✅ Completada           | ✅ Completada           |
-| **E6** - Importación                 | ✅ Completada           | ✅ Completada           |
-| **E7** - Reportes                    | ✅ Completada           | 🚧 Revision minima pend.|
+| **E6** - Importación                 | ✅ Completada           | 🚧 Revision tests pend. |
+| **E7** - Reportes                    | ✅ Completada           | 🚧 Revision tests pend. |
 | **E8** - Seguridad y Respaldo        | ✅ Completada           | ⏳ Pendiente            |
 | **E9** - BI + Aplicación sencilla    | 🛠️ En trabajo           | ⏳ Pendiente            |
 
