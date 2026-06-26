@@ -17,7 +17,7 @@
 | Entrega                              | Estado                   | Revision Interna        |
 | :----------------------------------- | :----------------------  | ------------------------|
 | **E8** - Cifrado                     | ✅ Completada           | ⏳ Pendiente            |
-| **E8** - Roles                       | ✅ Semi-Completada      | ⏳ Pendiente            |
+| **E8** - Roles                       | ✅ Semi-Completada      | ✅ Completada           |
 | **E8** - Backups                     | 🛠️ En trabajo           | ⏳ Pendiente            |
 | **E9** - BI                          | ✅ Completada           | ⏳ Pendiente            |
 | **E9** - Aplicación sencilla         | 🛠️ En trabajo           | ⏳ Pendiente            |
