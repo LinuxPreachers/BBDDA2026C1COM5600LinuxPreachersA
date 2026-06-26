@@ -58,7 +58,7 @@ WITH PASSWORD = N'ImportadorDatos123&', CHECK_POLICY = OFF, CHECK_EXPIRATION = O
 GO
 
 
-USE [ LinuxPreachers]
+USE [LinuxPreachers]
 GO
 
 CREATE USER [user_admin_pagos] FOR LOGIN [login_admin_pagos]
