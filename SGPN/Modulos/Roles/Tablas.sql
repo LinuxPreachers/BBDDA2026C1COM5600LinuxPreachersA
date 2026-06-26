@@ -10,7 +10,7 @@
 
 
 
--- Validamos si el esquema 'reservas' NO existe
+-- Validamos si el esquema 'roles' NO existe
 IF SCHEMA_ID('roles') IS NULL
 BEGIN
     -- Ejecutamos la creación como una cadena de texto aislada
