@@ -44,16 +44,18 @@ GO
 
 CREATE OR ALTER PROCEDURE apis.sp_llamar_api_get
     @url VARCHAR(1000),
-    @respuesta NVARCHAR(MAX) OUTPUT
+    @respuesta varchar(MAX) OUTPUT
 AS
 BEGIN
     SET NOCOUNT ON;
 
     DECLARE @Object INT;
-    DECLARE @json TABLE(DATA NVARCHAR(MAX));
+    DECLARE @json TABLE(DATA varchar(MAX));
 
     DECLARE @status INT;
     DECLARE @statusText VARCHAR(255);
+
+    EXEC apis.sp_habilitar_ole_automation;
 
     --EXEC sp_OACreate 'MSXML2.XMLHTTP', @Object OUT; -- Creamos una instancia del objeto OLE, que nos permite hacer los llamados.
     EXEC sp_OACreate 'MSXML2.ServerXMLHTTP.6.0', @Object OUT; -- Funciona para la API de climas mientras la otra no
@@ -96,8 +98,8 @@ AS
 BEGIN
     SET NOCOUNT ON;
 
-    DECLARE @url NVARCHAR(1000);
-    DECLARE @datos NVARCHAR(MAX);
+    DECLARE @url varchar(1000);
+    DECLARE @datos varchar(MAX);
 
     SET @url = CONCAT('https://dolarapi.com/v1/dolares/', @casa_dolar);
 
@@ -131,8 +133,8 @@ AS
 BEGIN
     SET NOCOUNT ON;
 
-    DECLARE @url NVARCHAR(1000);
-    DECLARE @datos NVARCHAR(MAX);
+    DECLARE @url varchar(1000);
+    DECLARE @datos varchar(MAX);
 
     SET @url = 'https://dolarapi.com/v1/dolares';
 
@@ -233,6 +235,69 @@ BEGIN
 END;
 GO
 
+CREATE OR ALTER PROCEDURE apis.sp_cotizaciones_principales_temp
+AS
+BEGIN
+    SET NOCOUNT ON;
+
+    DECLARE @url_dolar VARCHAR(1000);
+    DECLARE @url_otros VARCHAR(1000);
+    DECLARE @datos_dolar VARCHAR(MAX);
+    DECLARE @datos_otros VARCHAR(MAX);
+
+    IF OBJECT_ID('tempdb..#cotizaciones_actuales') IS NULL
+    BEGIN
+        RETURN;
+    END;
+
+    SET @url_dolar = 'https://dolarapi.com/v1/dolares/';
+    SET @url_otros = 'https://dolarapi.com/v1/cotizaciones/';
+
+    EXEC apis.sp_llamar_api_get @url = @url_dolar, @respuesta = @datos_dolar OUTPUT;
+    EXEC apis.sp_llamar_api_get @url = @url_otros, @respuesta = @datos_otros OUTPUT;
+
+    INSERT INTO #cotizaciones_actuales
+    SELECT
+        'DolarAPI',
+        @url_dolar,
+        moneda,
+        casa,
+        nombre,
+        compra,
+        venta,
+        fechaActualizacion
+    FROM OPENJSON(@datos_dolar)
+    WITH (
+        moneda VARCHAR(10) '$.moneda',
+        casa VARCHAR(50) '$.casa',
+        nombre VARCHAR(100) '$.nombre',
+        compra DECIMAL(18,2) '$.compra',
+        venta DECIMAL(18,2) '$.venta',
+        fechaActualizacion DATETIMEOFFSET '$.fechaActualizacion'
+    );
+
+    INSERT INTO #cotizaciones_actuales
+    SELECT
+        'DolarAPI',
+        @url_otros,
+        moneda,
+        casa,
+        nombre,
+        compra,
+        venta,
+        fechaActualizacion
+    FROM OPENJSON(@datos_otros)
+    WITH (
+        moneda VARCHAR(10) '$.moneda',
+        casa VARCHAR(50) '$.casa',
+        nombre VARCHAR(100) '$.nombre',
+        compra DECIMAL(18,2) '$.compra',
+        venta DECIMAL(18,2) '$.venta',
+        fechaActualizacion DATETIMEOFFSET '$.fechaActualizacion'
+    );
+END;
+GO
+
 /* =========================================================
    Feriados por anio
 
@@ -271,11 +336,11 @@ BEGIN
     FROM OPENJSON(@datos)
     WITH (
         fecha DATE '$.date',
-        nombre_local NVARCHAR(150) '$.localName',
+        nombre_local varchar(150) '$.localName',
         nombre_ingles VARCHAR(150) '$.name',
         codigo_pais VARCHAR(5) '$.countryCode',
         es_global BIT '$.global',
-        tipos_json VARCHAR(MAX) '$.types' AS JSON
+        tipos_json NVARCHAR(MAX) '$.types' AS JSON
     )
     ORDER BY fecha;
 END;
@@ -308,7 +373,7 @@ BEGIN
     SET NOCOUNT ON;
 
     DECLARE @url VARCHAR(1000);
-    DECLARE @datos NVARCHAR(MAX);
+    DECLARE @datos varchar(MAX);
     DECLARE @latitud_texto VARCHAR(30);
     DECLARE @longitud_texto VARCHAR(30);
     DECLARE @fecha_desde_texto VARCHAR(10);
@@ -403,7 +468,7 @@ END;
 GO
 
 /* =========================================================
-   7) Jornadas lluviosas o de mal clima para un parque
+   Jornadas lluviosas o de mal clima para un parque
 
    Usa las coordenadas guardadas en parques.Parque.
    ========================================================= */
@@ -425,7 +490,7 @@ BEGIN
         @latitud = latitud,
         @longitud = longitud
     FROM parques.Parque
-    WHERE id_parque = @id_parque;
+    WHERE id = @id_parque;
 
     IF @latitud IS NULL OR @longitud IS NULL
     BEGIN

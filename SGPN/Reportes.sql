@@ -223,6 +223,65 @@ BEGIN
 END;
 GO
 
+CREATE OR ALTER PROCEDURE reportes.sp_visitas_malosdias
+    @idparque int,
+    @fechaDesde date
+AS
+BEGIN
+    SET NOCOUNT ON;
+
+    DECLARE @latitud DECIMAL(9,6) = (SELECT latitud from parques.Parque where id=@idparque)
+    DECLARE @longitud DECIMAL(9,6) = (SELECT longitud from parques.Parque where id=@idparque)
+
+
+    DECLARE @f DATE = DATEADD(MONTH, -3, GETDATE()); -- para default
+    IF @fechaDesde IS NOT NULL
+    SET @f = @fechaDesde;
+
+    CREATE TABLE #meteorologia (
+        fuente VARCHAR(100),
+        url_consultada VARCHAR(100),
+        fecha DATE,
+        codigo_clima INT,
+        precipitacion_mm DECIMAL(10,2),
+        lluvia_mm DECIMAL(10,2),
+        estado_jornada VARCHAR(50),
+        motivo VARCHAR(100)
+    );
+
+    INSERT INTO #meteorologia
+    EXEC apis.sp_clima_jornadas_malas_historico @latitud, @longitud, @f;
+
+    WITH Datos AS (
+        SELECT
+            e.id_item_reserva AS entrada_id,
+            e.fecha_acceso AS fecha,
+            e.id_tipo_visitante AS tipoVisitante_id
+        FROM reservas.Entrada e
+        WHERE e.id_parque = @idparque
+    ), Resultado AS (
+        SELECT
+            tipoVisitante_id,
+            DAY(fecha) as dia,
+            COUNT(entrada_id) AS visitas
+        FROM Datos
+        GROUP BY tipoVisitante_id, DAY(fecha)
+
+    ), ResultadoMostrable AS (
+        SELECT 
+            R.tipoVisitante_id as tipoVisitante_id,
+            TV.nombre as tipoVisitante_nombre,
+            R.dia,
+            R.visitas,
+            M.codigo_clima, M.estado_jornada, M.lluvia_mm, M.motivo, M.precipitacion_mm
+        FROM Resultado R
+        LEFT JOIN parques.TipoVisitante TV on R.tipoVisitante_id = TV.id
+        LEFT JOIN #meteorologia M on R.dia = DAY(M.fecha)
+    )
+    SELECT *
+    FROM ResultadoMostrable
+END;
+GO
 
 /* =========================================================
    2) Ingresos por parque por semana, mes y anio
@@ -547,6 +606,75 @@ BEGIN
 END;
 GO
 
+CREATE OR ALTER PROCEDURE reportes.sp_ingresos_filt_monedas
+    @fechaInicio date,
+    @fechaFin date,
+    @periodo varchar(10),
+    @idParque int
+AS
+BEGIN
+    SET NOCOUNT ON;
+
+    DROP TABLE IF EXISTS #ingresos;
+
+    CREATE TABLE #ingresos (
+        parque_id INT,
+        parque_nombre VARCHAR(100),
+        periodo VARCHAR(20),
+        anio INT,
+        mes INT NULL,
+        semana INT NULL,
+        cantidad_entradas INT,
+        ingresos_entradas DECIMAL(38,4),
+        cantidad_tours INT,
+        ingresos_tours DECIMAL(38,4),
+        canones_cobrados INT,
+        ingresos_concesiones DECIMAL(38,4),
+        ingresos_totales DECIMAL(38,4)
+    );
+
+    INSERT INTO #ingresos
+    EXEC reportes.sp_ingresos_filt @fechaInicio, @fechaFin, @periodo, @idParque;
+
+    DROP TABLE IF EXISTS #cotizaciones_actuales;
+
+    CREATE TABLE #cotizaciones_actuales (
+        fuente VARCHAR(30),
+        url_consultada VARCHAR(1000),
+        moneda VARCHAR(10),
+        casa VARCHAR(50),
+        nombre VARCHAR(100),
+        compra DECIMAL(18,2),
+        venta DECIMAL(18,2),
+        fechaActualizacion DATETIMEOFFSET
+    );
+    
+    EXEC apis.sp_cotizaciones_principales_temp;
+
+    WITH CamposImportantes as (
+        SELECT
+            'compra' AS tipo, [USD], [EUR], [BRL], [CLP]
+        FROM (
+            SELECT
+                moneda,
+                compra
+            FROM #cotizaciones_actuales
+            WHERE casa = 'oficial'
+        ) AS t
+        PIVOT (
+            MAX(compra)
+            FOR moneda IN ([USD], [EUR], [BRL], [CLP])
+        ) AS p
+    )
+    select i.*,
+        CAST(i.ingresos_totales / NULLIF(c.USD, 0) AS DECIMAL(38,4)) AS ingresos_totales_USD,
+        CAST(i.ingresos_totales / NULLIF(c.EUR, 0) AS DECIMAL(38,4)) AS ingresos_totales_EUR,
+        CAST(i.ingresos_totales / NULLIF(c.BRL, 0) AS DECIMAL(38,4)) AS ingresos_totales_BRL,
+        CAST(i.ingresos_totales / NULLIF(c.CLP, 0) AS DECIMAL(38,4)) AS ingresos_totales_CLP
+    from #ingresos i
+    cross join CamposImportantes c;
+END;
+GO
 
 /* =========================================================
    3) Deudores: Concesiones atrasadas en los pagos
