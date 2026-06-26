@@ -36,6 +36,7 @@ EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Reservas", "Reservas", "{AF293F3A-72EA-43CC-9594-4C385FA1A6E6}"
 	ProjectSection(SolutionItems) = preProject
 		Modulos\Reservas\ABM.sql = Modulos\Reservas\ABM.sql
+		Modulos\Reservas\EjemploReserva.sql = Modulos\Reservas\EjemploReserva.sql
 		Modulos\Reservas\Tablas.sql = Modulos\Reservas\Tablas.sql
 		Modulos\Reservas\Testing.sql = Modulos\Reservas\Testing.sql
 	EndProjectSection
@@ -81,7 +82,7 @@ Global
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
 		{CE4A56E1-1995-9F01-1989-9941B5F28028}.Default|Default.ActiveCfg = Default
-		{40308F97-1424-4FE4-A48C-71D0E4FCDA43}.Default|Default.ActiveCfg = Default
+		{B545151D-035E-4B49-9F7E-6448BD2DB4FC}.Default|Default.ActiveCfg = Default
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

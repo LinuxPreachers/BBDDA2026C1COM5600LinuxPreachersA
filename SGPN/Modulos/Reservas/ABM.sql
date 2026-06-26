@@ -291,7 +291,7 @@ BEGIN
 
         SELECT @id_estado_reservada = id
         FROM reservas.EstadoItem
-        WHERE nombre = 'Reservada';
+        WHERE nombre= 'Reservada';
 
         IF @id_estado_reservada IS NULL
             THROW 50316, 'No existe el estado Reservada.', 1;
