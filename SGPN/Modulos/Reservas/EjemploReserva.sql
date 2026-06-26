@@ -1,15 +1,14 @@
 USE LinuxPreachers;
 GO
 
-
 ---------------------------------------
 -- SPS A EJECUTAR ANTES DE LA PRUEBA
 ---------------------------------------
 EXEC pagos.sp_crear_forma_pago @nombre = 'Tarjeta de Credito';
 EXEC pagos.sp_crear_punto_venta @nombre = 'Boletería Zona Norte';
-
--- ya no es necesario: EXEC reservas.sp_crear_estado_item @nombre = 'Reservada', @descripcion = 'Ítem comprado y pendiente de uso.';
-
+EXEC reservas.sp_crear_estado_item @nombre = 'Reservada', @descripcion = 'Ítem comprado y pendiente de uso.';
+EXEC reservas.sp_crear_estado_item @nombre = 'Cancelada', @descripcion = 'Ítem comprado cancelada.';
+EXEC reservas.sp_crear_motivo_cancelacion @nombre = 'Cliente', @descripcion = 'Cancelado por cliente';
 
 --- Ante la duda: DBCC CHECKIDENT ('pagos.FormaPago', RESEED, 0); Reiniciar los identitys
 
@@ -42,8 +41,8 @@ BEGIN TRY
 
     INSERT INTO @lista_participaciones(id_horario, fecha_realizacion, cantidad)
     VALUES 
-        (21, CAST(GETDATE() AS DATE), 5),    
-        (16, CAST(GETDATE() AS DATE), 2);
+        (1, CAST(GETDATE() AS DATE), 5),    
+        (2, CAST(GETDATE() AS DATE), 2);
     ------------------------------------------------------
     -- 3. Generación de la Reserva
     ------------------------------------------------------
@@ -114,7 +113,32 @@ SET @id_reserva_generada_res = (SELECT TOP 1 id FROM reservas.Reserva ORDER BY i
 SET @id_pago_generado_res = (SELECT TOP 1 id FROM pagos.Pago ORDER BY id DESC);
 SET @id_ticket_generado_res = (SELECT TOP 1 id FROM pagos.TicketFactura ORDER BY id DESC);
 
-SELECT * FROM reservas.Reserva WHERE id = @id_reserva_generada_res;
-SELECT * FROM pagos.Pago WHERE id = @id_pago_generado_res;
-SELECT * FROM pagos.TicketFactura WHERE id_pago = @id_ticket_generado_res;
+--SELECT * FROM reservas.Reserva WHERE id = @id_reserva_generada_res;
+--SELECT * FROM pagos.Pago WHERE id = @id_pago_generado_res;
+--SELECT * FROM pagos.TicketFactura WHERE id_pago = @id_ticket_generado_res;
+--GO
+
+SELECT * FROM reservas.Reserva;
+SELECT * FROM pagos.Pago;
+SELECT * FROM pagos.TicketFactura;
 GO
+
+-- Ver reservas activas (no canceladas)
+SELECT * FROM 
+    reservas.ItemReserva i 
+    JOIN reservas.Participacion p 
+    ON i.id = p.id_item_reserva
+    WHERE i.id_cancelacion IS NULL
+
+-- Cancelar reserva (libera cupos)
+DECLARE @items reservas.TVP_ItemsReserva;
+
+INSERT INTO @items
+SELECT id
+FROM reservas.ItemReserva
+WHERE id_reserva = 12;
+
+EXEC reservas.sp_cancelar_items_reserva
+    @items = @items,
+    @id_motivo = 1,
+    @id_cancelacion = NULL

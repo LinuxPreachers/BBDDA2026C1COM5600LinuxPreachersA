@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # SQL Server Management Studio Version 21
-VisualStudioVersion = 17.14.36212.18 d17.14
+VisualStudioVersion = 17.14.36212.18
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{4F2E2C19-372F-40D8-9FA7-9D2138C6997A}") = "SGPN", "SGPN.ssmssqlproj", "{CE4A56E1-1995-9F01-1989-9941B5F28028}"
 EndProject
@@ -60,6 +60,7 @@ EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Elementos de la solución", "Elementos de la solución", "{D107F4C8-89CC-BEA8-D3D7-CA6B7733353D}"
 	ProjectSection(SolutionItems) = preProject
 		Cifrado.sql = Cifrado.sql
+		..\CreacionPass.sql = ..\CreacionPass.sql
 		Reinicio.sql = Reinicio.sql
 	EndProjectSection
 EndProject
@@ -82,7 +83,7 @@ Global
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
 		{CE4A56E1-1995-9F01-1989-9941B5F28028}.Default|Default.ActiveCfg = Default
-		{9CD41D44-2777-4CFB-B434-75288637F35D}.Default|Default.ActiveCfg = Default
+		{BA1129A3-9593-4595-A398-532BF33466E1}.Default|Default.ActiveCfg = Default
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

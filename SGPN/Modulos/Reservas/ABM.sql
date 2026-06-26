@@ -423,8 +423,12 @@ BEGIN
             --------------------------------------------------
 
             SELECT @cupos_utilizados = COUNT(*)
-            FROM reservas.Participacion p
-            WHERE p.id_horario = @id_horario AND p.fecha_realizacion = @fecha_realizacion;
+            FROM reservas.ItemReserva i
+            JOIN reservas.Participacion p
+            ON i.id = p.id_item_reserva
+            WHERE p.id_horario = @id_horario 
+            AND i.id_cancelacion IS NULL
+            AND p.fecha_realizacion = @fecha_realizacion;
 
             SET @cupos_utilizados = ISNULL(@cupos_utilizados, 0);
 
