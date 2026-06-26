@@ -9,7 +9,7 @@
 | **E5** - Base de Datos               | ✅ Completada           | ✅ Completada           |
 | **E6** - Importación                 | ✅ Completada           | ✅ Completada           |
 | **E7** - Reportes                    | ✅ Completada           | 🚧 Revision minima pend.|
-| **E8** - Seguridad y Respaldo        | 🛠️ En trabajo           | ⏳ Pendiente            |
+| **E8** - Seguridad y Respaldo        | ✅ Completada           | ⏳ Pendiente            |
 | **E9** - BI + Aplicación sencilla    | 🛠️ En trabajo           | ⏳ Pendiente            |
 
 ### Desglose Entregas 8 y 9
