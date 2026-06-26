@@ -19,7 +19,7 @@ END;
 GO
 
 -- Este SP asume que no existe ninguna tabla
-CREATE OR ALTER PROCEDURE empleados.crear_tablas_modulo_empleados
+CREATE OR ALTER PROCEDURE empleados.sp_crear_tablas_modulo_empleados
 AS
 BEGIN
     SET NOCOUNT ON;
@@ -242,7 +242,7 @@ BEGIN
         ;THROW 50101,'No se puede crear el modulo empleados: faltan tablas necesarias por relaciones.', 1;
     END 
 
-    EXEC empleados.crear_tablas_modulo_empleados;
+    EXEC empleados.sp_crear_tablas_modulo_empleados;
 END;
 GO
 

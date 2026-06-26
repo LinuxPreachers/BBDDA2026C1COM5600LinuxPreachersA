@@ -19,7 +19,7 @@ END;
 GO
 
 -- Este SP Asume que no existe ninguna tabla
-CREATE OR ALTER PROCEDURE parques.crear_tablas_modulo_parques
+CREATE OR ALTER PROCEDURE parques.sp_crear_tablas_modulo_parques
 AS
 BEGIN
     SET NOCOUNT ON;
@@ -173,7 +173,7 @@ BEGIN
         THROW 50000,'No se puede crear el modulo: ya existe al menos una tabla del modulo en el esquema parques.', 1;
     END;
 
-    EXEC parques.crear_tablas_modulo_parques;
+    EXEC parques.sp_crear_tablas_modulo_parques;
 
 END;
 GO

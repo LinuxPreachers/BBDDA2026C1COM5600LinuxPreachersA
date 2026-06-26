@@ -37,6 +37,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Reservas", "Reservas", "{AF
 	ProjectSection(SolutionItems) = preProject
 		Modulos\Reservas\ABM.sql = Modulos\Reservas\ABM.sql
 		Modulos\Reservas\EjemploReserva.sql = Modulos\Reservas\EjemploReserva.sql
+		Modulos\Reservas\Generar_datos.sql = Modulos\Reservas\Generar_datos.sql
 		Modulos\Reservas\Tablas.sql = Modulos\Reservas\Tablas.sql
 		Modulos\Reservas\Testing.sql = Modulos\Reservas\Testing.sql
 	EndProjectSection
@@ -44,6 +45,7 @@ EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Pagos", "Pagos", "{65E62FC6-315D-4B10-A896-1BA2E07CFDEE}"
 	ProjectSection(SolutionItems) = preProject
 		Modulos\Pagos\ABM.sql = Modulos\Pagos\ABM.sql
+		Modulos\Pagos\Generar_datos.sql = Modulos\Pagos\Generar_datos.sql
 		Modulos\Pagos\Tablas.sql = Modulos\Pagos\Tablas.sql
 		Modulos\Pagos\Testing.sql = Modulos\Pagos\Testing.sql
 	EndProjectSection
@@ -74,6 +76,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Roles", "Roles", "{13A1CE25
 	ProjectSection(SolutionItems) = preProject
 		Modulos\Roles\ABM.sql = Modulos\Roles\ABM.sql
 		Modulos\Roles\CreacionRoles.sql = Modulos\Roles\CreacionRoles.sql
+		Modulos\Roles\CrearLogins.sql = Modulos\Roles\CrearLogins.sql
 		Modulos\Roles\Tablas.sql = Modulos\Roles\Tablas.sql
 	EndProjectSection
 EndProject
@@ -83,7 +86,7 @@ Global
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
 		{CE4A56E1-1995-9F01-1989-9941B5F28028}.Default|Default.ActiveCfg = Default
-		{BA1129A3-9593-4595-A398-532BF33466E1}.Default|Default.ActiveCfg = Default
+		{B6F06935-516B-4C2D-AB8A-95AE41BAFC98}.Default|Default.ActiveCfg = Default
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

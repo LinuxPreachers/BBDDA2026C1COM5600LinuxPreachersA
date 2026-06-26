@@ -286,7 +286,9 @@ BEGIN
 END;
 GO
 
+
 -- Test
+
 -- 1. Test: Creación de empleado y lectura descifrada
 DECLARE @id_tipo_doc_emp INT = (SELECT TOP 1 id FROM empleados.TipoDocumento);
 DECLARE @doc_random INT = CAST(RAND()*10000000 AS INT);
@@ -341,10 +343,13 @@ BEGIN CATCH
 END CATCH;
 GO
 
+-- 3. Test: Registro de Reembolso y lectura descifrada
+DECLARE @id_canc INT = (
+    SELECT TOP 1 id FROM reservas.Cancelacion 
+    WHERE id NOT IN (SELECT id_cancelacion FROM reservas.Reembolso)
+);
 
--- 4. Test: Registro de Reembolso y lectura descifrada
-DECLARE @id_canc INT = (SELECT TOP 1 id FROM reservas.Cancelacion WHERE id NOT IN (SELECT id_cancelacion FROM reservas.Reembolso));
-DECLARE @cvu_prueba CHAR(23) = '1111222233334444555566';
+DECLARE @cvu_prueba CHAR(22) = '1234567890123456789012';
 
 BEGIN TRY
     IF @id_canc IS NOT NULL
@@ -373,5 +378,3 @@ BEGIN CATCH
     PRINT 'ERROR INESPERADO: ' + ERROR_MESSAGE(); 
 END CATCH;
 GO
-
-

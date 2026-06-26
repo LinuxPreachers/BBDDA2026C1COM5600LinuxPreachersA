@@ -50,6 +50,6 @@ BEGIN
 END
 GO
 
-EXEC roles.sp_crear_tabla_rol;
+-- EXEC roles.sp_crear_tabla_rol;
 
 --EXEC roles.sp_eliminar_tabla_rol

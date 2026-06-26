@@ -126,12 +126,30 @@ BEGIN
         THROW 60000, 'No se puede crear el modulo: ya existe al menos un rol.', 1;
     END;
 
-    EXEC roles.sp_crear_modulo_roles;
+    EXEC roles.sp_crear_roles;
+END;
+GO
+
+CREATE OR ALTER PROCEDURE roles.sp_eliminar_roles AS
+BEGIN
+    DROP ROLE IF EXISTS admin_pagos;
+    DROP ROLE IF EXISTS admin_actividades;
+    DROP ROLE IF EXISTS admin_parques;
+    DROP ROLE IF EXISTS admin_empleados;
+    DROP ROLE IF EXISTS rrhh;
+    DROP ROLE IF EXISTS admin_concesiones;
+    DROP ROLE IF EXISTS admin_reservas;
+    DROP ROLE IF EXISTS user_web;
+    DROP ROLE IF EXISTS auditor_concesion;
+    DROP ROLE IF EXISTS auditor_finanzas;
+    DROP ROLE IF EXISTS director_gral;
+    DROP ROLE IF EXISTS importador_datos;
 END;
 GO
 
 EXEC roles.sp_crear_modulo_roles;
 
+-- EXEC roles.sp_eliminar_roles
 
 
 -------------------------------------------------- PARA ROL DE Administrador de Pagos--------------------------------------------------
@@ -161,17 +179,15 @@ DENY EXECUTE ON OBJECT::actividades.sp_crear_tablas_modulo_actividades TO admin_
 DENY EXECUTE ON OBJECT::actividades.sp_crear_modulo_actividades TO admin_actividades
 DENY EXECUTE ON OBJECT::actividades.sp_eliminar_modulo_actividades TO admin_actividades
 
-
-
 -------------------------------------------------- PARA ROL DE Administrador de Parques--------------------------------------------------
 -- Permisos sobre esquema parques (puede ver, insertar, eliminar y modificar registros de la tabla mediante procedimientos almacenados pero sin alterar la tabla)
 
 --Le asignamos permiso para ejecutar los sps del schema parques
 GRANT EXECUTE ON SCHEMA::parques TO admin_parques
-GRANT SELECT ON OBJECT::reservas.vw_leer_concesiones TO admin_parques
-GRANT SELECT ON OBJECT::reservas.vw_leer_guardaparques_asignados_a_parque TO admin_parques
+GRANT SELECT ON OBJECT::concesiones.vw_leer_concesiones TO admin_parques
+GRANT SELECT ON OBJECT::empleados.vw_leer_guardaparque_asignado_parque TO admin_parques
 GRANT SELECT ON OBJECT::reservas.vw_leer_entradas TO admin_parques
-GRANT SELECT ON OBJECT::reservas.vw_leer_actividades TO admin_parques
+GRANT SELECT ON OBJECT::actividades.vw_leer_actividades TO admin_parques
 
 -- Le denegamos el permiso para ejecutar los sps de creacion y eliminacion del modulo
 DENY EXECUTE ON OBJECT::parques.sp_crear_tablas_modulo_parques TO admin_parques
@@ -224,7 +240,7 @@ DENY EXECUTE ON OBJECT::reservas.sp_eliminar_modulo_reservas TO admin_reservas
 -- Permisos sobre sps de consultas sobre empleados (puede unicamente ver informacion del esquema empleados)
 
 GRANT SELECT ON OBJECT::empleados.vw_leer_guia TO rrhh
-GRANT SELECT ON OBJECT::empleados.vw_leer_guia_em_actividad TO rrhh
+GRANT SELECT ON OBJECT::empleados.vw_leer_guia_en_actividad TO rrhh
 GRANT SELECT ON OBJECT::empleados.vw_leer_guia_posee_habilitacion TO rrhh
 GRANT SELECT ON OBJECT::empleados.vw_leer_guardaparque TO rrhh
 GRANT SELECT ON OBJECT::empleados.vw_leer_guardaparque_asignado_parque TO rrhh
@@ -249,7 +265,7 @@ GRANT SELECT ON OBJECT::reservas.vw_leer_reservas TO auditor_finanzas
 GRANT SELECT ON OBJECT::reservas.vw_leer_reembolsos TO auditor_finanzas
 GRANT SELECT ON OBJECT::reservas.vw_leer_motivo_cancelacion TO auditor_finanzas
 GRANT SELECT ON OBJECT::pagos.vw_leer_pagos TO auditor_finanzas
-GRANT SELECT ON OBJECT::pagos_vw_leer_tickets_factura TO auditor_finanzas
+GRANT SELECT ON OBJECT::pagos.vw_leer_tickets_factura TO auditor_finanzas
 
 
 -------------------------------------------------- PARA ROL DE Director General--------------------------------------------------
