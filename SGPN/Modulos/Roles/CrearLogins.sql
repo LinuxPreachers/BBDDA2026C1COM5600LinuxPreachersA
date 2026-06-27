@@ -9,52 +9,88 @@
 USE master
 GO
 
-CREATE LOGIN [login_admin_pagos]
-WITH PASSWORD = N'AdminPagos123&', CHECK_POLICY = OFF, CHECK_EXPIRATION = OFF
+IF NOT EXISTS (SELECT 1 FROM sys.server_principals WHERE name = N'login_admin_pagos')
+BEGIN
+	CREATE LOGIN [login_admin_pagos]
+	WITH PASSWORD = N'AdminPagos123&', CHECK_POLICY = OFF, CHECK_EXPIRATION = OFF
+END;
 GO
 
-CREATE LOGIN [login_admin_actividades]
-WITH PASSWORD = N'AdminActividades123&', CHECK_POLICY = OFF, CHECK_EXPIRATION = OFF
+IF NOT EXISTS (SELECT 1 FROM sys.server_principals WHERE name = N'login_admin_actividades')
+BEGIN
+	CREATE LOGIN [login_admin_actividades]
+	WITH PASSWORD = N'AdminActividades123&', CHECK_POLICY = OFF, CHECK_EXPIRATION = OFF
+END;
 GO
 
-CREATE LOGIN [login_admin_parques]
-WITH PASSWORD = N'AdminParques123&', CHECK_POLICY = OFF, CHECK_EXPIRATION = OFF
+IF NOT EXISTS (SELECT 1 FROM sys.server_principals WHERE name = N'login_admin_parques')
+BEGIN
+	CREATE LOGIN [login_admin_parques]
+	WITH PASSWORD = N'AdminParques123&', CHECK_POLICY = OFF, CHECK_EXPIRATION = OFF
+END;
 GO
 
-CREATE LOGIN [login_admin_empleados]
-WITH PASSWORD = N'AdminEmpleados123&', CHECK_POLICY = OFF, CHECK_EXPIRATION = OFF
+IF NOT EXISTS (SELECT 1 FROM sys.server_principals WHERE name = N'login_admin_empleados')
+BEGIN
+	CREATE LOGIN [login_admin_empleados]
+	WITH PASSWORD = N'AdminEmpleados123&', CHECK_POLICY = OFF, CHECK_EXPIRATION = OFF
+END;
 GO
 
-CREATE LOGIN [login_rrhh]
-WITH PASSWORD = N'Rrhh123&', CHECK_POLICY = OFF, CHECK_EXPIRATION = OFF
+IF NOT EXISTS (SELECT 1 FROM sys.server_principals WHERE name = N'login_rrhh')
+BEGIN
+	CREATE LOGIN [login_rrhh]
+	WITH PASSWORD = N'Rrhh123&', CHECK_POLICY = OFF, CHECK_EXPIRATION = OFF
+END;
 GO
 
-CREATE LOGIN [login_admin_concesiones]
-WITH PASSWORD = N'AdminConcesiones123&', CHECK_POLICY = OFF, CHECK_EXPIRATION = OFF
+IF NOT EXISTS (SELECT 1 FROM sys.server_principals WHERE name = N'login_admin_concesiones')
+BEGIN
+	CREATE LOGIN [login_admin_concesiones]
+	WITH PASSWORD = N'AdminConcesiones123&', CHECK_POLICY = OFF, CHECK_EXPIRATION = OFF
+END;
 GO
 
-CREATE LOGIN [login_admin_reservas]
-WITH PASSWORD = N'AdminReservas123&', CHECK_POLICY = OFF, CHECK_EXPIRATION = OFF
+IF NOT EXISTS (SELECT 1 FROM sys.server_principals WHERE name = N'login_admin_reservas')
+BEGIN
+	CREATE LOGIN [login_admin_reservas]
+	WITH PASSWORD = N'AdminReservas123&', CHECK_POLICY = OFF, CHECK_EXPIRATION = OFF
+END;
 GO
 
-CREATE LOGIN [login_user_web]
-WITH PASSWORD = N'UserWeb123&', CHECK_POLICY = OFF, CHECK_EXPIRATION = OFF
+IF NOT EXISTS (SELECT 1 FROM sys.server_principals WHERE name = N'login_user_web')
+BEGIN
+	CREATE LOGIN [login_user_web]
+	WITH PASSWORD = N'UserWeb123&', CHECK_POLICY = OFF, CHECK_EXPIRATION = OFF
+END;
 GO
 
-CREATE LOGIN [login_auditor_concesion]
-WITH PASSWORD = N'AuditorConcesion123&', CHECK_POLICY = OFF, CHECK_EXPIRATION = OFF
+IF NOT EXISTS (SELECT 1 FROM sys.server_principals WHERE name = N'login_auditor_concesion')
+BEGIN
+	CREATE LOGIN [login_auditor_concesion]
+	WITH PASSWORD = N'AuditorConcesion123&', CHECK_POLICY = OFF, CHECK_EXPIRATION = OFF
+END;
 GO
 
-CREATE LOGIN [login_auditor_finanzas]
-WITH PASSWORD = N'AuditorFinanzas123&', CHECK_POLICY = OFF, CHECK_EXPIRATION = OFF
+IF NOT EXISTS (SELECT 1 FROM sys.server_principals WHERE name = N'login_auditor_finanzas')
+BEGIN
+	CREATE LOGIN [login_auditor_finanzas]
+	WITH PASSWORD = N'AuditorFinanzas123&', CHECK_POLICY = OFF, CHECK_EXPIRATION = OFF
+END;
 GO
 
-CREATE LOGIN [login_director_gral]
-WITH PASSWORD = N'DirectorGral123&', CHECK_POLICY = OFF, CHECK_EXPIRATION = OFF
+IF NOT EXISTS (SELECT 1 FROM sys.server_principals WHERE name = N'login_director_gral')
+BEGIN
+	CREATE LOGIN [login_director_gral]
+	WITH PASSWORD = N'DirectorGral123&', CHECK_POLICY = OFF, CHECK_EXPIRATION = OFF
+END;
 GO
 
-CREATE LOGIN [login_importador_datos]
-WITH PASSWORD = N'ImportadorDatos123&', CHECK_POLICY = OFF, CHECK_EXPIRATION = OFF
+IF NOT EXISTS (SELECT 1 FROM sys.server_principals WHERE name = N'login_importador_datos')
+BEGIN
+	CREATE LOGIN [login_importador_datos]
+	WITH PASSWORD = N'ImportadorDatos123&', CHECK_POLICY = OFF, CHECK_EXPIRATION = OFF
+END;
 GO
 
 

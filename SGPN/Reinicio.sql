@@ -114,6 +114,10 @@ PRINT 'Generando datos de modulos...';
 
 PRINT 'Importando datos de modulos...';
 
+EXEC parques.sp_importar_parques 
+	@ruta = '\\DESKTOP-KOIKGVK\Users\Carpeta publica\ArchivosImportacion\Áreas protegidas de Argentina - Sistema de Información de Biodiversidad.xlsx'
+GO
+
 EXEC empleados.sp_importar_guias 
     @ruta = '\\DESKTOP-KOIKGVK\Users\Carpeta publica\ArchivosImportacion\registro-de-guias-de-turismo.csv'
 GO

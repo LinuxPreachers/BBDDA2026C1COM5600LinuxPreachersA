@@ -6,6 +6,9 @@ MinimumVisualStudioVersion = 10.0.40219.1
 Project("{4F2E2C19-372F-40D8-9FA7-9D2138C6997A}") = "SGPN", "SGPN.ssmssqlproj", "{CE4A56E1-1995-9F01-1989-9941B5F28028}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Modulos", "Modulos", "{02EA681E-C7D8-13C7-8484-4AC65E1B71E8}"
+	ProjectSection(SolutionItems) = preProject
+		Reinicio.sql = Reinicio.sql
+	EndProjectSection
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Parques", "Parques", "{C0BE212A-2DC4-4F1D-A5FF-DDB3A8A4B624}"
 	ProjectSection(SolutionItems) = preProject
@@ -86,7 +89,7 @@ Global
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
 		{CE4A56E1-1995-9F01-1989-9941B5F28028}.Default|Default.ActiveCfg = Default
-		{B6F06935-516B-4C2D-AB8A-95AE41BAFC98}.Default|Default.ActiveCfg = Default
+		{4E6905A1-0253-4411-BF49-EBC81AD1992F}.Default|Default.ActiveCfg = Default
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
