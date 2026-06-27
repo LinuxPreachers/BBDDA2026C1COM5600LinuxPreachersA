@@ -265,15 +265,40 @@ BEGIN
 END;
 GO
 
-/* EJECUCION
+--- EJECUCION
+
+SELECT * FROM parques.Parque; --Muestra que ya existian 10 parques
 
 -- Completar con la ruta a utilizar al ejecutar.
 EXEC parques.sp_importar_parques @ruta = '\\DESKTOP-KOIKGVK\Users\Carpeta publica\ArchivosImportacion\Áreas protegidas de Argentina - Sistema de Información de Biodiversidad.xlsx'
 GO
 
-SELECT * FROM parques.Parque ORDER BY nombre
-SELECT * FROM parques.ProvinciaParque
-SELECT * FROM  parques.ImportacionErrorLog
+SELECT * FROM parques.Parque -- En total hay 309 parques, de los cuales 299 fueron cargados del excel
+
+SELECT * FROM  parques.ImportacionErrorLog -- 89 registros contienen datos invalidos y no pueden ser cargados
 GO
 
+--TEST--
+
+/*
+
+--AGREGAMOS UN NUEVO REGISTRO Y REIMPORTAMOS
+ 
+-- agarramos un registro válido, como el P N Iguazú, en la fila 208 del excel, y lo duplicamos cambiandole el nombre y agregandolo al final.
+-- Reimportamos
+
+EXEC parques.sp_importar_parques @ruta = '\\DESKTOP-KOIKGVK\Users\Carpeta publica\ArchivosImportacion\Áreas protegidas de Argentina - Sistema de Información de Biodiversidad.xlsx'
+GO
+
+SELECT * FROM parques.Parque -- Verificamos que ahora hay 310 parques cargados
+
+--MODIFICAMOS UN REGISTRO (UPSERT)
+
+-- Seleccionamos un registro valido (ej el que acabamos de crear) , y le cambiamos por ejemplo la superficie
+-- Reimportamos
+
+EXEC parques.sp_importar_parques @ruta = '\\DESKTOP-KOIKGVK\Users\Carpeta publica\ArchivosImportacion\Áreas protegidas de Argentina - Sistema de Información de Biodiversidad.xlsx'
+GO
+
+SELECT * FROM parques.Parque -- Verificamos que el parque cambio su superficie ( Hay una conversion de Hectáreas a KM2)
 */
