@@ -20,6 +20,7 @@ BEGIN TRANSACTION;
 BEGIN TRY
 
 	EXEC pagos.sp_crear_forma_pago @nombre = 'Tarjeta de Credito';
+	EXEC pagos.sp_crear_forma_pago @nombre = 'Mercado Pago';
 
 	COMMIT TRANSACTION;
 
@@ -40,6 +41,7 @@ BEGIN TRANSACTION;
 BEGIN TRY
 
 	EXEC pagos.sp_crear_punto_venta @nombre = 'Boleteria Zona Norte';
+	EXEC pagos.sp_crear_punto_venta @nombre = 'Boleteria Zona Sur';
 
 	COMMIT TRANSACTION;
 	
