@@ -1,7 +1,7 @@
 /*
  * Universidad: UNLaM
  * Materia: Bases de datos aplicadas
- * Comisión: 5600
+ * ComisiÃ³n: 5600
  * Grupo: 02
  * Integrantes: Conforti, Jaime, Laurelli, Porras
  * Fecha:
@@ -11,9 +11,9 @@
 /* 
  * IMPORTANTE:
  *
- * Este script elimina y crea nuevamente toda la DB. Para ello llama a los scripts de creación de tablas, ABM
- * generación de datos, importaciones y demás de forma automática. Para ejecutarlo correctamente se debe
- * configurar el modo SQLCMD en la pestaña "Consulta" de Management Studio.
+ * Este script elimina y crea nuevamente toda la DB. Para ello llama a los scripts de creaciÃ³n de tablas, ABM
+ * generaciÃ³n de datos, importaciones y demÃ¡s de forma automÃ¡tica. Para ejecutarlo correctamente se debe
+ * configurar el modo SQLCMD en la pestaÃ±a "Consulta" de Management Studio.
 */
 
 USE master;
@@ -87,8 +87,8 @@ PRINT 'Generando datos de modulos...';
 :r "D:\Facultad\TP-BDA\BBDDA2026C1COM5600LinuxPreachersA\SGPN\Modulos\Parques\ABM.sql"
 :r "D:\Facultad\TP-BDA\BBDDA2026C1COM5600LinuxPreachersA\SGPN\Modulos\Actividades\ABM.sql"
 :r "D:\Facultad\TP-BDA\BBDDA2026C1COM5600LinuxPreachersA\SGPN\Modulos\Empleados\ABM.sql"
-:r "D:\Facultad\TP-BDA\BBDDA2026C1COM5600LinuxPreachersA\SGPN\Modulos\Reservas\ABM.sql"
 :r "D:\Facultad\TP-BDA\BBDDA2026C1COM5600LinuxPreachersA\SGPN\Modulos\Pagos\ABM.sql"
+:r "D:\Facultad\TP-BDA\BBDDA2026C1COM5600LinuxPreachersA\SGPN\Modulos\Reservas\ABM.sql"
 :r "D:\Facultad\TP-BDA\BBDDA2026C1COM5600LinuxPreachersA\SGPN\Modulos\Concesiones\ABM.sql"
 :r "D:\Facultad\TP-BDA\BBDDA2026C1COM5600LinuxPreachersA\SGPN\Modulos\Roles\ABM.sql"
 
@@ -96,8 +96,8 @@ PRINT 'Generando datos de modulos...';
 :r "D:\Facultad\TP-BDA\BBDDA2026C1COM5600LinuxPreachersA\SGPN\Modulos\Parques\Generar_datos.sql"
 :r "D:\Facultad\TP-BDA\BBDDA2026C1COM5600LinuxPreachersA\SGPN\Modulos\Actividades\Generar_datos.sql"
 :r "D:\Facultad\TP-BDA\BBDDA2026C1COM5600LinuxPreachersA\SGPN\Modulos\Empleados\Generar_datos.sql"
-:r "D:\Facultad\TP-BDA\BBDDA2026C1COM5600LinuxPreachersA\SGPN\Modulos\Reservas\Generar_datos.sql"
 :r "D:\Facultad\TP-BDA\BBDDA2026C1COM5600LinuxPreachersA\SGPN\Modulos\Pagos\Generar_datos.sql"
+:r "D:\Facultad\TP-BDA\BBDDA2026C1COM5600LinuxPreachersA\SGPN\Modulos\Reservas\Generar_datos.sql"
 
 -- Importaciones
 :r "D:\Facultad\TP-BDA\BBDDA2026C1COM5600LinuxPreachersA\SGPN\Modulos\Parques\Importacion.sql"
@@ -114,18 +114,14 @@ PRINT 'Generando datos de modulos...';
 
 PRINT 'Importando datos de modulos...';
 
-EXEC parques.sp_importar_parques 
-	@ruta = '\\DESKTOP-KOIKGVK\Users\Carpeta publica\ArchivosImportacion\Áreas protegidas de Argentina - Sistema de Información de Biodiversidad.xlsx'
-GO
+--EXEC empleados.sp_importar_guias 
+--    @ruta = '\\DESKTOP-KOIKGVK\Users\Carpeta publica\ArchivosImportacion\registro-de-guias-de-turismo.csv'
+--GO
 
-EXEC empleados.sp_importar_guias 
-    @ruta = '\\DESKTOP-KOIKGVK\Users\Carpeta publica\ArchivosImportacion\registro-de-guias-de-turismo.csv'
-GO
-
-EXEC concesiones.sp_importar_directorio_empresas
-    @ruta = '\\DESKTOP-KOIKGVK\Users\Carpeta publica\ArchivosImportacion\registro-organizaciones-distinguidas-sact.csv',
-    @id_parque = 1;
-GO
+--EXEC concesiones.sp_importar_directorio_empresas
+--    @ruta = '\\DESKTOP-KOIKGVK\Users\Carpeta publica\ArchivosImportacion\registro-organizaciones-distinguidas-sact.csv',
+--    @id_parque = 1;
+--GO
 
 --PRINT 'Creando configuraciones de seguridad...';
 
@@ -133,8 +129,3 @@ GO
 --:r "D:\Facultad\TP-BDA\BBDDA2026C1COM5600LinuxPreachersA\SGPN\Cifrado.sql"
 
 PRINT 'Reinicio completo.';
-
-SELECT * 
-FROM INFORMATION_SCHEMA.TABLES
-ORDER BY TABLE_SCHEMA
-GO

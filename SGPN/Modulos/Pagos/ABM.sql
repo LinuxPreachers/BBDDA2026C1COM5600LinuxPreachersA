@@ -191,7 +191,8 @@ CREATE OR ALTER PROCEDURE pagos.sp_crear_pago
     @fecha_y_hora DATETIME,
     @id_reserva INT,
     @id_forma_pago TINYINT,
-    @importe DECIMAL(15,2)
+    @importe DECIMAL(15,2),
+    @id_pago INT = NULL OUTPUT
 AS
 BEGIN
     SET NOCOUNT ON;
@@ -215,6 +216,9 @@ BEGIN
 
         INSERT INTO pagos.Pago(fecha_y_hora,id_reserva,id_forma_pago,importe)
         VALUES (@fecha_y_hora,@id_reserva,@id_forma_pago,@importe);
+
+        SET @id_pago = SCOPE_IDENTITY();
+
     END TRY
     BEGIN CATCH
         THROW;

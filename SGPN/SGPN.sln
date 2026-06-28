@@ -1,14 +1,11 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# SQL Server Management Studio Version 22
-VisualStudioVersion = 18.7.11903.348 stable
+# SQL Server Management Studio Version 21
+VisualStudioVersion = 17.14.36212.18
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{4F2E2C19-372F-40D8-9FA7-9D2138C6997A}") = "SGPN", "SGPN.ssmssqlproj", "{CE4A56E1-1995-9F01-1989-9941B5F28028}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Modulos", "Modulos", "{02EA681E-C7D8-13C7-8484-4AC65E1B71E8}"
-	ProjectSection(SolutionItems) = preProject
-		Reinicio.sql = Reinicio.sql
-	EndProjectSection
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Parques", "Parques", "{C0BE212A-2DC4-4F1D-A5FF-DDB3A8A4B624}"
 	ProjectSection(SolutionItems) = preProject
@@ -66,7 +63,6 @@ EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Elementos de la solución", "Elementos de la solución", "{D107F4C8-89CC-BEA8-D3D7-CA6B7733353D}"
 	ProjectSection(SolutionItems) = preProject
 		Cifrado.sql = Cifrado.sql
-		CreacionPass.sql = CreacionPass.sql
 		Reinicio.sql = Reinicio.sql
 	EndProjectSection
 EndProject
@@ -90,7 +86,7 @@ Global
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
 		{CE4A56E1-1995-9F01-1989-9941B5F28028}.Default|Default.ActiveCfg = Default
-		{7358CC2D-D8BB-4D3D-9E0F-A4CCEB49C54E}.Default|Default.ActiveCfg = Default
+		{5279F85A-F379-4227-A34F-6483C559A76F}.Default|Default.ActiveCfg = Default
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

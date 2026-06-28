@@ -315,224 +315,293 @@ GO
 --------------------------------------------------------------------------------------
 
 -- SP para registrar múltiples entradas y participaciones.
+-- Nota: Este SP permite registrar no solo reservas en el momento, si no también cargar históricos.
 CREATE OR ALTER PROCEDURE reservas.sp_registrar_reserva
     @entradas reservas.TVP_Entradas READONLY,
     @participaciones reservas.TVP_Participaciones READONLY,
-    @id_reserva INT OUTPUT
+    @fecha_y_hora_operacion DATETIME = NULL, -- Para reservas historicas
+    @id_reserva INT = NULL OUTPUT
 AS
 BEGIN
     SET NOCOUNT ON;
-
-    /*
-     * Se utiliza SERIALIZABLE para el manejo de participaciones. Una participación antes de procesarse debe
-     * verificar que haya cupos disponibles para esa actividad en el horario solicitado (verificando la cantidad
-     * de participaciones registradas para la misma actividad en el mismo horario. Si se tiene otra transacción
-     * cargando participaciones, si solo se usa REPEATABLE READ se le permitirá a la otra transacción insertar
-     * participaciones como también a esta, generando reservas de participaciones por sobre el cupo máximo.
-    */
     SET TRANSACTION ISOLATION LEVEL SERIALIZABLE;
 
     BEGIN TRY
-
         BEGIN TRANSACTION;
 
-        ------------------------------------------------------
-        -- Validar que exista algo para comprar
-        ------------------------------------------------------
+        DECLARE @fecha_actual DATE = CAST(GETDATE() AS DATE);
 
+        ------------------------------------------------------
+        -- Validación de estados
+        ------------------------------------------------------
         IF NOT EXISTS (SELECT 1 FROM @entradas) AND NOT EXISTS (SELECT 1 FROM @participaciones)
             THROW 50315, 'Debe especificar al menos una entrada o participación.', 1;
 
+        DECLARE 
+            @id_estado_reservada TINYINT,
+            @id_estado_utilizada TINYINT;
+
+        SELECT @id_estado_reservada = id FROM reservas.EstadoItem WHERE nombre = 'Reservada';
+        SELECT @id_estado_utilizada = id FROM reservas.EstadoItem WHERE nombre = 'Utilizada';
+
+        IF @id_estado_reservada IS NULL OR @id_estado_utilizada IS NULL
+            THROW 50316, 'No existe alguno de los estados necesarios para registrar la reserva.', 1;
+
         ------------------------------------------------------
-        -- Crear Reserva
+        -- Validación de existencia de precios
+        ------------------------------------------------------
+        IF EXISTS
+        (
+            SELECT 1
+            FROM @entradas e
+            LEFT JOIN parques.ParqueTipoVisitante ptv
+                ON ptv.id_parque = e.id_parque
+               AND ptv.id_tipo_visitante = e.id_tipo_visitante
+            WHERE ptv.id_parque IS NULL
+        )
+            THROW 50317, 'No existe un precio configurado para una o más entradas.', 1;
+
+        ------------------------------------------------------
+        -- Validación de existencia de horarios
         ------------------------------------------------------
 
-        INSERT INTO reservas.Reserva(fecha_y_hora)
-        VALUES (GETDATE());
+        IF EXISTS
+        (
+            SELECT 1
+            FROM @participaciones p
+            LEFT JOIN actividades.Horario h
+                ON h.id = p.id_horario
+            WHERE h.id IS NULL
+        )
+            THROW 50318, 'Uno o más horarios no existen.', 1;
+
+        ------------------------------------------------------
+        -- Validación de cupos
+        ------------------------------------------------------
+        IF EXISTS (
+            SELECT 1
+            FROM (
+                -- Subconsulta 1: Sumamos lo que el usuario está pidiendo en este momento (Equivalente a CTE_Solicitado)
+                SELECT id_horario, fecha_realizacion, SUM(cantidad) AS cantidad_solicitada
+                FROM @participaciones
+                GROUP BY id_horario, fecha_realizacion
+            ) s
+            INNER JOIN actividades.Horario h ON h.id = s.id_horario
+            INNER JOIN actividades.Actividad a ON a.id = h.id_actividad
+            LEFT JOIN (
+                -- Subconsulta 2: Contamos lo ya reservado en la Base de Datos (Equivalente a CTE_Ocupado)
+                SELECT p.id_horario, p.fecha_realizacion, COUNT(*) AS cantidad_ocupada
+                FROM reservas.ItemReserva i
+                INNER JOIN reservas.Participacion p ON i.id = p.id_item_reserva
+                WHERE i.id_cancelacion IS NULL
+                GROUP BY p.id_horario, p.fecha_realizacion
+            ) o ON o.id_horario = s.id_horario AND o.fecha_realizacion = s.fecha_realizacion
+            -- Comparamos si la suma supera el cupo máximo
+            WHERE (ISNULL(o.cantidad_ocupada, 0) + s.cantidad_solicitada) > a.cupo_maximo
+        )
+        BEGIN;
+            THROW 50319, 'No hay cupos suficientes para una o más de las actividades seleccionadas.', 1;
+        END;
+
+        ------------------------------------------------------
+        -- Crear la reserva
+        ------------------------------------------------------
+        SET @fecha_y_hora_operacion = ISNULL(@fecha_y_hora_operacion, GETDATE());
+
+        INSERT INTO reservas.Reserva (fecha_y_hora)
+        VALUES (@fecha_y_hora_operacion);
 
         SET @id_reserva = SCOPE_IDENTITY();
 
         ------------------------------------------------------
-        -- Obtener estado inicial
+        -- GENERADOR DE NÚMEROS (Para multiplicar filas)
+        -- Esta CTE genera una lista del 1 al 100 de forma instantánea
         ------------------------------------------------------
-
-        DECLARE @id_estado_reservada INT;
-
-        SELECT @id_estado_reservada = id
-        FROM reservas.EstadoItem
-        WHERE nombre= 'Reservada';
-
-        IF @id_estado_reservada IS NULL
-            THROW 50316, 'No existe el estado Reservada.', 1;
-
+        ;WITH L0 AS (SELECT 1 AS c UNION ALL SELECT 1), -- 2 filas
+              L1 AS (SELECT 1 AS c FROM L0 AS a CROSS JOIN L0 AS b), -- 4 filas
+              L2 AS (SELECT 1 AS c FROM L1 AS a CROSS JOIN L1 AS b), -- 16 filas
+              L3 AS (SELECT 1 AS c FROM L2 AS a CROSS JOIN L2 AS b), -- 256 filas
+              Numeros AS (SELECT ROW_NUMBER() OVER (ORDER BY (SELECT NULL)) AS N FROM L3)
         ------------------------------------------------------
-        -- Variables para entradas
+        -- Procesar entradas
         ------------------------------------------------------
+        -- Desglosamos las entradas multiplicando las filas mediante el JOIN con "Numeros"
+        SELECT
+        ptv.precio,
+        e.fecha_acceso,
+        e.id_parque,
+        e.id_tipo_visitante,
+        CASE
+            WHEN e.fecha_acceso < @fecha_actual -- Si la entrada es para una fecha anterior a hoy, ya se marca como utilizada.
+                THEN @id_estado_utilizada
+            ELSE @id_estado_reservada
+        END AS id_estado
 
-        DECLARE
-            @id_item_reserva INT,
-            @precio DECIMAL(10,2),
-            @cantidad TINYINT,
-            @contador TINYINT,
+        INTO #EntradasAbiertas
+        FROM @entradas e
+        INNER JOIN parques.ParqueTipoVisitante ptv 
+        ON ptv.id_parque = e.id_parque AND ptv.id_tipo_visitante = e.id_tipo_visitante
+        INNER JOIN Numeros n 
+        ON n.N <= e.cantidad; -- Si cantidad es 3, hace match con N=1, N=2 y N=3 (duplica la fila)
 
-            @fila_entrada TINYINT = 1,
-            @total_entradas TINYINT,
-
-            @id_parque INT,
-            @id_tipo_visitante INT,
-            @fecha_acceso DATE;
-
-        ------------------------------------------------------
-        -- Procesar Entradas
-        ------------------------------------------------------
-
-        SELECT @total_entradas = COUNT(*)
-        FROM @entradas;
-
-        -- No se cargarán muchas filas de entradas por compra.
-        -- El impacto del procesamiento iterativo será mínimo.
-
-        WHILE @fila_entrada <= @total_entradas
+        IF EXISTS (SELECT 1 FROM #EntradasAbiertas)
         BEGIN
+            -- Tabla para capturar los IDs que va a generar el INSERT masivo
+            CREATE TABLE #IdsEntradasGenerados (
+                fila_id INT IDENTITY(1,1),
+                id_item_reserva INT
+            );
 
-            SELECT
-                @id_parque = id_parque,
-                @id_tipo_visitante = id_tipo_visitante,
-                @fecha_acceso = fecha_acceso,
-                @cantidad = cantidad
-            FROM @entradas
-            WHERE fila = @fila_entrada;
+            INSERT INTO reservas.ItemReserva (precio, id_estado, id_reserva)
+            OUTPUT inserted.id INTO #IdsEntradasGenerados(id_item_reserva)
+            SELECT precio, id_estado, @id_reserva
+            FROM #EntradasAbiertas;
 
-            --------------------------------------------------
-            -- Obtener precio de la entrada
-            --------------------------------------------------
-
-            SELECT @precio = precio
-            FROM parques.ParqueTipoVisitante
-            WHERE id_parque = @id_parque
-              AND id_tipo_visitante = @id_tipo_visitante;
-
-            IF @precio IS NULL
-                THROW 50317, 'No existe un precio configurado para la entrada.', 1;
-
-            --------------------------------------------------
-            -- Crear tantas entradas como indique cantidad
-            --------------------------------------------------
-
-            SET @contador = 1;
-
-            WHILE @contador <= @cantidad
-            BEGIN
-
-                INSERT INTO reservas.ItemReserva
-                (precio, id_estado, id_reserva)
-                VALUES
-                (@precio, @id_estado_reservada, @id_reserva);
-
-                SET @id_item_reserva = SCOPE_IDENTITY();
-
-                INSERT INTO reservas.Entrada
-                (id_item_reserva, fecha_acceso, id_parque, id_tipo_visitante)
-                VALUES
-                (@id_item_reserva, @fecha_acceso, @id_parque, @id_tipo_visitante);
-
-                SET @contador += 1;
-            END;
-
-            SET @fila_entrada += 1;
+            -- Numeramos nuestras entradas desglosadas para poder unirlas con sus IDs correspondientes
+            ;WITH CTE_EntradasConFila AS (
+                SELECT *, ROW_NUMBER() OVER (ORDER BY (SELECT NULL)) AS fila_id
+                FROM #EntradasAbiertas
+            )
+            INSERT INTO reservas.Entrada (id_item_reserva, fecha_acceso, id_parque, id_tipo_visitante)
+            SELECT id.id_item_reserva, ea.fecha_acceso, ea.id_parque, ea.id_tipo_visitante
+            FROM CTE_EntradasConFila ea
+            INNER JOIN #IdsEntradasGenerados id ON ea.fila_id = id.fila_id;
         END;
 
         ------------------------------------------------------
-        -- Variables para participaciones
+        -- RE-GENERAR EL GENERADOR DE NÚMEROS (Para las participaciones)
         ------------------------------------------------------
-
-        DECLARE
-            @fila_participacion TINYINT = 1,
-            @total_participaciones TINYINT,
-
-            @id_horario INT,
-            @fecha_realizacion DATE,
-
-            @cupo_maximo SMALLINT,
-            @cupos_utilizados INT;
+        ;WITH L0 AS (SELECT 1 AS c UNION ALL SELECT 1), 
+              L1 AS (SELECT 1 AS c FROM L0 AS a CROSS JOIN L0 AS b), 
+              L2 AS (SELECT 1 AS c FROM L1 AS a CROSS JOIN L1 AS b), 
+              L3 AS (SELECT 1 AS c FROM L2 AS a CROSS JOIN L2 AS b), 
+              Numeros AS (SELECT ROW_NUMBER() OVER (ORDER BY (SELECT NULL)) AS N FROM L3)
 
         ------------------------------------------------------
-        -- Procesar Participaciones
+        -- Procesar las participaciones
         ------------------------------------------------------
+        -- Desglosamos las participaciones de la misma manera
+        SELECT 
+            a.precio, 
+            p.fecha_realizacion, 
+            p.id_horario,
+        CASE
+            WHEN p.fecha_realizacion < @fecha_actual -- Si la participacion es para una fecha anterior a hoy, ya se marca como utilizada.
+                THEN @id_estado_utilizada
+            ELSE @id_estado_reservada
+        END AS id_estado
 
-        SELECT
-            @total_participaciones = COUNT(*)
-        FROM @participaciones;
+        INTO #ParticipacionesAbiertas
+        FROM @participaciones p
+        INNER JOIN actividades.Horario h ON h.id = p.id_horario
+        INNER JOIN actividades.Actividad a ON a.id = h.id_actividad
+        INNER JOIN Numeros n ON n.N <= p.cantidad;
 
-        WHILE @fila_participacion <= @total_participaciones
+        IF EXISTS (SELECT 1 FROM #ParticipacionesAbiertas)
         BEGIN
+            CREATE TABLE #IdsPartGenerados (id_item_reserva INT, fila_id INT IDENTITY(1,1));
 
-            SELECT
-                @id_horario = id_horario,
-                @fecha_realizacion = fecha_realizacion,
-                @cantidad = cantidad
-            FROM @participaciones
-            WHERE fila = @fila_participacion;
+            INSERT INTO reservas.ItemReserva (precio, id_estado, id_reserva)
+            OUTPUT inserted.id INTO #IdsPartGenerados(id_item_reserva)
+            SELECT precio, id_estado, @id_reserva
+            FROM #ParticipacionesAbiertas;
 
-            --------------------------------------------------
-            -- Obtener precio y cupo máximo
-            --------------------------------------------------
+            ;WITH CTE_ParticipacionesConFila AS (
+                SELECT *, ROW_NUMBER() OVER (ORDER BY (SELECT NULL)) AS fila_id
+                FROM #ParticipacionesAbiertas
+            )
+            INSERT INTO reservas.Participacion (id_item_reserva, fecha_realizacion, id_horario)
+            SELECT id.id_item_reserva, pa.fecha_realizacion, pa.id_horario
+            FROM CTE_ParticipacionesConFila pa
+            INNER JOIN #IdsPartGenerados id ON pa.fila_id = id.fila_id;
+        END;
 
-            SELECT @precio = a.precio, @cupo_maximo = a.cupo_maximo
-            FROM actividades.Horario h
-            INNER JOIN actividades.Actividad a
-            ON a.id = h.id_actividad
-            WHERE h.id = @id_horario;
+        COMMIT TRANSACTION;
 
-            IF @precio IS NULL
-                THROW 50318, 'No existe el horario especificado.', 1;
+    END TRY
+    BEGIN CATCH
+        IF @@TRANCOUNT > 0 ROLLBACK TRANSACTION;
+        THROW;
+    END CATCH;
 
-            --------------------------------------------------
-            -- Calcular cupos utilizados
-            --------------------------------------------------
+    SET TRANSACTION ISOLATION LEVEL READ COMMITTED;
+END;
+GO
 
-            SELECT @cupos_utilizados = COUNT(*)
-            FROM reservas.ItemReserva i
-            JOIN reservas.Participacion p
-            ON i.id = p.id_item_reserva
-            WHERE p.id_horario = @id_horario 
-            AND i.id_cancelacion IS NULL
-            AND p.fecha_realizacion = @fecha_realizacion;
+-- SP para registrar una reserva con su pago y ticket factura.
+CREATE OR ALTER PROCEDURE reservas.sp_registrar_reserva_con_pago
+    @entradas AS reservas.TVP_Entradas READONLY,
+    @participaciones AS reservas.TVP_Participaciones READONLY,
+    @fecha_y_hora_operacion DATETIME = NULL,
+    @id_forma_pago TINYINT,
+    @id_punto_venta SMALLINT,
+    @id_reserva INT = NULL OUTPUT
+AS
+BEGIN
+    SET NOCOUNT ON;
 
-            SET @cupos_utilizados = ISNULL(@cupos_utilizados, 0);
+    BEGIN TRY
+        BEGIN TRANSACTION;
 
-            --------------------------------------------------
-            -- Validar disponibilidad
-            --------------------------------------------------
+        DECLARE @msj_errores VARCHAR(1000) = '';
 
-            IF @cupos_utilizados + @cantidad > @cupo_maximo
-                THROW 50319, 'No hay cupos suficientes para la actividad seleccionada.', 1;
+        ------------------------------------------------------
+        -- 1. Validar ids de forma de pago, punto de venta e items reserva.
+        -----------------------------------------------------
+
+        --IF NOT EXISTS (SELECT 1 FROM pagos.FormaPago WHERE id = @id_forma_pago)
+        --     SET @msj_errores += '- Forma de pago inexistente';
+
+        --IF NOT EXISTS (SELECT 1 FROM pagos.PuntoVenta WHERE id = @id_punto_venta)
+        --     SET @msj_errores += '- Punto de venta inexistente';
+
+        --IF NOT EXISTS (SELECT 1 FROM @entradas) AND NOT EXISTS (SELECT 1 FROM @participaciones)
+        --    SET @msj_errores += '- Debe especificar al menos una entrada o participación.';
+
+        --IF (LEN(@msj_errores) > 0)
+        --    THROW 50309, @msj_errores, 1
+
+        ------------------------------------------------------
+        -- 2. Generación de la Reserva.
+        ------------------------------------------------------
+
+        SET @fecha_y_hora_operacion = ISNULL(@fecha_y_hora_operacion, GETDATE());
+
+        EXEC reservas.sp_registrar_reserva        
+            @entradas = @entradas,
+            @participaciones = @participaciones,
+            @fecha_y_hora_operacion = @fecha_y_hora_operacion,
+            @id_reserva = @id_reserva OUTPUT;
+
+        ------------------------------------------------------
+        -- 3. Registro del Pago.
+        ------------------------------------------------------
+
+        DECLARE @importe_total DECIMAL(15,2);
+        DECLARE @id_pago_generado INT;
+    
+        -- Calculamos el monto total para el pago
+        SELECT @importe_total = ISNULL(SUM(precio), 0)
+        FROM reservas.ItemReserva
+        WHERE id_reserva = @id_reserva;
+
+        IF @importe_total > 0
+        BEGIN
+            EXEC pagos.sp_crear_pago        
+                @fecha_y_hora = @fecha_y_hora_operacion,
+                @id_reserva = @id_reserva,
+                @id_forma_pago = @id_forma_pago,
+                @importe = @importe_total,
+                @id_pago = @id_pago_generado OUTPUT;
 
             ------------------------------------------------------
-            -- Crear tantas participaciones como indique cantidad
+            -- 4. Emisión del Ticket Factura.
             ------------------------------------------------------
 
-            SET @contador = 1;
-
-            WHILE @contador <= @cantidad
-            BEGIN
-
-                INSERT INTO reservas.ItemReserva
-                (precio, id_estado, id_reserva)
-                VALUES
-                (@precio, @id_estado_reservada, @id_reserva);
-
-                SET @id_item_reserva = SCOPE_IDENTITY();
-
-                INSERT INTO reservas.Participacion
-                (id_item_reserva, fecha_realizacion, id_horario)
-                VALUES
-                (@id_item_reserva, @fecha_realizacion, @id_horario);
-
-                SET @contador += 1;
-            END;
-
-            SET @fila_participacion += 1;
+            EXEC pagos.sp_crear_ticket_factura        
+                @fecha_y_hora = @fecha_y_hora_operacion,
+                @id_punto_venta = @id_punto_venta,
+                @id_pago = @id_pago_generado;
         END;
 
         COMMIT TRANSACTION;
@@ -542,20 +611,201 @@ BEGIN
 
         IF @@TRANCOUNT > 0
             ROLLBACK TRANSACTION;
-
-        THROW;
-
+        
+        PRINT 'ERROR INESPERADO: ' + ERROR_MESSAGE();
     END CATCH;
 
-    SET TRANSACTION ISOLATION LEVEL READ COMMITTED;
+END;
+GO
 
+-- SP para generar el historial de reservas (ficticio).
+CREATE OR ALTER PROCEDURE reservas.sp_generar_reservas_historicas
+    @id_parque INT,
+    @fecha_inicio DATE,
+    @fecha_fin DATE,
+    @reservas_por_dia TINYINT = 3
+AS
+BEGIN
+    SET NOCOUNT ON;
+
+    -----------------------------------------------------
+    -- Validaciones
+    -----------------------------------------------------
+
+    IF @fecha_fin < @fecha_inicio
+        THROW 50000, 'La fecha de fin debe ser mayor o igual a la fecha de inicio.', 1;
+
+    IF NOT EXISTS (
+        SELECT 1
+        FROM parques.Parque
+        WHERE id = @id_parque
+    )
+        THROW 50000, 'El parque indicado no existe.', 1;
+
+    IF @reservas_por_dia <= 0
+        THROW 50000, 'Debe especificarse una cantidad positiva de reservas por día', 1;
+
+    -----------------------------------------------------
+    -- Variables
+    -----------------------------------------------------
+
+    DECLARE
+        @fecha_actual DATE,
+        @reserva_del_dia TINYINT,
+        @modo TINYINT,
+        @entradas reservas.TVP_Entradas,
+        @participaciones reservas.TVP_Participaciones;
+
+    SET @fecha_actual = @fecha_inicio;
+
+    -----------------------------------------------------
+    -- Carga datos auxiliares
+    -----------------------------------------------------
+
+    -- Formas de pago
+    DECLARE @formas_pago TABLE (
+        fila INT PRIMARY KEY,
+        id TINYINT
+    );
+
+    INSERT INTO @formas_pago
+    SELECT ROW_NUMBER() OVER (ORDER BY id), id
+    FROM pagos.FormaPago
+    WHERE estado = 1;
+
+    -- Puntos de venta
+    DECLARE @puntos_venta TABLE (
+        fila INT PRIMARY KEY,
+        id SMALLINT
+    );
+
+    INSERT INTO @puntos_venta
+    SELECT ROW_NUMBER() OVER (ORDER BY id), id
+    FROM pagos.PuntoVenta WHERE estado = 1;
+
+    -- Tipos de visitante
+    DECLARE @tipos_visitante TABLE (
+        fila INT PRIMARY KEY,
+        id TINYINT
+    );
+
+    INSERT INTO @tipos_visitante
+    SELECT ROW_NUMBER() OVER (ORDER BY id_tipo_visitante), id_tipo_visitante
+    FROM parques.ParqueTipoVisitante
+    WHERE id_parque = @id_parque;
+
+    -- Horarios
+    DECLARE @horarios TABLE (
+        fila INT PRIMARY KEY,
+        id_horario INT,
+        dia_semana TINYINT,
+        fecha_ini DATE,
+        fecha_fin DATE
+    );
+
+    INSERT INTO @horarios
+    SELECT
+        ROW_NUMBER() OVER(ORDER BY h.id),
+        h.id,
+        h.dia_semana,
+        h.fecha_vigencia_ini,
+        h.fecha_vigencia_fin
+    FROM actividades.Horario h
+    JOIN actividades.Actividad a
+        ON a.id = h.id_actividad
+    WHERE a.id_parque = @id_parque;
+
+    -----------------------------------------------------
+    -- Generación de reservas
+    -----------------------------------------------------
+
+    WHILE @fecha_actual <= @fecha_fin
+    BEGIN
+
+        SET @reserva_del_dia = 1;
+
+        WHILE @reserva_del_dia <= @reservas_por_dia
+        BEGIN
+
+            DECLARE
+                @id_tipo_visitante TINYINT = (SELECT TOP 1 id FROM @tipos_visitante ORDER BY NEWID()),
+                @id_horario INT,
+                @dias_offset TINYINT = CAST((RAND() * 180) AS TINYINT),
+                @cantidad TINYINT = CAST(((RAND() * 3) +1) AS TINYINT),
+                @id_forma_pago TINYINT = (SELECT TOP 1 id FROM @formas_pago ORDER BY NEWID()),
+                @id_punto_venta SMALLINT = (SELECT TOP 1 id FROM @puntos_venta ORDER BY NEWID());
+
+            DECLARE @fecha_utilizacion DATE = DATEADD(DAY, @dias_offset, @fecha_actual);
+
+            /*
+            * Se distribuye el porcentaje entre entradas solas, con participaciones o participaciones solas:
+            * 70% de entradas solas.
+            * 20% de entradas con participaciones.
+            * 10% de participaciones solas.
+            */
+            SET @modo = CAST(RAND(CHECKSUM(NEWID())) * 10 AS TINYINT);
+
+            IF @modo <= 8
+            BEGIN
+                INSERT INTO @entradas(id_parque, id_tipo_visitante, fecha_acceso, cantidad)
+                VALUES(@id_parque, @id_tipo_visitante, @fecha_utilizacion, @cantidad);
+            END;
+
+            IF @modo >= 7
+            BEGIN
+
+                -- Calcula que día de la semana le corresponde a la fecha de utilización.
+                DECLARE @dia_semana TINYINT = ((DATEDIFF(DAY, '19000101', @fecha_utilizacion) % 7) + 1);
+
+                -- Con ese día de la semana, obtiene un horario aleatorio.
+                SELECT TOP 1 @id_horario = h.id_horario
+                FROM @horarios h
+                WHERE h.dia_semana = @dia_semana
+                AND @fecha_utilizacion >= h.fecha_ini
+                AND (
+                        h.fecha_fin IS NULL
+                        OR @fecha_utilizacion <= h.fecha_fin
+                )
+                ORDER BY NEWID();
+
+                -- Si encontró un horario válido, carga la participación.
+                IF @id_horario IS NOT NULL
+                BEGIN
+                    INSERT INTO @participaciones (id_horario, fecha_realizacion, cantidad)
+                    VALUES (@id_horario, @fecha_utilizacion, 1);
+                END
+            END;
+
+            -- Valida que realmente se haya cargado algo, 
+            -- podría ocurrir que solo se necesite una participación pero no encuentre un horario, y no cargue nada.
+            IF EXISTS (SELECT 1 FROM @entradas) OR EXISTS (SELECT 1 FROM @participaciones)
+            BEGIN
+
+                EXEC reservas.sp_registrar_reserva_con_pago
+                    @entradas = @entradas,
+                    @participaciones = @participaciones,
+                    @fecha_y_hora_operacion = @fecha_actual,
+                    @id_forma_pago = @id_forma_pago,
+                    @id_punto_venta = @id_punto_venta;
+
+                -- Limpia las tablas variables para la proxima iteración.
+                DELETE FROM @entradas;
+                DELETE FROM @participaciones;
+
+                SET @reserva_del_dia += 1;
+            END            
+        END;
+
+        SET @fecha_actual = DATEADD(DAY, 1, @fecha_actual);
+    END;
 END;
 GO
 
 -- SP para registrar el uso de una entrada a un parque.
 CREATE OR ALTER PROCEDURE reservas.sp_utilizar_entrada
     @id_item_reserva INT,
-    @id_parque_lector INT
+    @id_parque_lector INT,
+    @modo_historico BIT = 0
 AS
 BEGIN
     SET NOCOUNT ON;
@@ -622,7 +872,7 @@ BEGIN
     -- Verificar fecha
     ------------------------------------------------------
 
-    IF @fecha_acceso <> CAST(GETDATE() AS DATE)
+    IF @modo_historico = 0 AND @fecha_acceso <> CAST(GETDATE() AS DATE)
         THROW 50322, 'La entrada solo puede utilizarse en su fecha de acceso.', 1;
 
     ------------------------------------------------------
@@ -638,7 +888,8 @@ GO
 -- SP para registrar el uso de una participación a un parque.
 CREATE OR ALTER PROCEDURE reservas.sp_utilizar_participacion
     @id_item_reserva INT,
-    @id_actividad_lectora INT
+    @id_actividad_lectora INT,
+    @modo_historico BIT = 0
 AS
 BEGIN
     SET NOCOUNT ON;
@@ -655,7 +906,8 @@ BEGIN
             @hora_inicio TIME,
             @hora_fin TIME,
             @estado_reservada INT,
-            @estado_utilizada INT;
+            @estado_utilizada INT,
+            @hora_actual TIME;
 
         ------------------------------------------------------
         -- Verificar ItemReserva
@@ -722,17 +974,19 @@ BEGIN
         -- Verificar fecha
         ------------------------------------------------------
 
-        IF @fecha_realizacion <> CAST(GETDATE() AS DATE)
+        IF @modo_historico = 0 AND @fecha_realizacion <> CAST(GETDATE() AS DATE)
             THROW 50313, 'La participación solo puede utilizarse en su fecha programada.', 1;
 
         ------------------------------------------------------
         -- Verificar horario
         ------------------------------------------------------
 
-        IF CAST(GETDATE() AS TIME) < @hora_inicio
+        SET @hora_actual = CAST(GETDATE() AS TIME);
+
+        IF @modo_historico = 0 AND @hora_actual < @hora_inicio
             THROW 50314, 'La actividad aún no ha comenzado.', 1;
 
-        IF CAST(GETDATE() AS TIME) > @hora_fin
+        IF @modo_historico = 0 AND @hora_actual > @hora_fin
             THROW 50315, 'La actividad ya ha finalizado.', 1;
 
         ------------------------------------------------------
@@ -761,7 +1015,7 @@ GO
 CREATE OR ALTER PROCEDURE reservas.sp_cancelar_items_reserva
     @items reservas.TVP_ItemsReserva READONLY,
     @id_motivo INT,
-    @id_cancelacion INT OUTPUT
+    @id_cancelacion INT = NULL OUTPUT
 AS
 BEGIN
     SET NOCOUNT ON;

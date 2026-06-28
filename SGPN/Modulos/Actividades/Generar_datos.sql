@@ -140,33 +140,33 @@ BEGIN TRY
     SET @id_pesca      = (SELECT TOP 1 id FROM actividades.Actividad WHERE nombre = 'Clínica de Pesca con Mosca');
     SET @id_historia   = (SELECT TOP 1 id FROM actividades.Actividad WHERE nombre = 'Circuito Histórico Ruinas');
     -- Sendero al Mirador (Sábados y Domingos a la mañana y tarde)
-    EXEC actividades.sp_crear_horario @hora_inicio = '09:00', @hora_fin = '11:00', @dia_semana = 6, @fecha_vigencia_ini = '2026-01-01', @fecha_vigencia_fin = NULL, @visible = 1, @id_actividad = @id_sendero;
-    EXEC actividades.sp_crear_horario @hora_inicio = '15:00', @hora_fin = '17:00', @dia_semana = 6, @fecha_vigencia_ini = '2026-01-01', @fecha_vigencia_fin = NULL, @visible = 1, @id_actividad = @id_sendero;
-    EXEC actividades.sp_crear_horario @hora_inicio = '10:00', @hora_fin = '12:00', @dia_semana = 7, @fecha_vigencia_ini = '2026-01-01', @fecha_vigencia_fin = NULL, @visible = 1, @id_actividad = @id_sendero;
+    EXEC actividades.sp_crear_horario @hora_inicio = '09:00', @hora_fin = '11:00', @dia_semana = 6, @fecha_vigencia_ini = '2025-01-01', @fecha_vigencia_fin = NULL, @visible = 1, @id_actividad = @id_sendero;
+    EXEC actividades.sp_crear_horario @hora_inicio = '15:00', @hora_fin = '17:00', @dia_semana = 6, @fecha_vigencia_ini = '2025-01-01', @fecha_vigencia_fin = NULL, @visible = 1, @id_actividad = @id_sendero;
+    EXEC actividades.sp_crear_horario @hora_inicio = '10:00', @hora_fin = '12:00', @dia_semana = 7, @fecha_vigencia_ini = '2025-01-01', @fecha_vigencia_fin = NULL, @visible = 1, @id_actividad = @id_sendero;
 
     -- Ascenso (Solo Jueves y Viernes temprano, por complejidad operativa)
-    EXEC actividades.sp_crear_horario @hora_inicio = '05:00', @hora_fin = '13:00', @dia_semana = 4, @fecha_vigencia_ini = '2026-09-01', @fecha_vigencia_fin = NULL, @visible = 1, @id_actividad = @id_ascenso;
-    EXEC actividades.sp_crear_horario @hora_inicio = '05:00', @hora_fin = '13:00', @dia_semana = 5, @fecha_vigencia_ini = '2026-09-01', @fecha_vigencia_fin = NULL, @visible = 1, @id_actividad = @id_ascenso;
+    EXEC actividades.sp_crear_horario @hora_inicio = '05:00', @hora_fin = '13:00', @dia_semana = 4, @fecha_vigencia_ini = '2025-09-01', @fecha_vigencia_fin = NULL, @visible = 1, @id_actividad = @id_ascenso;
+    EXEC actividades.sp_crear_horario @hora_inicio = '05:00', @hora_fin = '13:00', @dia_semana = 5, @fecha_vigencia_ini = '2025-09-01', @fecha_vigencia_fin = NULL, @visible = 1, @id_actividad = @id_ascenso;
 
     -- Navegación (Lunes, Miércoles, Viernes en dos turnos)
-    EXEC actividades.sp_crear_horario @hora_inicio = '10:00', @hora_fin = '13:00', @dia_semana = 1, @fecha_vigencia_ini = '2026-01-01', @fecha_vigencia_fin = NULL, @visible = 1, @id_actividad = @id_navegacion;
-    EXEC actividades.sp_crear_horario @hora_inicio = '14:00', @hora_fin = '17:00', @dia_semana = 1, @fecha_vigencia_ini = '2026-01-01', @fecha_vigencia_fin = NULL, @visible = 1, @id_actividad = @id_navegacion;
-    EXEC actividades.sp_crear_horario @hora_inicio = '10:00', @hora_fin = '13:00', @dia_semana = 3, @fecha_vigencia_ini = '2026-01-01', @fecha_vigencia_fin = NULL, @visible = 1, @id_actividad = @id_navegacion;
-    EXEC actividades.sp_crear_horario @hora_inicio = '14:00', @hora_fin = '17:00', @dia_semana = 3, @fecha_vigencia_ini = '2026-01-01', @fecha_vigencia_fin = NULL, @visible = 1, @id_actividad = @id_navegacion;
+    EXEC actividades.sp_crear_horario @hora_inicio = '10:00', @hora_fin = '13:00', @dia_semana = 1, @fecha_vigencia_ini = '2025-01-01', @fecha_vigencia_fin = NULL, @visible = 1, @id_actividad = @id_navegacion;
+    EXEC actividades.sp_crear_horario @hora_inicio = '14:00', @hora_fin = '17:00', @dia_semana = 1, @fecha_vigencia_ini = '2025-01-01', @fecha_vigencia_fin = NULL, @visible = 1, @id_actividad = @id_navegacion;
+    EXEC actividades.sp_crear_horario @hora_inicio = '10:00', @hora_fin = '13:00', @dia_semana = 3, @fecha_vigencia_ini = '2025-01-01', @fecha_vigencia_fin = NULL, @visible = 1, @id_actividad = @id_navegacion;
+    EXEC actividades.sp_crear_horario @hora_inicio = '14:00', @hora_fin = '17:00', @dia_semana = 3, @fecha_vigencia_ini = '2025-01-01', @fecha_vigencia_fin = NULL, @visible = 1, @id_actividad = @id_navegacion;
 
     -- Rafting (Martes y Jueves al mediodía)
-    EXEC actividades.sp_crear_horario @hora_inicio = '12:00', @hora_fin = '15:20', @dia_semana = 2, @fecha_vigencia_ini = '2026-11-01', @fecha_vigencia_fin = NULL, @visible = 1, @id_actividad = @id_rafting;
-    EXEC actividades.sp_crear_horario @hora_inicio = '12:00', @hora_fin = '15:20', @dia_semana = 4, @fecha_vigencia_ini = '2026-11-01', @fecha_vigencia_fin = NULL, @visible = 1, @id_actividad = @id_rafting;
+    EXEC actividades.sp_crear_horario @hora_inicio = '12:00', @hora_fin = '15:20', @dia_semana = 2, @fecha_vigencia_ini = '2025-11-01', @fecha_vigencia_fin = NULL, @visible = 1, @id_actividad = @id_rafting;
+    EXEC actividades.sp_crear_horario @hora_inicio = '12:00', @hora_fin = '15:20', @dia_semana = 4, @fecha_vigencia_ini = '2025-11-01', @fecha_vigencia_fin = NULL, @visible = 1, @id_actividad = @id_rafting;
 
     -- Cabalgata (Fines de semana)
-    EXEC actividades.sp_crear_horario @hora_inicio = '09:00', @hora_fin = '13:00', @dia_semana = 6, @fecha_vigencia_ini = '2026-01-01', @fecha_vigencia_fin = NULL, @visible = 1, @id_actividad = @id_cabalgata;
-    EXEC actividades.sp_crear_horario @hora_inicio = '09:00', @hora_fin = '13:00', @dia_semana = 7, @fecha_vigencia_ini = '2026-01-01', @fecha_vigencia_fin = NULL, @visible = 1, @id_actividad = @id_cabalgata;
+    EXEC actividades.sp_crear_horario @hora_inicio = '09:00', @hora_fin = '13:00', @dia_semana = 6, @fecha_vigencia_ini = '2025-01-01', @fecha_vigencia_fin = NULL, @visible = 1, @id_actividad = @id_cabalgata;
+    EXEC actividades.sp_crear_horario @hora_inicio = '09:00', @hora_fin = '13:00', @dia_semana = 7, @fecha_vigencia_ini = '2025-01-01', @fecha_vigencia_fin = NULL, @visible = 1, @id_actividad = @id_cabalgata;
 
     -- Pesca (Sábados turno completo)
-    EXEC actividades.sp_crear_horario @hora_inicio = '07:00', @hora_fin = '15:00', @dia_semana = 6, @fecha_vigencia_ini = '2026-11-01', @fecha_vigencia_fin = '2027-05-01', @visible = 1, @id_actividad = @id_pesca;
+    EXEC actividades.sp_crear_horario @hora_inicio = '07:00', @hora_fin = '15:00', @dia_semana = 6, @fecha_vigencia_ini = '2025-11-01', @fecha_vigencia_fin = '2027-05-01', @visible = 1, @id_actividad = @id_pesca;
 
     -- Historia (Lunes)
-    EXEC actividades.sp_crear_horario @hora_inicio = '11:00', @hora_fin = '12:30', @dia_semana = 1, @fecha_vigencia_ini = '2026-01-01', @fecha_vigencia_fin = NULL, @visible = 1, @id_actividad = @id_historia;
+    EXEC actividades.sp_crear_horario @hora_inicio = '11:00', @hora_fin = '12:30', @dia_semana = 1, @fecha_vigencia_ini = '2025-01-01', @fecha_vigencia_fin = NULL, @visible = 1, @id_actividad = @id_historia;
 
     COMMIT TRANSACTION;
     PRINT 'Horarios insertados';

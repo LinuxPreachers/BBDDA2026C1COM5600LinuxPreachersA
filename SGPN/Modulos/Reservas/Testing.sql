@@ -30,7 +30,7 @@
 USE LinuxPreachers;
 GO
 
-RAISERROR('Este script no esta pensado para ser ejecutado todo junto. Ejecutar cada test individualmente.', 16, 1);
+RAISERROR('Este script no esta pensado para ser ejecutado todo junto. Leer comentario de arriba de todo.', 16, 1);
 GO
 
 -- ==============================================================================
@@ -593,6 +593,13 @@ BEGIN TRY
 
     PRINT 'DATOS VALIDOS, SE ESPERA MODIFICACION EXITOSA';
 
+    SELECT
+        id,
+        nombre,
+        descripcion
+    FROM reservas.EstadoItem
+    WHERE id = @id_estado;
+
     EXEC reservas.sp_modificar_estado_item
         @id = @id_estado,
         @nombre = 'TEST_2',
@@ -761,6 +768,10 @@ BEGIN TRY
     FROM reservas.EstadoItem
     WHERE nombre = 'TEST_1';
 
+    SELECT *
+    FROM reservas.EstadoItem
+    WHERE id = @id_estado
+
     PRINT 'ID EXISTENTE SIN DEPENDENCIAS, SE ESPERA BAJA EXITOSA';
 
     EXEC reservas.sp_eliminar_estado_item
@@ -818,6 +829,10 @@ BEGIN TRY
             @nombre = 'TEST_1';
 
     PRINT 'NOMBRE EXISTENTE SIN DEPENDENCIAS, SE ESPERA BAJA EXITOSA';
+
+    SELECT *
+    FROM reservas.EstadoItem
+    WHERE nombre = 'TEST_1';
 
     EXEC reservas.sp_eliminar_estado_item_por_nombre
         @nombre = 'TEST_1';
@@ -918,6 +933,8 @@ GO
 BEGIN TRANSACTION;
 
 BEGIN TRY
+
+    SET NOCOUNT ON;
 
     DECLARE @id_estado TINYINT;
 
@@ -1094,6 +1111,10 @@ BEGIN TRY
     FROM reservas.MotivoCancelacion
     WHERE nombre = 'TEST_1';
 
+    SELECT *
+    FROM reservas.MotivoCancelacion
+    WHERE nombre = 'TEST_1';
+
     PRINT 'DATOS VALIDOS, SE ESPERA MODIFICACION EXITOSA';
 
     EXEC reservas.sp_modificar_motivo_cancelacion
@@ -1260,6 +1281,10 @@ BEGIN TRY
         EXEC reservas.sp_crear_motivo_cancelacion
             @nombre = 'TEST_1';
 
+    SELECT *
+    FROM reservas.MotivoCancelacion
+    WHERE nombre = 'TEST_1';
+
     SELECT @id_motivo = id
     FROM reservas.MotivoCancelacion
     WHERE nombre = 'TEST_1';
@@ -1321,6 +1346,10 @@ BEGIN TRY
             @nombre = 'TEST_1';
 
     PRINT 'NOMBRE EXISTENTE SIN DEPENDENCIAS, SE ESPERA BAJA EXITOSA';
+
+    SELECT *
+    FROM reservas.MotivoCancelacion
+    WHERE nombre = 'TEST_1';
 
     EXEC reservas.sp_eliminar_motivo_cancelacion_por_nombre
         @nombre = 'TEST_1';
@@ -1465,8 +1494,7 @@ BEGIN TRY
 
     EXEC reservas.sp_registrar_reserva
         @entradas = @entradas,
-        @participaciones = @participaciones,
-        @id_reserva = NULL;
+        @participaciones = @participaciones;
 
     PRINT 'SI EJECUTO ESTO, EL SP PERMITIO REGISTRAR UNA RESERVA SIN ITEMS';
 
@@ -1481,7 +1509,6 @@ IF @@TRANCOUNT > 0
     ROLLBACK TRANSACTION;
 GO
 
-
 ---------------------------------------------------------
 -- 3.2 REGISTRO EXITOSO (ENTRADAS CON CANTIDAD > 1)
 ---------------------------------------------------------
@@ -1492,7 +1519,8 @@ BEGIN TRY
 
     DECLARE
         @id_parque INT,
-        @id_tipo_visitante INT;
+        @id_tipo_visitante TINYINT,
+        @id_reserva INT;
 
     DECLARE @entradas reservas.TVP_Entradas;
     DECLARE @participaciones reservas.TVP_Participaciones;
@@ -1519,20 +1547,23 @@ BEGIN TRY
     EXEC reservas.sp_registrar_reserva
         @entradas = @entradas,
         @participaciones = @participaciones,
-        @id_reserva = NULL;
+        @id_reserva = @id_reserva OUTPUT;
 
-    IF (
-        SELECT COUNT(*)
-        FROM reservas.Entrada e
-        INNER JOIN reservas.ItemReserva ir
-            ON ir.id = e.id_item_reserva
-        WHERE e.id_parque = @id_parque
-          AND e.id_tipo_visitante = @id_tipo_visitante
-          AND ir.precio = 1000
-    ) = 3
-        PRINT 'OPERACION EXITOSA';
-    ELSE
-        PRINT 'SI EJECUTO ESTO, EL SP NO REGISTRO LA CANTIDAD ESPERADA DE ENTRADAS';
+    -- Comprobacion
+    SELECT 
+        e.id_item_reserva, 
+        e.id_parque,
+        e.id_tipo_visitante,
+        e.fecha_acceso,
+        i.precio, 
+        r.fecha_y_hora AS fecha_y_hora_reserva, 
+        i.id_reserva, 
+        ei.nombre AS estado 
+    FROM reservas.Entrada e
+    INNER JOIN reservas.ItemReserva i ON i.id = e.id_item_reserva
+    INNER JOIN reservas.Reserva r ON i.id_reserva = r.id
+    INNER JOIN reservas.EstadoItem ei ON i.id_estado = ei.id
+    WHERE i.id_reserva = @id_reserva;
 
 END TRY
 BEGIN CATCH
@@ -1592,14 +1623,21 @@ BEGIN TRY
         @participaciones = @participaciones,
         @id_reserva = @id_reserva OUTPUT;
 
-    IF (
-        SELECT COUNT(*)
-        FROM reservas.ItemReserva
-        WHERE id_reserva = @id_reserva
-    ) = 3
-        PRINT 'OPERACION EXITOSA';
-    ELSE
-        PRINT 'SI EJECUTO ESTO, EL SP NO REGISTRO TODAS LAS ENTRADAS ESPERADAS';
+    -- Comprobacion
+    SELECT 
+        e.id_item_reserva, 
+        e.id_parque,
+        e.id_tipo_visitante,
+        e.fecha_acceso,
+        i.precio, 
+        r.fecha_y_hora AS fecha_y_hora_reserva, 
+        i.id_reserva, 
+        ei.nombre AS estado 
+    FROM reservas.Entrada e
+    INNER JOIN reservas.ItemReserva i ON i.id = e.id_item_reserva
+    INNER JOIN reservas.Reserva r ON i.id_reserva = r.id
+    INNER JOIN reservas.EstadoItem ei ON i.id_estado = ei.id
+    WHERE i.id_reserva = @id_reserva
 
 END TRY
 BEGIN CATCH
@@ -1619,6 +1657,8 @@ GO
 BEGIN TRANSACTION;
 
 BEGIN TRY
+
+    SET NOCOUNT ON;
 
     DECLARE
         @id_parque INT,
@@ -1651,8 +1691,7 @@ BEGIN TRY
 
     EXEC reservas.sp_registrar_reserva
         @entradas = @entradas,
-        @participaciones = @participaciones,
-        @id_reserva = NULL;
+        @participaciones = @participaciones;
 
     PRINT 'SI EJECUTO ESTO, EL SP PERMITIO REGISTRAR UNA ENTRADA SIN PRECIO';
 
@@ -1679,6 +1718,7 @@ BEGIN TRY
         @id_parque INT,
         @id_tipo_visitante INT,
         @id_horario INT,
+        @id_reserva INT,
         @participaciones reservas.TVP_Participaciones,
         @entradas reservas.TVP_Entradas;
 
@@ -1705,7 +1745,22 @@ BEGIN TRY
     EXEC reservas.sp_registrar_reserva
         @entradas = @entradas,
         @participaciones = @participaciones,
-        @id_reserva = NULL;
+        @id_reserva = @id_reserva OUTPUT;
+
+    -- Comprobacion
+    SELECT 
+        p.id_item_reserva, 
+        p.id_horario,
+        p.fecha_realizacion,
+        i.precio, 
+        r.fecha_y_hora AS fecha_y_hora_reserva, 
+        i.id_reserva, 
+        ei.nombre AS estado 
+    FROM reservas.Participacion p
+    INNER JOIN reservas.ItemReserva i ON i.id = p.id_item_reserva
+    INNER JOIN reservas.Reserva r ON i.id_reserva = r.id
+    INNER JOIN reservas.EstadoItem ei ON i.id_estado = ei.id
+    WHERE i.id_reserva = @id_reserva;
 
     PRINT 'RESERVA REGISTRADA CORRECTAMENTE';
 
@@ -1731,6 +1786,7 @@ BEGIN TRY
         @id_parque INT,
         @id_tipo_visitante INT,
         @id_horario INT,
+        @id_reserva INT,
         @participaciones reservas.TVP_Participaciones,
         @entradas reservas.TVP_Entradas;
 
@@ -1762,7 +1818,22 @@ BEGIN TRY
     EXEC reservas.sp_registrar_reserva
         @entradas = @entradas,
         @participaciones = @participaciones,
-        @id_reserva = NULL;
+        @id_reserva = @id_reserva OUTPUT;
+    
+    -- Comprobacion
+    SELECT 
+        p.id_item_reserva, 
+        p.id_horario,
+        p.fecha_realizacion,
+        i.precio, 
+        r.fecha_y_hora AS fecha_y_hora_reserva, 
+        i.id_reserva, 
+        ei.nombre AS estado 
+    FROM reservas.Participacion p
+    INNER JOIN reservas.ItemReserva i ON i.id = p.id_item_reserva
+    INNER JOIN reservas.Reserva r ON i.id_reserva = r.id
+    INNER JOIN reservas.EstadoItem ei ON i.id_estado = ei.id
+    WHERE i.id_reserva = @id_reserva;
 
     PRINT 'RESERVA REGISTRADA CORRECTAMENTE';
 
@@ -1784,6 +1855,8 @@ BEGIN TRANSACTION;
 
 BEGIN TRY
 
+    SET NOCOUNT ON;
+    
     DECLARE
         @id_parque INT,
         @id_tipo_visitante INT,
@@ -1895,6 +1968,7 @@ BEGIN TRY
         @id_parque INT,
         @id_tipo_visitante INT,
         @id_horario INT,
+        @id_reserva INT,
         @entradas reservas.TVP_Entradas,
         @participaciones reservas.TVP_Participaciones;
 
@@ -1936,7 +2010,37 @@ BEGIN TRY
     EXEC reservas.sp_registrar_reserva
         @entradas = @entradas,
         @participaciones = @participaciones,
-        @id_reserva = NULL;
+        @id_reserva = @id_reserva OUTPUT;
+
+    -- Comprobacion
+    SELECT 
+        e.id_item_reserva, 
+        e.id_parque,
+        e.id_tipo_visitante,
+        e.fecha_acceso,
+        i.precio, 
+        r.fecha_y_hora AS fecha_y_hora_reserva, 
+        i.id_reserva, 
+        ei.nombre AS estado 
+    FROM reservas.Entrada e
+    INNER JOIN reservas.ItemReserva i ON i.id = e.id_item_reserva
+    INNER JOIN reservas.Reserva r ON i.id_reserva = r.id
+    INNER JOIN reservas.EstadoItem ei ON i.id_estado = ei.id
+    WHERE i.id_reserva = @id_reserva;
+
+    SELECT 
+        p.id_item_reserva, 
+        p.id_horario,
+        p.fecha_realizacion,
+        i.precio, 
+        r.fecha_y_hora AS fecha_y_hora_reserva, 
+        i.id_reserva, 
+        ei.nombre AS estado 
+    FROM reservas.Participacion p
+    INNER JOIN reservas.ItemReserva i ON i.id = p.id_item_reserva
+    INNER JOIN reservas.Reserva r ON i.id_reserva = r.id
+    INNER JOIN reservas.EstadoItem ei ON i.id_estado = ei.id
+    WHERE i.id_reserva = @id_reserva;
 
     PRINT 'RESERVA REGISTRADA CORRECTAMENTE';
 
@@ -1962,10 +2066,6 @@ BEGIN TRY
         @id_parque INT,
         @id_tipo_visitante INT,
         @id_horario INT,
-        @cantidad_reservas_antes INT,
-        @cantidad_items_antes INT,
-        @cantidad_reservas_despues INT,
-        @cantidad_items_despues INT,
         @entradas reservas.TVP_Entradas,
         @participaciones reservas.TVP_Participaciones;
 
@@ -1973,12 +2073,6 @@ BEGIN TRY
         @id_parque = @id_parque OUTPUT,
         @id_tipo_visitante = @id_tipo_visitante OUTPUT,
         @id_horario = @id_horario OUTPUT;
-
-    SELECT @cantidad_reservas_antes = COUNT(*)
-    FROM reservas.Reserva;
-
-    SELECT @cantidad_items_antes = COUNT(*)
-    FROM reservas.ItemReserva;
 
     INSERT INTO @entradas
     (
@@ -2012,8 +2106,7 @@ BEGIN TRY
 
     EXEC reservas.sp_registrar_reserva
         @entradas = @entradas,
-        @participaciones = @participaciones,
-        @id_reserva = NULL;
+        @participaciones = @participaciones;
 
     PRINT 'SI EJECUTO ESTO, EL SP PERMITIO REGISTRAR DATOS INVALIDOS';
 
@@ -2025,6 +2118,113 @@ BEGIN CATCH
      * en entradas cortará la ejecución y dará el error correspondiente.
     */
     PRINT 'ERROR ESPERADO: ' + ERROR_MESSAGE();
+
+END CATCH;
+
+IF @@TRANCOUNT > 0
+    ROLLBACK TRANSACTION;
+GO
+
+---------------------------------------------------------
+-- 3.11 ENTRADAS Y PARTICIPACIONES CON PAGO Y TICKET FACTURA
+---------------------------------------------------------
+
+BEGIN TRANSACTION;
+
+    BEGIN TRY
+    
+        DECLARE @id_forma_pago TINYINT;
+        DECLARE @id_punto_venta SMALLINT;
+        DECLARE @id_reserva INT;
+        DECLARE @entradas reservas.TVP_Entradas;
+        DECLARE @participaciones reservas.TVP_Participaciones;
+
+        IF NOT EXISTS (SELECT 1 FROM pagos.FormaPago WHERE nombre = 'Efectivo')
+            EXEC pagos.sp_crear_forma_pago @nombre = 'Efectivo';
+
+        IF NOT EXISTS (SELECT 1 FROM pagos.PuntoVenta WHERE nombre = 'Boleteria')
+            EXEC pagos.sp_crear_punto_venta @nombre = 'Boleteria';
+        
+        SELECT @id_forma_pago = id 
+        FROM pagos.FormaPago 
+        WHERE nombre = 'Efectivo'
+
+        SELECT @id_punto_venta = id 
+        FROM pagos.PuntoVenta 
+        WHERE nombre = 'Boleteria'
+
+        -- Llenamos el TVP con 3 entradas de ejemplo 
+        INSERT INTO @entradas (id_parque, id_tipo_visitante, fecha_acceso, cantidad)
+        VALUES 
+            (2, 4, CAST(GETDATE() AS DATE), 1),    
+            (1, 2, CAST(GETDATE() AS DATE), 1),    
+            (1, 2, CAST(GETDATE() AS DATE), 1); 
+
+        INSERT INTO @participaciones(id_horario, fecha_realizacion, cantidad)
+        VALUES 
+            (1, CAST(GETDATE() AS DATE), 5),    
+            (2, CAST(GETDATE() AS DATE), 2);
+
+        EXEC reservas.sp_registrar_reserva_con_pago   
+            @entradas = @entradas,
+            @participaciones = @participaciones,
+            @id_forma_pago = @id_forma_pago,
+            @id_punto_venta = @id_punto_venta,
+            @id_reserva = @id_reserva OUTPUT;
+
+        PRINT 'SE GENERÓ LA RESERVA #' + CAST(@id_reserva AS VARCHAR);
+
+        -----------------------------------
+        -- Comprobacion
+        -----------------------------------
+
+        -- Reserva
+        SELECT * FROM reservas.Reserva WHERE id = @id_reserva;
+
+        -- Entradas
+        SELECT 
+            e.id_item_reserva, 
+            e.id_parque,
+            e.id_tipo_visitante,
+            e.fecha_acceso,
+            i.precio, 
+            i.id_reserva, 
+            ei.nombre AS estado 
+        FROM reservas.Entrada e
+        INNER JOIN reservas.ItemReserva i ON i.id = e.id_item_reserva
+        INNER JOIN reservas.EstadoItem ei ON i.id_estado = ei.id
+        WHERE i.id_reserva = @id_reserva;
+
+        -- Participaciones
+        SELECT 
+            p.id_item_reserva, 
+            p.id_horario,
+            p.fecha_realizacion,
+            i.precio, 
+            i.id_reserva, 
+            ei.nombre AS estado 
+        FROM reservas.Participacion p
+        INNER JOIN reservas.ItemReserva i ON i.id = p.id_item_reserva
+        INNER JOIN reservas.EstadoItem ei ON i.id_estado = ei.id
+        WHERE i.id_reserva = @id_reserva;
+
+        -- Pago con ticket factura, forma de pago y punto de venta
+        SELECT 
+            p.id AS id_pago, 
+            p.fecha_y_hora,
+            p.importe,
+            fp.nombre AS forma_pago,   
+            pv.nombre AS punto_venta
+        FROM pagos.Pago p
+        INNER JOIN pagos.FormaPago fp ON p.id_forma_pago = fp.id
+        INNER JOIN pagos.TicketFactura t ON p.id = t.id_pago
+        INNER JOIN pagos.PuntoVenta pv ON pv.id = t.id_punto_venta
+        WHERE id_reserva = @id_reserva;
+
+END TRY
+BEGIN CATCH
+        
+    PRINT 'ERROR INESPERADO: ' + ERROR_MESSAGE();
 
 END CATCH;
 

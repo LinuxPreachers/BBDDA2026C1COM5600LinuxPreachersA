@@ -45,7 +45,7 @@ BEGIN
     );
 
     CREATE TABLE reservas.MotivoCancelacion (
-        id INT IDENTITY(1,1) NOT NULL,
+        id TINYINT IDENTITY(1,1) NOT NULL,
         nombre VARCHAR(10) NOT NULL,
         descripcion VARCHAR(255) NULL,
 
@@ -56,7 +56,7 @@ BEGIN
     CREATE TABLE reservas.Cancelacion (
         id INT IDENTITY(1,1) NOT NULL,
         fecha_y_hora DATETIME NOT NULL DEFAULT GETDATE(),
-        id_motivo INT NOT NULL,
+        id_motivo TINYINT NOT NULL,
 
         CONSTRAINT PK_Cancelacion PRIMARY KEY (id),
 
@@ -153,17 +153,17 @@ BEGIN
     ----------------------------------------
 
     CREATE TYPE reservas.TVP_Entradas AS TABLE (
-        fila TINYINT IDENTITY(1,1) NOT NULL,
+        fila INT IDENTITY(1,1) NOT NULL,
         id_parque INT NOT NULL,
         id_tipo_visitante INT NOT NULL,
-        fecha_acceso DATE NOT NULL CHECK (fecha_acceso >= CAST(GETDATE() AS DATE)),
+        fecha_acceso DATE NOT NULL,
         cantidad TINYINT NOT NULL CHECK (cantidad > 0)
     );
 
     CREATE TYPE reservas.TVP_Participaciones AS TABLE (
-        fila TINYINT IDENTITY(1,1) NOT NULL,
+        fila INT IDENTITY(1,1) NOT NULL,
         id_horario INT NOT NULL,
-        fecha_realizacion DATE NOT NULL CHECK (fecha_realizacion >= CAST(GETDATE() AS DATE)),
+        fecha_realizacion DATE NOT NULL,
         cantidad TINYINT NOT NULL CHECK (cantidad > 0)
     );
 

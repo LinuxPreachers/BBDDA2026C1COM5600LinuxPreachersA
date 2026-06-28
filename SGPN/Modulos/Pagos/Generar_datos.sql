@@ -19,7 +19,9 @@ BEGIN TRANSACTION;
 
 BEGIN TRY
 
-	EXEC pagos.sp_crear_forma_pago @nombre = 'Tarjeta de Credito';
+	EXEC pagos.sp_crear_forma_pago @nombre = 'Efectivo';
+	EXEC pagos.sp_crear_forma_pago @nombre = 'Tarjeta de debito';
+	EXEC pagos.sp_crear_forma_pago @nombre = 'Tarjeta de credito';
 	EXEC pagos.sp_crear_forma_pago @nombre = 'Mercado Pago';
 
 	COMMIT TRANSACTION;
@@ -42,6 +44,9 @@ BEGIN TRY
 
 	EXEC pagos.sp_crear_punto_venta @nombre = 'Boleteria Zona Norte';
 	EXEC pagos.sp_crear_punto_venta @nombre = 'Boleteria Zona Sur';
+	EXEC pagos.sp_crear_punto_venta @nombre = 'Boleterias del parque';
+	EXEC pagos.sp_crear_punto_venta @nombre = 'Oficina administrativa';
+	EXEC pagos.sp_crear_punto_venta @nombre = 'Venta online';
 
 	COMMIT TRANSACTION;
 	
