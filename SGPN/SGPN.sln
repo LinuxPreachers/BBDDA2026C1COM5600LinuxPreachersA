@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # SQL Server Management Studio Version 22
-VisualStudioVersion = 18.7.11919.86 stable
+VisualStudioVersion = 18.7.11919.86
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{4F2E2C19-372F-40D8-9FA7-9D2138C6997A}") = "SGPN", "SGPN.ssmssqlproj", "{CE4A56E1-1995-9F01-1989-9941B5F28028}"
 EndProject
@@ -68,8 +68,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Elementos de la solución",
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Reportes", "Reportes", "{22D3ED59-CF35-416C-BE02-EAB23912772A}"
 	ProjectSection(SolutionItems) = preProject
-		APIs.sql = APIs.sql
-		Reportes.sql = Reportes.sql
+		0800-APIs.sql = 0800-APIs.sql
+		0804-Reportes.sql = 0804-Reportes.sql
 	EndProjectSection
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Roles", "Roles", "{13A1CE25-0BC2-4855-AF18-3B71A221BE69}"
@@ -86,7 +86,7 @@ Global
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
 		{CE4A56E1-1995-9F01-1989-9941B5F28028}.Default|Default.ActiveCfg = Default
-		{A13D99FD-C86D-4F90-B75C-0177CC80E12F}.Default|Default.ActiveCfg = Default
+		{2D6C1532-3E77-4131-8648-8E0AC19AED59}.Default|Default.ActiveCfg = Default
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
