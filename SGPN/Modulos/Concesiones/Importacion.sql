@@ -25,26 +25,26 @@ BEGIN
         RETURN;
     END;
 
-    DECLARE @importacion VARCHAR(1500);
+    DECLARE @importacion VARCHAR(4000);
 
     DROP TABLE IF EXISTS #ImportacionDirectorio;
 
     -- Esta obligado a recibir todos los campos del csv 
     CREATE TABLE #ImportacionDirectorio (
-        organizacion VARCHAR(100),
-        rubro VARCHAR(100),
-        subrubro VARCHAR(100),
-        calle VARCHAR(100),
-        numero VARCHAR(100),
-        pais VARCHAR(100),
-        provincia VARCHAR(100),
-        ciudad VARCHAR(100),
-        telefono VARCHAR(100),
-        facebook VARCHAR(100),
-        web VARCHAR(100),
-        programa VARCHAR(100),
-        fecha_distincion VARCHAR(100),
-        fecha_revalidacion VARCHAR(100)
+        organizacion VARCHAR(500),
+        rubro VARCHAR(255),
+        subrubro VARCHAR(255),
+        calle VARCHAR(200),
+        numero VARCHAR(200),
+        pais VARCHAR(200),
+        provincia VARCHAR(200),
+        ciudad VARCHAR(200),
+        telefono VARCHAR(200),
+        facebook VARCHAR(200),
+        web VARCHAR(200),
+        programa VARCHAR(200),
+        fecha_distincion VARCHAR(200),
+        fecha_revalidacion VARCHAR(200)
     );
 
     -- Ejecución de la carga masiva
@@ -56,7 +56,8 @@ BEGIN
             FIELDTERMINATOR = '','',
             ROWTERMINATOR = ''0x0a'', 
             CODEPAGE = ''65001'',
-            FIRSTROW = 2
+            FIRSTROW = 2,
+            MAXERRORS=0
         );';
 
         EXEC (@importacion);
@@ -66,36 +67,42 @@ BEGIN
         THROW 50340, @ErrorBulk, 1;
         RETURN;
     END CATCH;
+
     -- Ahora que ya cargamos los datos a la tabla temporal le agregamos el id 
     ALTER TABLE #ImportacionDirectorio ADD id INT IDENTITY(1,1) PRIMARY KEY;
+    
     -- Variables de control del bucle
     DECLARE @id_actual INT = 1;
-        -- identificamos el ultimo id que se le asigno al ultimo registro del csv
+    -- identificamos el ultimo id que se le asigno al ultimo registro del csv
     DECLARE @id_max INT = (SELECT MAX(id) FROM #ImportacionDirectorio);
-
+    PRINT '>> Se cargaron ' + CAST(@id_max AS VARCHAR) + ' filas lógicas en la tabla temporal desde el archivo.';
     -- Variables de mapeo de datos
     DECLARE @organizacion VARCHAR(500);
     DECLARE @rubro VARCHAR(255);
     DECLARE @subrubro VARCHAR(255);
     DECLARE @fecha_distincion VARCHAR(100);
-    DECLARE @razon_social VARCHAR(200);
+    DECLARE @razon_social VARCHAR(500);
     DECLARE @descripcion VARCHAR(400);
+    
     -- Variables operativas internas
     DECLARE @id_actividad_empresarial SMALLINT;
     DECLARE @id_empresa INT;
     DECLARE @cuit BIGINT;
     DECLARE @fecha_inicio DATE;
     
-    -- Variable de error
-    -- Procesamiento fila por fila con aislamiento de excepciones
+    -- VARIABLE NUEVA: Capturamos el CUIT más alto que exista (o 30000000000 si está vacía)
+    DECLARE @cuit_max_historico BIGINT;
+    SELECT @cuit_max_historico = ISNULL(MAX(cuit), 30000000000) FROM concesiones.EmpresaConcesionaria;
+
+    
     WHILE @id_actual <= @id_max
     BEGIN
         BEGIN TRY
             DECLARE @mensaje_error VARCHAR(4000) =' ' ;
             
-            -- Extracción, limpieza posicional y remoción de comillas residuales del parser plano
+            -- Extracción y limpieza de datos
             SELECT
-                @organizacion = UPPER(LTRIM(RTRIM(REPLACE(organizacion, '"', '')))), -- Se los pone en mayuscula para mantener un estandar
+                @organizacion = UPPER(LTRIM(RTRIM(REPLACE(organizacion, '"', '')))),
                 @rubro = UPPER(LTRIM(RTRIM(REPLACE(rubro, '"', '')))),
                 @subrubro = UPPER(LTRIM(RTRIM(REPLACE(subrubro, '"', '')))),
                 @fecha_distincion = LTRIM(RTRIM(REPLACE(fecha_distincion, '"', '')))
@@ -119,44 +126,34 @@ BEGIN
                 THROW 50130, @mensaje_error, 1;
 
             -- UPSERT - ActividadEmpresarial (Rubros)
-            SET @id_actividad_empresarial = (SELECT id FROM concesiones.ActividadEmpresarial WHERE UPPER(nombre) = @rubro);
+            SET @id_actividad_empresarial = (SELECT TOP 1 id FROM concesiones.ActividadEmpresarial WHERE UPPER(nombre) = @rubro AND UPPER(descripcion)=@subrubro );
 
             IF (@id_actividad_empresarial IS NULL)
-            
                 BEGIN
                 
                 EXEC concesiones.sp_crear_actividad_empresarial 
-                @nombre=@rubro,
-                @descripcion=@subrubro
+                    @nombre=@rubro,
+                    @descripcion=@subrubro;
 
-
-                SET @id_actividad_empresarial = (SELECT id FROM 
-                                                concesiones.ActividadEmpresarial 
-                                                WHERE UPPER(nombre) = @rubro);
+                SET @id_actividad_empresarial = (SELECT TOP 1 id FROM concesiones.ActividadEmpresarial WHERE UPPER(nombre) = @rubro ORDER BY id DESC);
             
                 END
-
             ELSE
-            
-            BEGIN
-                
+                BEGIN
                 EXEC concesiones.sp_modificar_actividad_empresarial 
                     @id = @id_actividad_empresarial, 
                     @nombre = @rubro, 
                     @descripcion = @subrubro;
-            END;
-
+                END;
 
             -- UPSERT - EmpresaConcesionaria 
-            SET @id_empresa = ( SELECT id 
-                                FROM concesiones.EmpresaConcesionaria 
-                                WHERE UPPER(nombre) = @organizacion);
+            SET @id_empresa = ( SELECT TOP 1 id FROM concesiones.EmpresaConcesionaria WHERE UPPER(nombre) = @organizacion );
 
             IF (@id_empresa IS NULL)
                 BEGIN
-                -- Se genera un cuit dependiendo de id actual ya que el archivo importado no cuenta con info sobre el cuit
-                -- Se lo crea para que no haya problemas en la inserción.
-                SET @cuit = 30000000000 + @id_actual;
+                -- Generamos un CUIT incremental basado en el registro histórico de la tabla
+                SET @cuit_max_historico = @cuit_max_historico + 1;
+                SET @cuit = @cuit_max_historico;
 
                 EXEC concesiones.sp_crear_empresa_concesionaria 
                     @nombre = @organizacion, 
@@ -164,23 +161,28 @@ BEGIN
                     @cuit = @cuit, 
                     @razon_social = @organizacion, 
                     @id_actividad_empresarial = @id_actividad_empresarial;
-                -- Como el archivo no tiene razon social especificada se le asigna el mismo nombre que la organizacion
 
-                SET @id_empresa = (SELECT id FROM concesiones.EmpresaConcesionaria WHERE UPPER(nombre) = @organizacion);
+                -- Como el archivo no tiene razon social especificada se le asigna el mismo nombre que la organizacion
+                SET @id_empresa = (SELECT TOP 1 id FROM concesiones.EmpresaConcesionaria WHERE UPPER(nombre) = @organizacion);
                 
                 END
-
             ELSE
+            BEGIN
+                -- REGISTRO DE DUPLICADOS: Guardamos en el log
+                INSERT INTO concesiones.ImportacionErrorLog (fila_origen, organizacion, rubro, mensaje_error)
+                VALUES (@id_actual, @organizacion, @rubro, 'DUPLICADO: Empresa existente. Actualizando datos.');
 
-                BEGIN
-                    -- Se recuperan los datos ya existentes ya que existen datos que no vienen procesados en el archivo como el cuit que son obligatorios en el update
-                    SELECT @cuit = cuit, 
-                       @razon_social = razon_social,
-                       @descripcion = descripcion
-                    FROM concesiones.EmpresaConcesionaria 
-                     WHERE id = @id_empresa;
+                -- Recuperamos datos de forma segura
+                SELECT 
+                    @cuit = cuit, 
+                    @razon_social = ISNULL(razon_social, @organizacion), -- Si es null, le ponemos el nombre
+                    @descripcion = ISNULL(descripcion, 'EMPRESA ACTUALIZADA')
+                FROM concesiones.EmpresaConcesionaria 
+                WHERE id = @id_empresa;
 
-                    EXEC concesiones.sp_modificar_empresa_concesionaria 
+                -- LLAMADA SEGURA AL SP DE MODIFICACION
+                -- Aseguramos que pasamos tipos compatibles
+                EXEC concesiones.sp_modificar_empresa_concesionaria 
                     @id = @id_empresa, 
                     @nombre = @organizacion, 
                     @descripcion = @descripcion, 
@@ -196,14 +198,16 @@ BEGIN
                 IF (ISDATE(@fecha_distincion) = 1)
                     SET @fecha_inicio = CAST(@fecha_distincion AS DATE);
                 ELSE
-                    SET @fecha_inicio = CAST(GETDATE() AS DATE);-- si no esta bien formada le asignamos la fecha actual (toma de decision de diseño)
-                DECLARE @fecha_fin DATE=DATEADD(YEAR,5,@fecha_inicio);
+                    SET @fecha_inicio = CAST(GETDATE() AS DATE); -- si no esta bien formada le asignamos la fecha actual (toma de decision de diseño)
+                
+                DECLARE @fecha_fin DATE = DATEADD(YEAR,5,@fecha_inicio);
+                
                 EXEC concesiones.sp_crear_concesion 
-                @descripcion='CONTRATO GENERADO POR IMPORTACION MASIVA',
-                @fecha_inicio=@fecha_inicio,
-                @fecha_fin=@fecha_fin,
-                @id_empresa_concesionaria=@id_empresa,
-                @id_parque=@id_parque
+                    @descripcion='CONTRATO GENERADO POR IMPORTACION MASIVA',
+                    @fecha_inicio=@fecha_inicio,
+                    @fecha_fin=@fecha_fin,
+                    @id_empresa_concesionaria=@id_empresa,
+                    @id_parque=@id_parque;
 
             END;
 
@@ -220,11 +224,31 @@ BEGIN
     END;
 
     DROP TABLE IF EXISTS #ImportacionDirectorio;
-    PRINT 'Proceso de importación finalizado. Verificar la tabla concesiones.ImportacionErrorLog para analizar registros con anomalías estructurales.';
+    PRINT 'Proceso de importación finalizado. Verificar la tabla concesiones.ImportacionErrorLog para analizar registros con anomalías estructurales o duplicados.';
 END;
 GO
 
+
 -- Descomentar al ejecutar.
---EXEC concesiones.sp_importar_directorio_empresas
---    @ruta = '\\DESKTOP-KOIKGVK\Users\Carpeta publica\ArchivosImportacion\registro-organizaciones-distinguidas-sact.csv',
---    @id_parque = 1;
+EXEC concesiones.sp_importar_directorio_empresas
+   @ruta = '\\DESKTOP-KOIKGVK\Users\Carpeta publica\ArchivosImportacion\registro-organizaciones-distinguidas-sact.csv',
+  @id_parque = 11;
+
+
+--  Select * from parques.Parque
+
+  
+--  SELECT * FROM concesiones.ImportacionErrorLog
+
+--  SELECT * FROM concesiones.EmpresaConcesionaria
+
+--  SELECT * FROM concesiones.ActividadEmpresarial
+--  SELECT * FROM concesiones.ActividadEmpresarial WHERE nombre='ORGANISMO MIXTO'
+--  --DROP TABLE IF EXISTS concesiones.ImportacionErrorLog
+--  SELECT * from parques.Parque
+--  INSERT INTO parques.TipoParque(descripcion)
+--VALUES ('Parque Abandonado')
+--INSERT INTO parques.Parque(nombre,id_tipo_parque)
+--VALUES ('Parque de Villa Fiorito',1)
+
+--select * from empleados.guia

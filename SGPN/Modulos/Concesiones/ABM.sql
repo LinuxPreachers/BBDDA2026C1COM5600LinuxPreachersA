@@ -32,10 +32,10 @@ GO
 -- Alta
 CREATE OR ALTER PROCEDURE concesiones.sp_crear_empresa_concesionaria
 
-    @nombre VARCHAR(100),
+    @nombre VARCHAR(500),
     @descripcion VARCHAR(255),
     @cuit BIGINT,
-    @razon_social VARCHAR(100),
+    @razon_social VARCHAR(500),
     @id_actividad_empresarial INT
 AS
 BEGIN
@@ -73,10 +73,10 @@ GO
 -- Modificación
 CREATE OR ALTER PROCEDURE concesiones.sp_modificar_empresa_concesionaria
     @id INT,
-    @nombre VARCHAR(100),
+    @nombre VARCHAR(500),
     @descripcion VARCHAR(255),
     @cuit BIGINT,
-    @razon_social VARCHAR(100),
+    @razon_social VARCHAR(500),
     @id_actividad_empresarial INT
 AS
 BEGIN

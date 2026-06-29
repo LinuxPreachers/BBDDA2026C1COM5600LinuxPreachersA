@@ -33,10 +33,10 @@ BEGIN
 
     CREATE TABLE concesiones.EmpresaConcesionaria(
         id INT IDENTITY (1,1),
-        nombre VARCHAR (100) NOT NULL,
+        nombre VARCHAR (400) NOT NULL,
         descripcion VARCHAR(255) NULL,
         cuit BIGINT NOT NULL UNIQUE,
-        razon_social VARCHAR(100) NOT NULL,
+        razon_social VARCHAR(400) NOT NULL,
         id_actividad_empresarial SMALLINT NOT NULL,
 
         CONSTRAINT PK_EmpresaConcesionaria PRIMARY KEY (id),
@@ -93,8 +93,8 @@ BEGIN
     CREATE TABLE concesiones.ImportacionErrorLog (
         id INT IDENTITY(1,1) PRIMARY KEY,
         fila_origen INT NOT NULL,
-        organizacion VARCHAR(100),
-        rubro VARCHAR(100),
+        organizacion VARCHAR(500),
+        rubro VARCHAR(255),
         mensaje_error VARCHAR(400)
     );
 
