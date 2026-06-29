@@ -9,37 +9,37 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Modulos", "Modulos", "{02EA
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Parques", "Parques", "{C0BE212A-2DC4-4F1D-A5FF-DDB3A8A4B624}"
 	ProjectSection(SolutionItems) = preProject
-		Modulos\Parques\ABM.sql = Modulos\Parques\ABM.sql
-		Modulos\Parques\Generar_datos.sql = Modulos\Parques\Generar_datos.sql
-		Modulos\Parques\Importacion.sql = Modulos\Parques\Importacion.sql
-		Modulos\Parques\Tablas.sql = Modulos\Parques\Tablas.sql
-		Modulos\Parques\Testing.sql = Modulos\Parques\Testing.sql
+		Modulos\Parques\0105-Importacion.sql = Modulos\Parques\0105-Importacion.sql
+		Modulos\Parques\0104-Generar_datos.sql = Modulos\Parques\0104-Generar_datos.sql
+		Modulos\Parques\0103-Testing.sql = Modulos\Parques\0103-Testing.sql
+		Modulos\Parques\0102-ABM.sql = Modulos\Parques\0102-ABM.sql
+		Modulos\Parques\0101-Tablas.sql = Modulos\Parques\0101-Tablas.sql
 	EndProjectSection
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Empleados", "Empleados", "{9571DDE5-8EDF-4007-B9A9-703393C3718B}"
 	ProjectSection(SolutionItems) = preProject
-		Modulos\Empleados\ABM.sql = Modulos\Empleados\ABM.sql
-		Modulos\Empleados\Generar_datos.sql = Modulos\Empleados\Generar_datos.sql
-		Modulos\Empleados\Importacion.sql = Modulos\Empleados\Importacion.sql
-		Modulos\Empleados\Tablas.sql = Modulos\Empleados\Tablas.sql
-		Modulos\Empleados\Testing.sql = Modulos\Empleados\Testing.sql
+		Modulos\Empleados\0201-Tablas.sql = Modulos\Empleados\0201-Tablas.sql
+		Modulos\Empleados\0203-Testing.sql = Modulos\Empleados\0203-Testing.sql
+		Modulos\Empleados\0202-ABM.sql = Modulos\Empleados\0202-ABM.sql
+		Modulos\Empleados\0204-Generar_datos.sql = Modulos\Empleados\0204-Generar_datos.sql
+		Modulos\Empleados\0205-Importacion.sql = Modulos\Empleados\0205-Importacion.sql
 	EndProjectSection
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Actividades", "Actividades", "{4DF9D534-4687-48EE-B7CF-4556869A802A}"
 	ProjectSection(SolutionItems) = preProject
-		Modulos\Actividades\ABM.sql = Modulos\Actividades\ABM.sql
-		Modulos\Actividades\Generar_datos.sql = Modulos\Actividades\Generar_datos.sql
-		Modulos\Actividades\Tablas.sql = Modulos\Actividades\Tablas.sql
-		Modulos\Actividades\Testing.sql = Modulos\Actividades\Testing.sql
+		Modulos\Actividades\0303-Testing.sql = Modulos\Actividades\0303-Testing.sql
+		Modulos\Actividades\0301-Tablas.sql = Modulos\Actividades\0301-Tablas.sql
+		Modulos\Actividades\0302-ABM.sql = Modulos\Actividades\0302-ABM.sql
+		Modulos\Actividades\0304-Generar_datos.sql = Modulos\Actividades\0304-Generar_datos.sql
 	EndProjectSection
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Reservas", "Reservas", "{AF293F3A-72EA-43CC-9594-4C385FA1A6E6}"
 	ProjectSection(SolutionItems) = preProject
-		Modulos\Reservas\ABM.sql = Modulos\Reservas\ABM.sql
-		Modulos\Reservas\EjemploReserva.sql = Modulos\Reservas\EjemploReserva.sql
-		Modulos\Reservas\Generar_datos.sql = Modulos\Reservas\Generar_datos.sql
-		Modulos\Reservas\Tablas.sql = Modulos\Reservas\Tablas.sql
-		Modulos\Reservas\Testing.sql = Modulos\Reservas\Testing.sql
+		Modulos\Reservas\0401-Tablas.sql = Modulos\Reservas\0401-Tablas.sql
+		Modulos\Reservas\0404-Generar_datos.sql = Modulos\Reservas\0404-Generar_datos.sql
+		Modulos\Reservas\0403-Testing.sql = Modulos\Reservas\0403-Testing.sql
+		Modulos\Reservas\0402-ABM.sql = Modulos\Reservas\0402-ABM.sql
+		Modulos\Reservas\0406-EjemploReserva.sql = Modulos\Reservas\0406-EjemploReserva.sql
 	EndProjectSection
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Pagos", "Pagos", "{65E62FC6-315D-4B10-A896-1BA2E07CFDEE}"
@@ -86,7 +86,7 @@ Global
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
 		{CE4A56E1-1995-9F01-1989-9941B5F28028}.Default|Default.ActiveCfg = Default
-		{5279F85A-F379-4227-A34F-6483C559A76F}.Default|Default.ActiveCfg = Default
+		{7679DBA6-C0E7-4761-84A0-4D3F17D6AB0D}.Default|Default.ActiveCfg = Default
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
