@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# SQL Server Management Studio Version 21
-VisualStudioVersion = 17.14.36212.18
+# SQL Server Management Studio Version 22
+VisualStudioVersion = 18.7.11919.86 stable
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{4F2E2C19-372F-40D8-9FA7-9D2138C6997A}") = "SGPN", "SGPN.ssmssqlproj", "{CE4A56E1-1995-9F01-1989-9941B5F28028}"
 EndProject
@@ -9,45 +9,45 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Modulos", "Modulos", "{02EA
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Parques", "Parques", "{C0BE212A-2DC4-4F1D-A5FF-DDB3A8A4B624}"
 	ProjectSection(SolutionItems) = preProject
-		Modulos\Parques\0105-Importacion.sql = Modulos\Parques\0105-Importacion.sql
-		Modulos\Parques\0104-Generar_datos.sql = Modulos\Parques\0104-Generar_datos.sql
-		Modulos\Parques\0103-Testing.sql = Modulos\Parques\0103-Testing.sql
-		Modulos\Parques\0102-ABM.sql = Modulos\Parques\0102-ABM.sql
 		Modulos\Parques\0101-Tablas.sql = Modulos\Parques\0101-Tablas.sql
+		Modulos\Parques\0102-ABM.sql = Modulos\Parques\0102-ABM.sql
+		Modulos\Parques\0103-Testing.sql = Modulos\Parques\0103-Testing.sql
+		Modulos\Parques\0104-Generar_datos.sql = Modulos\Parques\0104-Generar_datos.sql
+		Modulos\Parques\0105-Importacion.sql = Modulos\Parques\0105-Importacion.sql
 	EndProjectSection
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Empleados", "Empleados", "{9571DDE5-8EDF-4007-B9A9-703393C3718B}"
 	ProjectSection(SolutionItems) = preProject
 		Modulos\Empleados\0201-Tablas.sql = Modulos\Empleados\0201-Tablas.sql
-		Modulos\Empleados\0203-Testing.sql = Modulos\Empleados\0203-Testing.sql
 		Modulos\Empleados\0202-ABM.sql = Modulos\Empleados\0202-ABM.sql
+		Modulos\Empleados\0203-Testing.sql = Modulos\Empleados\0203-Testing.sql
 		Modulos\Empleados\0204-Generar_datos.sql = Modulos\Empleados\0204-Generar_datos.sql
 		Modulos\Empleados\0205-Importacion.sql = Modulos\Empleados\0205-Importacion.sql
 	EndProjectSection
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Actividades", "Actividades", "{4DF9D534-4687-48EE-B7CF-4556869A802A}"
 	ProjectSection(SolutionItems) = preProject
-		Modulos\Actividades\0303-Testing.sql = Modulos\Actividades\0303-Testing.sql
 		Modulos\Actividades\0301-Tablas.sql = Modulos\Actividades\0301-Tablas.sql
 		Modulos\Actividades\0302-ABM.sql = Modulos\Actividades\0302-ABM.sql
+		Modulos\Actividades\0303-Testing.sql = Modulos\Actividades\0303-Testing.sql
 		Modulos\Actividades\0304-Generar_datos.sql = Modulos\Actividades\0304-Generar_datos.sql
 	EndProjectSection
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Reservas", "Reservas", "{AF293F3A-72EA-43CC-9594-4C385FA1A6E6}"
 	ProjectSection(SolutionItems) = preProject
 		Modulos\Reservas\0401-Tablas.sql = Modulos\Reservas\0401-Tablas.sql
-		Modulos\Reservas\0404-Generar_datos.sql = Modulos\Reservas\0404-Generar_datos.sql
-		Modulos\Reservas\0403-Testing.sql = Modulos\Reservas\0403-Testing.sql
 		Modulos\Reservas\0402-ABM.sql = Modulos\Reservas\0402-ABM.sql
+		Modulos\Reservas\0403-Testing.sql = Modulos\Reservas\0403-Testing.sql
+		Modulos\Reservas\0404-Generar_datos.sql = Modulos\Reservas\0404-Generar_datos.sql
 		Modulos\Reservas\0406-EjemploReserva.sql = Modulos\Reservas\0406-EjemploReserva.sql
 	EndProjectSection
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Pagos", "Pagos", "{65E62FC6-315D-4B10-A896-1BA2E07CFDEE}"
 	ProjectSection(SolutionItems) = preProject
+		Modulos\Pagos\0501-Tablas.sql = Modulos\Pagos\0501-Tablas.sql
+		Modulos\Pagos\0503-Testing.sql = Modulos\Pagos\0503-Testing.sql
+		Modulos\Pagos\0504-Generar_datos.sql = Modulos\Pagos\0504-Generar_datos.sql
 		Modulos\Pagos\ABM.sql = Modulos\Pagos\ABM.sql
-		Modulos\Pagos\Generar_datos.sql = Modulos\Pagos\Generar_datos.sql
-		Modulos\Pagos\Tablas.sql = Modulos\Pagos\Tablas.sql
-		Modulos\Pagos\Testing.sql = Modulos\Pagos\Testing.sql
 	EndProjectSection
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Concesiones", "Concesiones", "{1CAE7C1D-5E06-4080-8C03-3CCEEEAD61D2}"
@@ -74,10 +74,10 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Reportes", "Reportes", "{22
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Roles", "Roles", "{13A1CE25-0BC2-4855-AF18-3B71A221BE69}"
 	ProjectSection(SolutionItems) = preProject
-		Modulos\Roles\ABM.sql = Modulos\Roles\ABM.sql
-		Modulos\Roles\CreacionRoles.sql = Modulos\Roles\CreacionRoles.sql
-		Modulos\Roles\CrearLogins.sql = Modulos\Roles\CrearLogins.sql
-		Modulos\Roles\Tablas.sql = Modulos\Roles\Tablas.sql
+		Modulos\Roles\0701-Tablas.sql = Modulos\Roles\0701-Tablas.sql
+		Modulos\Roles\0702-ABM.sql = Modulos\Roles\0702-ABM.sql
+		Modulos\Roles\0704-1-CreacionRoles.sql = Modulos\Roles\0704-1-CreacionRoles.sql
+		Modulos\Roles\0704-2-CrearLogins.sql = Modulos\Roles\0704-2-CrearLogins.sql
 	EndProjectSection
 EndProject
 Global
@@ -86,7 +86,7 @@ Global
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
 		{CE4A56E1-1995-9F01-1989-9941B5F28028}.Default|Default.ActiveCfg = Default
-		{7679DBA6-C0E7-4761-84A0-4D3F17D6AB0D}.Default|Default.ActiveCfg = Default
+		{A13D99FD-C86D-4F90-B75C-0177CC80E12F}.Default|Default.ActiveCfg = Default
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
