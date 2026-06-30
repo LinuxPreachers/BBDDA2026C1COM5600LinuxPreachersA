@@ -45,24 +45,25 @@ EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Pagos", "Pagos", "{65E62FC6-315D-4B10-A896-1BA2E07CFDEE}"
 	ProjectSection(SolutionItems) = preProject
 		Modulos\Pagos\0501-Tablas.sql = Modulos\Pagos\0501-Tablas.sql
+		Modulos\Pagos\0502-ABM.sql = Modulos\Pagos\0502-ABM.sql
 		Modulos\Pagos\0503-Testing.sql = Modulos\Pagos\0503-Testing.sql
 		Modulos\Pagos\0504-Generar_datos.sql = Modulos\Pagos\0504-Generar_datos.sql
-		Modulos\Pagos\ABM.sql = Modulos\Pagos\ABM.sql
 	EndProjectSection
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Concesiones", "Concesiones", "{1CAE7C1D-5E06-4080-8C03-3CCEEEAD61D2}"
 	ProjectSection(SolutionItems) = preProject
-		Modulos\Concesiones\ABM.sql = Modulos\Concesiones\ABM.sql
-		Modulos\Concesiones\Generar_datos.sql = Modulos\Concesiones\Generar_datos.sql
-		Modulos\Concesiones\Importacion.sql = Modulos\Concesiones\Importacion.sql
-		Modulos\Concesiones\Tablas.sql = Modulos\Concesiones\Tablas.sql
-		Modulos\Concesiones\Testing.sql = Modulos\Concesiones\Testing.sql
-		Modulos\Concesiones\Testing_alternativa.sql = Modulos\Concesiones\Testing_alternativa.sql
+		Modulos\Concesiones\0601-Tablas.sql = Modulos\Concesiones\0601-Tablas.sql
+		Modulos\Concesiones\0602-ABM.sql = Modulos\Concesiones\0602-ABM.sql
+		Modulos\Concesiones\0603-Testing.sql = Modulos\Concesiones\0603-Testing.sql
+		Modulos\Concesiones\0603-Testing_alternativa.sql = Modulos\Concesiones\0603-Testing_alternativa.sql
+		Modulos\Concesiones\0604-Generar_datos.sql = Modulos\Concesiones\0604-Generar_datos.sql
+		Modulos\Concesiones\0605-Importacion.sql = Modulos\Concesiones\0605-Importacion.sql
 	EndProjectSection
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Elementos de la solución", "Elementos de la solución", "{D107F4C8-89CC-BEA8-D3D7-CA6B7733353D}"
 	ProjectSection(SolutionItems) = preProject
-		Cifrado.sql = Cifrado.sql
+		0901CreacionPass.sql = 0901CreacionPass.sql
+		0902Cifrado.sql = 0902Cifrado.sql
 		Reinicio.sql = Reinicio.sql
 	EndProjectSection
 EndProject
@@ -86,7 +87,7 @@ Global
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
 		{CE4A56E1-1995-9F01-1989-9941B5F28028}.Default|Default.ActiveCfg = Default
-		{2D6C1532-3E77-4131-8648-8E0AC19AED59}.Default|Default.ActiveCfg = Default
+		{CDDF2490-3600-4321-BD36-C4856556C918}.Default|Default.ActiveCfg = Default
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
