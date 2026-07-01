@@ -40,23 +40,24 @@
    que se encuentra en el directorio raiz, allí encontrará más intrucciones y detalles
    de instalación._
 2. Abra el archivo `SGPN.sln` que encontrará en la carpeta `SGPN`
-   
+
    ![](img/abriendoProyectoPorSolucion.png)
    ![](img/abriendoProyectoPorSolucion2.png)
    ![](img/abriendoProyectoPorSolucion3.png)
-  
-5. Abrir el explorador de soluciones. Encontrara todos los archivos utilizados, separados por modulo y utilizacion.
+
+3. Abrir el explorador de soluciones. Encontrara todos los archivos utilizados, separados por modulo y utilizacion.
    Vea mas información en [códigos de modulos](#códigos-de-error-por-módulo), [usos de archivos](#usos-de-archivos) y [numeración de archivos](#nombres-de-archivos)
 
    ![](img/abriendoExploradorDeSoluciones.png)
-7. Abrir el archivo `Reinicio.sql` _(puede variar el nombre, pero siempre contendrá "Reinicio")_
+
+4. Abrir el archivo `Reinicio.sql` _(puede variar el nombre, pero siempre contendrá "Reinicio")_
 
    ![](img/explSol1.jpg)
-   
-8. En el encontrará el aviso: _"Para ejecutarlo correctamente se debe configurar el modo SQLCMD en la pestaña "Consulta" de Management Studio."_, por ende, deberá habilitar el modo SQLCMD.
+
+5. En el encontrará el aviso: _"Para ejecutarlo correctamente se debe configurar el modo SQLCMD en la pestaña "Consulta" de Management Studio."_, por ende, deberá habilitar el modo SQLCMD.
 
    ![](img/SQLCMD.png)
-   
+
    De modo que pase de esto:
    ![](img/SQLCMDINACTIVE.png)
    a esto (queda un recuadro):
@@ -64,12 +65,34 @@
 
    _(Nota: Si no encuentra la opción "Consulta" es porque el cursor no esta ubicado sobre ningún archivo, asegurese de haber abierto alguno y ver el cursor sobre el archivo como si quisiera editarlo)_
 
-10. En el archivo de reinicio encontrara muchas lineas con la siguiente sintaxis, generalmente con fondo gris:
+6. En el archivo de reinicio encontrara muchas lineas con la siguiente sintaxis, generalmente con fondo gris:
 
-   > `:r "D:\Facultad\TP-BDA\BBDDA2026C1COM5600LinuxPreachersA\SGPN\Modulos\Parques\Tablas.sql"`
+> `:r "D:\Facultad\TP-BDA\BBDDA2026C1COM5600LinuxPreachersA\SGPN\Modulos\Parques\Tablas.sql"`
 
-   deberá reemplazar `D:\Facultad\TP-BDA` por la ruta donde haya descargado este repositorio. Se recomienda utilizar un macroreemplazo directamente desde SQL. (Lamentamos este paso adicional,
-   no encontramos forma de evitarlo en SSMS)
+deberá reemplazar `D:\Facultad\TP-BDA` por la ruta donde haya descargado este repositorio. Se recomienda utilizar un macroreemplazo directamente desde SQL. (Lamentamos este paso adicional,
+no encontramos forma de evitarlo en SSMS)
+
+11. Además, deberá reemplazar las rutas en los llamados de los SP de importación, para que queden adecuadas a las de este repositorio. Los archivos de importación los encontrara en el directorio `archivosAImportar`.
+
+12. Si no cuenta con el driver de Access (OLE DB Provider 16.0, `Microsoft.ACE.OLEDB.16.0`) al intentar ejecutar `Reinicio.sql` encontrará errores como:
+
+> `Fallo crítico al conectar con el Excel. Asegúrese de que el archivo no esté abierto exclusivamente y de que los drivers OLEDB estén instalados. Error: The OLE DB provider "Microsoft.ACE.OLEDB.16.0" has not been registered.`
+
+para solucionarlo debe descargar el driver en https://www.microsoft.com/en-us/download/details.aspx?id=54920. El proceso de instalación es sencillo, debe instalar 32bit si no cuenta con él, caso contrario elija la versión 64bit.
+
+![](img/OLEDB1.png)
+![](img/OLEDB2.png)
+
+_En la imagen se muestra el caso donde lo que no se tiene es el driver 32bit, pero podria
+ocurrir que el faltante sea el 64bit_
+
+Una vez instalado el driver deberá reiniciar el motor. Cierre el SQL Server managment studio.
+Entre al Administrador de Tareas, en la pestaña Servicios filtre por `sql` y
+seleccione el/los motores que este usando. Los encontrara en estado "Ejecutando"/"Running", haga click en "Reiniciar" arriba a la derecha y espere hasta que vuelvan a entrar en ejecucion. Luego deberá cerrar y volver a abrir SQL Server managment studio.
+Si encuentra errores adicionales posiblemente ocurran por tener una version de Office 32bits,
+en ese caso cambie a una version de managment studio 32bits o de Office a 64bit
+
+![](img/administradorTareas1.png)
 
 ---
 

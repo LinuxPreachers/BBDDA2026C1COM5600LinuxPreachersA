@@ -18,6 +18,10 @@ BEGIN
 END;
 GO
 
+PRINT "OLE automation habilitada para apis"
+EXEC apis.sp_habilitar_ole_automation; -- para apis
+go
+
 /* =========================================================
    1) Visitas por semana, mes y anio, por parque
    ========================================================= */
@@ -162,6 +166,7 @@ BEGIN
     )
     SELECT *
     FROM ResultadoMostrable
+    order by parque_id, tipoVisitante_id, anio, mes, semana
 END;
 GO
 
@@ -223,12 +228,18 @@ BEGIN
 END;
 GO
 
-CREATE OR ALTER PROCEDURE reportes.sp_visitas_malosdias
+CREATE OR ALTER PROCEDURE reportes.sp_visitas_malosdias_old
     @idparque int,
     @fechaDesde date
 AS
 BEGIN
     SET NOCOUNT ON;
+
+    IF @idparque IS NULL
+    BEGIN
+        RAISERROR('No se encontro el parque indicado o no tiene coordenadas cargadas.', 16, 1);
+        RETURN;
+    END;
 
     DECLARE @latitud DECIMAL(9,6) = (SELECT latitud from parques.Parque where id=@idparque)
     DECLARE @longitud DECIMAL(9,6) = (SELECT longitud from parques.Parque where id=@idparque)
@@ -249,8 +260,24 @@ BEGIN
         motivo VARCHAR(100)
     );
 
+    DECLARE @datos_clima VARCHAR(MAX);
+    DECLARE @url_clima VARCHAR(1000);
+
+    EXEC apis.sp_clima_jornadas_malas_historico_json
+        @latitud = @latitud,
+        @longitud = @longitud,
+        @fecha_desde = @f,
+        @datos = @datos_clima OUTPUT,
+        @url_consultada = @url_clima OUTPUT;
+
     INSERT INTO #meteorologia
-    EXEC apis.sp_clima_jornadas_malas_historico @latitud, @longitud, @f;
+    SELECT *
+    FROM apis.fn_clima_jornadas_malas_desde_json(
+        @datos_clima,
+        @url_clima,
+        1.00,
+        1
+    );
 
     WITH Datos AS (
         SELECT
@@ -259,27 +286,105 @@ BEGIN
             e.id_tipo_visitante AS tipoVisitante_id
         FROM reservas.Entrada e
         WHERE e.id_parque = @idparque
+        AND e.fecha_acceso >= @f
     ), Resultado AS (
         SELECT
-            tipoVisitante_id,
-            DAY(fecha) as dia,
+            fecha,
             COUNT(entrada_id) AS visitas
         FROM Datos
-        GROUP BY tipoVisitante_id, DAY(fecha)
+        GROUP BY fecha
 
     ), ResultadoMostrable AS (
         SELECT 
-            R.tipoVisitante_id as tipoVisitante_id,
-            TV.nombre as tipoVisitante_nombre,
-            R.dia,
+            R.fecha,
             R.visitas,
             M.codigo_clima, M.estado_jornada, M.lluvia_mm, M.motivo, M.precipitacion_mm
         FROM Resultado R
-        LEFT JOIN parques.TipoVisitante TV on R.tipoVisitante_id = TV.id
-        LEFT JOIN #meteorologia M on R.dia = DAY(M.fecha)
+        RIGHT JOIN #meteorologia M on R.fecha = M.fecha
     )
     SELECT *
     FROM ResultadoMostrable
+    order by fecha
+END;
+GO
+
+CREATE OR ALTER PROCEDURE reportes.sp_visitas_malosdias
+    @idparque int,
+    @fechaDesde date
+AS
+BEGIN
+    SET NOCOUNT ON;
+
+    IF @idparque IS NULL
+    BEGIN
+        RAISERROR('No se encontro el parque indicado o no tiene coordenadas cargadas.', 16, 1);
+        RETURN;
+    END;
+
+    DECLARE @latitud DECIMAL(9,6) = (SELECT latitud from parques.Parque where id=@idparque)
+    DECLARE @longitud DECIMAL(9,6) = (SELECT longitud from parques.Parque where id=@idparque)
+
+
+    DECLARE @f DATE = DATEADD(MONTH, -3, GETDATE()); -- para default
+    IF @fechaDesde IS NOT NULL
+    SET @f = @fechaDesde;
+
+    CREATE TABLE #meteorologia (
+        fuente VARCHAR(100),
+        url_consultada VARCHAR(MAX),
+        fecha DATE,
+        codigo_clima INT,
+        precipitacion_mm DECIMAL(10,2),
+        lluvia_mm DECIMAL(10,2),
+        estado_jornada VARCHAR(50),
+        motivo VARCHAR(100)
+    );
+
+    DECLARE @datos_clima VARCHAR(MAX);
+    DECLARE @url_clima VARCHAR(1000);
+
+    EXEC apis.sp_clima_jornadas_malas_historico_json
+        @latitud = @latitud,
+        @longitud = @longitud,
+        @fecha_desde = @f,
+        @datos = @datos_clima OUTPUT,
+        @url_consultada = @url_clima OUTPUT;
+
+    INSERT INTO #meteorologia
+    SELECT *
+    FROM apis.fn_clima_jornadas_malas_desde_json(
+        @datos_clima,
+        @url_clima,
+        1.00,
+        1
+    );
+
+    WITH Datos AS (
+        SELECT
+            e.id_item_reserva AS entrada_id,
+            e.fecha_acceso AS fecha,
+            e.id_tipo_visitante AS tipoVisitante_id
+        FROM reservas.Entrada e
+        WHERE e.id_parque = @idparque
+        AND e.fecha_acceso >= @f
+    ), Resultado AS (
+        SELECT
+            fecha,
+            COUNT(entrada_id) AS visitas
+        FROM Datos
+        GROUP BY fecha
+
+    ), ResultadoMostrable AS (
+        SELECT 
+            M.fecha,
+            COALESCE(R.visitas,0) as visitas,
+            M.codigo_clima, M.estado_jornada, M.lluvia_mm, M.motivo, M.precipitacion_mm
+        FROM Resultado R
+        RIGHT JOIN #meteorologia M on R.fecha = M.fecha
+    )
+    SELECT *
+    FROM ResultadoMostrable
+    order by fecha
 END;
 GO
 
@@ -397,8 +502,8 @@ BEGIN
             R.ingresos_entradas,
             R.cantidad_tours,
             R.ingresos_tours,
-            R.canones_cobrados,
-            R.ingresos_concesiones,
+            --R.canones_cobrados,
+            --R.ingresos_concesiones,
             R.ingresos_totales
         FROM Resultado R
         LEFT JOIN parques.Parque P ON R.parque_id = P.id
@@ -530,8 +635,8 @@ BEGIN
             R.ingresos_entradas,
             R.cantidad_tours,
             R.ingresos_tours,
-            R.canones_cobrados,
-            R.ingresos_concesiones,
+            --R.canones_cobrados,
+            --R.ingresos_concesiones,
             R.ingresos_totales
         FROM Resultado R
         LEFT JOIN parques.Parque P ON R.parque_id = P.id
@@ -539,6 +644,7 @@ BEGIN
     )
     SELECT *
     FROM ResultadoMostrable
+    order by parque_id, periodo, anio, mes, semana
 END;
 GO
 
@@ -558,8 +664,8 @@ BEGIN
         ingresos_entradas DECIMAL(38,4),
         cantidad_tours INT,
         ingresos_tours DECIMAL(38,4),
-        canones_cobrados INT,
-        ingresos_concesiones DECIMAL(38,4),
+        --canones_cobrados INT,
+        --ingresos_concesiones DECIMAL(38,4),
         ingresos_totales DECIMAL(38,4)
     );
 
@@ -592,8 +698,8 @@ BEGIN
         ingresos_entradas DECIMAL(38,4),
         cantidad_tours INT,
         ingresos_tours DECIMAL(38,4),
-        canones_cobrados INT,
-        ingresos_concesiones DECIMAL(38,4),
+        --canones_cobrados INT,
+        --ingresos_concesiones DECIMAL(38,4),
         ingresos_totales DECIMAL(38,4)
     );
 
@@ -628,8 +734,8 @@ BEGIN
         ingresos_entradas DECIMAL(38,4),
         cantidad_tours INT,
         ingresos_tours DECIMAL(38,4),
-        canones_cobrados INT,
-        ingresos_concesiones DECIMAL(38,4),
+        --canones_cobrados INT,
+        --ingresos_concesiones DECIMAL(38,4),
         ingresos_totales DECIMAL(38,4)
     );
 
@@ -806,7 +912,7 @@ GO
    4) Matriz de visitas: tabla cruzada mostrando visitas por mes y parque
    ========================================================= */
 CREATE OR ALTER PROCEDURE reportes.sp_matriz_visitas
-    @anio TINYINT
+    @anio INT
 AS
 BEGIN
     SET NOCOUNT ON;
@@ -844,6 +950,7 @@ END;
 GO
 
 CREATE OR ALTER PROCEDURE reportes.sp_matriz_visitas_xml
+    @anio INT
 AS
 BEGIN
     SET NOCOUNT ON;
@@ -866,7 +973,7 @@ BEGIN
     );
 
     INSERT INTO #matriz_visitas
-    EXEC reportes.sp_matriz_visitas;
+    EXEC reportes.sp_matriz_visitas @anio;
 
     SELECT *
     FROM #matriz_visitas

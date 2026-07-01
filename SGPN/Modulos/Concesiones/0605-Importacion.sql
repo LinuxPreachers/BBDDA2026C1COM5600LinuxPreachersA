@@ -228,12 +228,12 @@ BEGIN
 END;
 GO
 
-
+/*
 -- Descomentar al ejecutar.
 EXEC concesiones.sp_importar_directorio_empresas
    @ruta = '\\DESKTOP-KOIKGVK\Users\Carpeta publica\ArchivosImportacion\registro-organizaciones-distinguidas-sact.csv',
   @id_parque = 11;
-
+*/
 
 --  Select * from parques.Parque
 

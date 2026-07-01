@@ -255,9 +255,11 @@ GO
 -- Ejecución
 -------------------------------
 
+/*
 EXEC empleados.sp_importar_guias 
     @ruta = '\\DESKTOP-KOIKGVK\Users\Carpeta publica\ArchivosImportacion\registro-de-guias-de-turismo.csv'
 GO
+*/
 
 -------------------------------
 -- Comprobación

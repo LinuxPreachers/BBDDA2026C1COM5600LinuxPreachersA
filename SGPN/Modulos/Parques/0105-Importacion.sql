@@ -269,9 +269,11 @@ GO
 
 SELECT * FROM parques.Parque; --Muestra que ya existian 10 parques
 
+/*
 -- Completar con la ruta a utilizar al ejecutar.
 EXEC parques.sp_importar_parques @ruta = '\\DESKTOP-KOIKGVK\Users\Carpeta publica\ArchivosImportacion\Áreas protegidas de Argentina - Sistema de Información de Biodiversidad.xlsx'
 GO
+*/
 
 SELECT * FROM parques.Parque -- En total hay 309 parques, de los cuales 299 fueron cargados del excel
 

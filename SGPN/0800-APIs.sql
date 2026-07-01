@@ -50,12 +50,10 @@ BEGIN
     SET NOCOUNT ON;
 
     DECLARE @Object INT;
-    DECLARE @json TABLE(DATA varchar(MAX));
+    DECLARE @json TABLE(DATA varchar(MAX)); --c
 
     DECLARE @status INT;
     DECLARE @statusText VARCHAR(255);
-
-    EXEC apis.sp_habilitar_ole_automation;
 
     --EXEC sp_OACreate 'MSXML2.XMLHTTP', @Object OUT; -- Creamos una instancia del objeto OLE, que nos permite hacer los llamados.
     EXEC sp_OACreate 'MSXML2.ServerXMLHTTP.6.0', @Object OUT; -- Funciona para la API de climas mientras la otra no
@@ -65,11 +63,15 @@ BEGIN
     EXEC sp_OAGetProperty @Object, 'status', @status OUT;
     EXEC sp_OAGetProperty @Object, 'statusText', @statusText OUT;
 
+    --ci
     INSERT INTO @json
         EXEC sp_OAGetProperty @Object, 'RESPONSETEXT';
 
     SELECT @respuesta = DATA
     FROM @json;
+    --cf
+
+    --EXEC sp_OAGetProperty @Object, 'responseText', @respuesta OUT;
 
     EXEC sp_OADestroy @Object;
 
@@ -361,7 +363,7 @@ GO
    - Esta configurado en uso horario argentino.
    ========================================================= */
 
-CREATE OR ALTER PROCEDURE apis.sp_clima_jornadas_malas_historico
+CREATE OR ALTER PROCEDURE apis.sp_clima_jornadas_malas_historico_old
     @latitud DECIMAL(9,6),
     @longitud DECIMAL(9,6),
     @fecha_desde DATE = NULL,
@@ -407,6 +409,8 @@ BEGIN
         '&daily=weather_code,precipitation_sum,rain_sum',
         '&timezone=America%2FArgentina%2FBuenos_Aires'
     );
+
+    PRINT @url;
 
     EXEC apis.sp_llamar_api_get
         @url = @url,
@@ -466,6 +470,153 @@ BEGIN
 
 END;
 GO
+
+CREATE OR ALTER FUNCTION apis.fn_clima_jornadas_malas_desde_json
+(
+    @datos VARCHAR(MAX),
+    @url VARCHAR(1000),
+    @umbral_lluvia_mm DECIMAL(10,2),
+    @solo_malas BIT
+)
+RETURNS TABLE
+AS
+RETURN
+(
+    WITH Fechas AS (
+        SELECT
+            [key] AS indice,
+            TRY_CONVERT(DATE, value) AS fecha
+        FROM OPENJSON(@datos, '$.daily.time')
+    ), Precipitacion AS (
+        SELECT
+            [key] AS indice,
+            TRY_CONVERT(DECIMAL(10,2), value) AS precipitacion_mm
+        FROM OPENJSON(@datos, '$.daily.precipitation_sum')
+    ), Lluvia AS (
+        SELECT
+            [key] AS indice,
+            TRY_CONVERT(DECIMAL(10,2), value) AS lluvia_mm
+        FROM OPENJSON(@datos, '$.daily.rain_sum')
+    ), Codigos AS (
+        SELECT
+            [key] AS indice,
+            TRY_CONVERT(INT, value) AS codigo_clima
+        FROM OPENJSON(@datos, '$.daily.weather_code')
+    ), Resultado AS (
+        SELECT
+            'Open-Meteo Historical Weather API' AS fuente,
+            @url AS url_consultada,
+            F.fecha,
+            C.codigo_clima,
+            P.precipitacion_mm,
+            L.lluvia_mm,
+            CASE
+                WHEN P.precipitacion_mm >= @umbral_lluvia_mm THEN 'Mala jornada'
+                WHEN C.codigo_clima >= 20 THEN 'Mala jornada'
+                ELSE 'Jornada favorable'
+            END AS estado_jornada,
+            CASE
+                WHEN C.codigo_clima BETWEEN 40 AND 49 THEN 'Niebla'
+                WHEN C.codigo_clima BETWEEN 50 AND 59 THEN 'Llovizna'
+                WHEN C.codigo_clima BETWEEN 60 AND 69 THEN 'Lluvia'
+                WHEN C.codigo_clima BETWEEN 70 AND 99 THEN 'Precipitacion con chubascos o tormenta electrica'
+                ELSE 'Sin mal clima relevante'
+            END AS motivo
+        FROM Fechas F
+        LEFT JOIN Precipitacion P ON P.indice = F.indice
+        LEFT JOIN Lluvia L ON L.indice = F.indice
+        LEFT JOIN Codigos C ON C.indice = F.indice
+    )
+    SELECT *
+    FROM Resultado
+    WHERE @solo_malas = 0
+       OR estado_jornada = 'Mala jornada'
+);
+GO
+
+CREATE OR ALTER PROCEDURE apis.sp_clima_jornadas_malas_historico_json
+    @latitud DECIMAL(9,6),
+    @longitud DECIMAL(9,6),
+    @fecha_desde DATE = NULL,
+    @fecha_hasta DATE = NULL,
+    @datos VARCHAR(MAX) OUTPUT,
+    @url_consultada VARCHAR(1000) OUTPUT
+AS
+BEGIN
+    SET NOCOUNT ON;
+
+    DECLARE @latitud_texto VARCHAR(30);
+    DECLARE @longitud_texto VARCHAR(30);
+    DECLARE @fecha_desde_texto VARCHAR(10);
+    DECLARE @fecha_hasta_texto VARCHAR(10);
+
+    IF @fecha_hasta IS NULL
+        SET @fecha_hasta = CONVERT(DATE, GETDATE());
+
+    IF @fecha_desde IS NULL
+        SET @fecha_desde = DATEADD(DAY, -30, @fecha_hasta);
+
+    IF @fecha_desde > @fecha_hasta
+    BEGIN
+        RAISERROR('La fecha desde no puede ser mayor que la fecha hasta.', 16, 1);
+        RETURN;
+    END;
+
+    SET @latitud_texto = REPLACE(CONVERT(VARCHAR(30), @latitud), ',', '.');
+    SET @longitud_texto = REPLACE(CONVERT(VARCHAR(30), @longitud), ',', '.');
+
+    SET @fecha_desde_texto = CONVERT(VARCHAR(10), @fecha_desde, 23);
+    SET @fecha_hasta_texto = CONVERT(VARCHAR(10), @fecha_hasta, 23);
+
+    SET @url_consultada = CONCAT(
+        'https://archive-api.open-meteo.com/v1/archive?',
+        'latitude=', @latitud_texto,
+        '&longitude=', @longitud_texto,
+        '&start_date=', @fecha_desde_texto,
+        '&end_date=', @fecha_hasta_texto,
+        '&daily=weather_code,precipitation_sum,rain_sum',
+        '&timezone=America%2FArgentina%2FBuenos_Aires'
+    );
+
+    EXEC apis.sp_llamar_api_get
+        @url = @url_consultada,
+        @respuesta = @datos OUTPUT;
+END;
+GO
+
+CREATE OR ALTER PROCEDURE apis.sp_clima_jornadas_malas_historico
+    @latitud DECIMAL(9,6),
+    @longitud DECIMAL(9,6),
+    @fecha_desde DATE = NULL,
+    @fecha_hasta DATE = NULL,
+    @umbral_lluvia_mm DECIMAL(10,2) = 1.00,
+    @solo_malas BIT = 1
+AS
+BEGIN
+    SET NOCOUNT ON;
+
+    DECLARE @url VARCHAR(1000);
+    DECLARE @datos VARCHAR(MAX);
+
+    EXEC apis.sp_clima_jornadas_malas_historico_json
+        @latitud = @latitud,
+        @longitud = @longitud,
+        @fecha_desde = @fecha_desde,
+        @fecha_hasta = @fecha_hasta,
+        @datos = @datos OUTPUT,
+        @url_consultada = @url OUTPUT;
+
+    SELECT *
+    FROM apis.fn_clima_jornadas_malas_desde_json(
+        @datos,
+        @url,
+        @umbral_lluvia_mm,
+        @solo_malas
+    )
+    ORDER BY fecha;
+END;
+GO
+
 
 /* =========================================================
    Jornadas lluviosas o de mal clima para un parque
