@@ -1,5 +1,15 @@
 # BBDDA2026C1COM5600LinuxPreachersA
 
+## Índice
+
+- [Estado de las entregas](#estado-de-las-entregas)
+- [Cómo utilizar este repositorio](#cómo-utilizar-este-repositorio)
+- Tablas de Detalle
+   - [Nombres de archivos](#nombres-de-archivos)
+     - [Números de Módulos](#números-de-módulos)
+     - [Usos de Archivos](#usos-de-archivos)
+   - [Códigos de error por módulo](#códigos-de-error-por-módulo)
+
 ## Estado de las entregas
 
 | Entrega                              | Estado        | Revision                |
@@ -35,8 +45,7 @@
    ![](img/abriendoProyectoPorSolucion3.png)
 3. Abrir el explorador de soluciones ![](img/abriendoExploradorDeSoluciones.png)
 4. Encontrara todos los archivos utilizados, separados por modulo y utilizacion.
-   Vea mas información en [códigos de modulos](###códigos-de-error-por-módulo) y [numeración de archivos](###usos-de-archivos)
-
+   Vea mas información en [códigos de modulos](#códigos-de-error-por-módulo), [usos de archivos](#usos-de-archivos) y [numeración de archivos](#nombres-de-archivos)
 ---
 
 ### Nombres de archivos
