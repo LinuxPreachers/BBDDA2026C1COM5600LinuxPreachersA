@@ -11,6 +11,10 @@
 USE LinuxPreachers;
 GO
 
+-------------------------------
+-- Creación del SP
+-------------------------------
+
 CREATE OR ALTER PROCEDURE empleados.sp_importar_guias
     @ruta VARCHAR(500)
 AS
@@ -247,14 +251,39 @@ BEGIN
 END;
 GO
 
--- Descomentar al ejecutar.
---EXEC empleados.sp_importar_guias 
---    @ruta = '\\DESKTOP-KOIKGVK\Users\Carpeta publica\ArchivosImportacion\registro-de-guias-de-turismo.csv'
---GO
+-------------------------------
+-- Ejecución
+-------------------------------
+
+EXEC empleados.sp_importar_guias 
+    @ruta = '\\DESKTOP-KOIKGVK\Users\Carpeta publica\ArchivosImportacion\registro-de-guias-de-turismo.csv'
+GO
+
+-------------------------------
+-- Comprobación
+-------------------------------
 
 /*
-SELECT * FROM empleados.Empleado
-SELECT * FROM empleados.Guia
+ * El archivo original posee 1352 registros (1353 con la cabecera).
+ * Del total, 1203 se importan correctamente y 149 se registran en el log de errores
+*/
+
+SELECT 
+    emp.id, 
+    emp.nombre, 
+    emp.apellido, 
+    emp.nro_doc, 
+    td.nombre AS nro_doc,
+    g.nro_registro,
+    esp.nombre AS especialidad,
+    emp.activo 
+FROM empleados.Empleado emp
+JOIN empleados.TipoDocumento td
+ON emp.id_tipo_documento = td.id
+JOIN empleados.guia g
+ON emp.id = g.id_empleado
+JOIN empleados.Especialidad esp
+ON g.id_especialidad = esp.id
+
 SELECT * FROM empleados.ImportacionErrorLog
 GO
-*/
