@@ -40,15 +40,23 @@
    que se encuentra en el directorio raiz, allí encontrará más intrucciones y detalles
    de instalación._
 2. Abra el archivo `SGPN.sln` que encontrará en la carpeta `SGPN`
+   
    ![](img/abriendoProyectoPorSolucion.png)
    ![](img/abriendoProyectoPorSolucion2.png)
    ![](img/abriendoProyectoPorSolucion3.png)
-3. Abrir el explorador de soluciones. Encontrara todos los archivos utilizados, separados por modulo y utilizacion.
-   Vea mas información en [códigos de modulos](#códigos-de-error-por-módulo), [usos de archivos](#usos-de-archivos) y [numeración de archivos](#nombres-de-archivos) ![](img/abriendoExploradorDeSoluciones.png)
-4. Abrir el archivo `Reinicio.sql` _(puede variar el nombre, pero siempre contendrá "Reinicio")_
+  
+5. Abrir el explorador de soluciones. Encontrara todos los archivos utilizados, separados por modulo y utilizacion.
+   Vea mas información en [códigos de modulos](#códigos-de-error-por-módulo), [usos de archivos](#usos-de-archivos) y [numeración de archivos](#nombres-de-archivos)
+
+   ![](img/abriendoExploradorDeSoluciones.png)
+7. Abrir el archivo `Reinicio.sql` _(puede variar el nombre, pero siempre contendrá "Reinicio")_
+
    ![](img/explSol1.jpg)
-5. En el encontrará el aviso: _"Para ejecutarlo correctamente se debe configurar el modo SQLCMD en la pestaña "Consulta" de Management Studio."_, por ende, deberá habilitar el modo SQLCMD.
+   
+8. En el encontrará el aviso: _"Para ejecutarlo correctamente se debe configurar el modo SQLCMD en la pestaña "Consulta" de Management Studio."_, por ende, deberá habilitar el modo SQLCMD.
+
    ![](img/SQLCMD.png)
+   
    De modo que pase de esto:
    ![](img/SQLCMDINACTIVE.png)
    a esto (queda un recuadro):
@@ -56,7 +64,7 @@
 
    _(Nota: Si no encuentra la opción "Consulta" es porque el cursor no esta ubicado sobre ningún archivo, asegurese de haber abierto alguno y ver el cursor sobre el archivo como si quisiera editarlo)_
 
-6. En el archivo de reinicio encontrara muchas lineas con la siguiente sintaxis, generalmente con fondo gris:
+10. En el archivo de reinicio encontrara muchas lineas con la siguiente sintaxis, generalmente con fondo gris:
 
    > `:r "D:\Facultad\TP-BDA\BBDDA2026C1COM5600LinuxPreachersA\SGPN\Modulos\Parques\Tablas.sql"`
 
